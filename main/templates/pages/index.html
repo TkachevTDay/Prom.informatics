@@ -1,20 +1,100 @@
 <!DOCTYPE html>
 <html>
-    <head>
-      <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
-      <link href="https://cdn.jsdelivr.net/npm/vuetify@1.x/dist/vuetify.min.css" rel="stylesheet">
-      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
-    </head>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
 <body>
+
+
   <div id="app">
     <v-app>
-      <v-content>
-        <v-container>Hello world</v-container>
-      </v-content>
+      <v-main>
+
+        <template>
+          <v-parallax dark src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
+            <template>
+
+              <v-container class="mb-2">
+
+                <v-row justify="end">
+
+                  <v-col lg="1" >
+                    <v-btn plain=True>
+                      Зарегистрироваться/Войти
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </template>
+            <v-row align="center" justify="center">
+
+              <v-col class="text-center" cols="12">
+                <h1 class="text-h4 font-weight-thin mb-4">
+                  Сайт курса "Промышленное программирование"
+                </h1>
+                <h4 class="subheading">
+                  Build your application today!
+                </h4>
+              </v-col>
+
+            </v-row>
+
+          </v-parallax>
+          <v-container>
+            <v-row align="center" justify="center">
+
+              <v-col class="text-center" cols="12">
+                <h1 class="text-h4 font-weight-thin mb-4">
+                  Последние проекты:
+                </h1>
+              </v-col>
+
+            </v-row>
+          </v-container>
+        </template>
+        <template>
+          <v-carousel
+            cycle
+            height="400"
+            hide-delimiter-background
+            show-arrows-on-hover
+          >
+            <v-carousel-item
+              v-for="(slide, i) in slides"
+              :key="i"
+            >
+              <v-sheet
+                :color="colors[i]"
+                height="100%"
+              >
+                <v-row
+                  class="fill-height"
+                  align="center"
+                  justify="center"
+                >
+                  <div class="text-h2">
+                    {{ slide }} Slide
+                  </div>
+                </v-row>
+              </v-sheet>
+            </v-carousel-item>
+          </v-carousel>
+        </template>
+      </v-main>
+
     </v-app>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vuetify@1.x/dist/vuetify.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+    })
+  </script>
 </body>
 </html>
