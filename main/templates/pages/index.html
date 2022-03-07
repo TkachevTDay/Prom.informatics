@@ -121,49 +121,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-<script>
-    var app = new Vue({
-  el: '#app',
-  vuetify: new Vuetify(),
-  data(){
-        return {
-      slider: [
-        "red",
-        "green",
-        "orange",
-        "blue",
-        "pink",
-        "purple",
-        "indigo",
-        "cyan",
-        "deep-purple",
-        "light-green",
-        "deep-orange",
-        "blue-grey"
-      ]
-}
-  },
-  computed: {
-    columns() {
-      if (this.$vuetify.breakpoint.xl) {
-        return 4;
-      }
-
-      if (this.$vuetify.breakpoint.lg) {
-        return 3;
-      }
-
-      if (this.$vuetify.breakpoint.md) {
-        return 2;
-      }
-
-      return 1;
-    }
-  },
-})
-
-
-</script>
+<script src="/static/js/main.js"></script>
 
 </body>
 </html>
