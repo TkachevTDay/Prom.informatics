@@ -14,7 +14,7 @@
         <v-main>
 
             <template>
-                <v-parallax dark src="https://informatics.ru/img/intro/intro-inter-progressive.jpg">
+                <v-parallax dark src="https://informatics.ru/img/intro/intro-inter-progressive.jpg"  height="900">
                     <template>
 
                         <v-container class="mb-2">
@@ -31,14 +31,14 @@
                     </template>
                     <v-row align="center" justify="center">
 
-                      <v-col class="text-center" cols="12">
-                        <h3 class="text-h3 font-weight-bold mb-4 cyan lighten-3">
-                          Сайт курса "Промышленное программирование"
-                        </h3>
-                        <h3 class="subheading">
-                          Upload your project today!
-                        </h3>
-                      </v-col>
+                      <v-col class="text-center" cols="6" align="center">
+                            <div style="height: 55px; border-radius: 15px; background: rgba(138,202,244,0.4) ">
+                                <h2 class="text-h4 font-weight-bold mb-4" style="">
+                                    Сайт курса "Промышленное программирование"
+                                </h2>
+
+                            </div>
+                        </v-col>
 
                     </v-row>
 
@@ -57,7 +57,7 @@
             </template>
 
 
-            <v-carousel hide-delimiters>
+            <v-carousel hide-delimiters cycle>
                 <template v-for="(item, index) in slider">
                     <v-carousel-item v-if="(index + 1) % columns === 1 || columns === 1"
                                      :key="index"
