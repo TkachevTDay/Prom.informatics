@@ -57,7 +57,7 @@
             </template>
 
 
-            <v-carousel>
+            <v-carousel hide-delimiters>
                 <template v-for="(item, index) in slider">
                     <v-carousel-item v-if="(index + 1) % columns === 1 || columns === 1"
                                      :key="index"
@@ -70,7 +70,7 @@
                                                  :color="white"
                                                  height="100%"
                                         >
-                                            <v-row class="fill-height"
+                                            <v-row
                                                    align="center"
                                                    justify="center"
                                             >
@@ -78,11 +78,11 @@
                                                     <template>
                                                         <v-card
                                                                 class="mx-auto"
-                                                                max-width="344"
+                                                                max-width="450"
                                                         >
                                                             <v-img
                                                                     src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-                                                                    height="200px"
+                                                                    height="300px"
                                                             ></v-img>
 
                                                             <v-card-title>
