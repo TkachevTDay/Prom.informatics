@@ -1,11 +1,127 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/vuetify/1.5.5/vuetify.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 </head>
 <body>
+
+
+<div id="app">
+    <v-app>
+        <v-main>
+
+            <template>
+                <v-parallax dark src="https://informatics.ru/img/intro/intro-inter-progressive.jpg"  height="900">
+                    <template>
+
+                        <v-container class="mb-2">
+
+                            <v-row justify="end">
+
+                                <v-col lg="1">
+                                    <v-btn plain=True>
+                                        Зарегистрироваться/Войти
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </template>
+                    <v-row align="center" justify="center">
+
+                      <v-col class="text-center" cols="6" align="center">
+                            <div style="height: 55px; border-radius: 15px; background: rgba(138,202,244,0.4) ">
+                                <h2 class="text-h4 font-weight-bold mb-4" style="">
+                                    Сайт курса "Промышленное программирование"
+                                </h2>
+
+                            </div>
+                        </v-col>
+
+                    </v-row>
+
+                </v-parallax>
+                <v-container>
+                    <v-row align="center" justify="center">
+
+                        <v-col class="text-center" cols="12">
+                            <h1 class="text-h4 font-weight-normal mb-4">
+                                Последние проекты:
+                            </h1>
+                        </v-col>
+
+                    </v-row>
+                </v-container>
+            </template>
+
+
+            <v-carousel hide-delimiters cycle>
+                <template v-for="(item, index) in slider">
+                    <v-carousel-item v-if="(index + 1) % columns === 1 || columns === 1"
+                                     :key="index"
+                    >
+                        <v-row class="flex-nowrap" style="height:100%">
+                            <template v-for="(n,i) in columns">
+                                <template v-if="(+index + i) < slider.length">
+                                    <v-col :key="i">
+                                        <v-sheet v-if="(+index + i) < slider.length"
+                                                 :color="white"
+                                                 height="100%"
+                                        >
+                                            <v-row
+                                                   align="center"
+                                                   justify="center"
+                                            >
+                                                <div class="display-3">
+                                                    <template>
+                                                        <v-card
+                                                                class="mx-auto"
+                                                                max-width="450"
+                                                        >
+                                                            <v-img
+                                                                    src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+                                                                    height="300px"
+                                                            ></v-img>
+
+                                                            <v-card-title>
+                                                                Top western road trips
+                                                            </v-card-title>
+
+                                                            <v-card-subtitle>
+                                                                1,000 miles of wonder
+                                                            </v-card-subtitle>
+
+                                                            <v-card-actions>
+                                                                <v-btn
+                                                                        color="orange lighten-2"
+                                                                        text
+                                                                >
+                                                                    Explore
+                                                                </v-btn>
+                                                            </v-card-actions>
+                                                        </v-card>
+                                                    </template>
+                                                </div>
+                                            </v-row>
+                                        </v-sheet>
+                                    </v-col>
+                                </template>
+                            </template>
+                        </v-row>
+                    </v-carousel-item>
+                </template>
+            </v-carousel>
+
+        </v-main>
+
+    </v-app>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+<script src="/static/js/main.js"></script>
 
 </body>
 </html>
