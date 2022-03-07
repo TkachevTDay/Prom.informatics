@@ -1,100 +1,169 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 </head>
 <body>
 
 
-  <div id="app">
+<div id="app">
     <v-app>
-      <v-main>
+        <v-main>
 
-        <template>
-          <v-parallax dark src="https://informatics.ru/img/intro/intro-inter-progressive.jpg">
             <template>
+                <v-parallax dark src="https://informatics.ru/img/intro/intro-inter-progressive.jpg">
+                    <template>
 
-              <v-container class="mb-2">
+                        <v-container class="mb-2">
 
-                <v-row justify="end">
+                            <v-row justify="end">
 
-                  <v-col lg="1" >
-                    <v-btn plain=True>
-                      Зарегистрироваться/Войти
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </v-container>
+                                <v-col lg="1">
+                                    <v-btn plain=True>
+                                        Зарегистрироваться/Войти
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </template>
+                    <v-row align="center" justify="center">
+
+                      <v-col class="text-center" cols="12">
+                        <h1 class="text-h4 font-weight-thin mb-4">
+                          Сайт курса "Промышленное программирование"
+                        </h1>
+                        <h4 class="subheading">
+                          Upload your project today!
+                        </h4>
+                      </v-col>
+
+                    </v-row>
+
+                </v-parallax>
+                <v-container>
+                    <v-row align="center" justify="center">
+
+                        <v-col class="text-center" cols="12">
+                            <h1 class="text-h4 font-weight-thin mb-4">
+                                Последние проекты:
+                            </h1>
+                        </v-col>
+
+                    </v-row>
+                </v-container>
             </template>
-            <v-row align="center" justify="center">
 
-              <v-col class="text-center" cols="12">
-                <h1 class="text-h4 font-weight-thin mb-4">
-                  Сайт курса "Промышленное программирование"
-                </h1>
-                <h4 class="subheading">
-                  Upload your project today!
-                </h4>
-              </v-col>
 
-            </v-row>
+            <v-carousel hide-delimiters>
+                <template v-for="(item, index) in slider">
+                    <v-carousel-item v-if="(index + 1) % columns === 1 || columns === 1"
+                                     :key="index"
+                    >
+                        <v-row class="flex-nowrap" style="height:100%">
+                            <template v-for="(n,i) in columns">
+                                <template v-if="(+index + i) < slider.length">
+                                    <v-col :key="i">
+                                        <v-sheet v-if="(+index + i) < slider.length"
+                                                 :color="white"
+                                                 height="100%"
+                                        >
+                                            <v-row
+                                                   align="center"
+                                                   justify="center"
+                                            >
+                                                <div class="display-3">
+                                                    <template>
+                                                        <v-card
+                                                                class="mx-auto"
+                                                                max-width="450"
+                                                        >
+                                                            <v-img
+                                                                    src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+                                                                    height="300px"
+                                                            ></v-img>
 
-          </v-parallax>
-          <v-container>
-            <v-row align="center" justify="center">
+                                                            <v-card-title>
+                                                                Top western road trips
+                                                            </v-card-title>
 
-              <v-col class="text-center" cols="12">
-                <h1 class="text-h4 font-weight-thin mb-4">
-                  Последние проекты:
-                </h1>
-              </v-col>
+                                                            <v-card-subtitle>
+                                                                1,000 miles of wonder
+                                                            </v-card-subtitle>
 
-            </v-row>
-          </v-container>
-        </template>
-        <template>
-          <v-carousel
-            cycle
-            height="400"
-            hide-delimiter-background
-            show-arrows-on-hover
-          >
-            <v-carousel-item
-              v-for="(slide, i) in slides"
-              :key="i"
-            >
-              <v-sheet
-                :color="colors[i]"
-                height="100%"
-              >
-                <v-row
-                  class="fill-height"
-                  align="center"
-                  justify="center"
-                >
-                  <div class="text-h2">
-                    {{ slide }} Slide
-                  </div>
-                </v-row>
-              </v-sheet>
-            </v-carousel-item>
-          </v-carousel>
-        </template>
-      </v-main>
+                                                            <v-card-actions>
+                                                                <v-btn
+                                                                        color="orange lighten-2"
+                                                                        text
+                                                                >
+                                                                    Explore
+                                                                </v-btn>
+                                                            </v-card-actions>
+                                                        </v-card>
+                                                    </template>
+                                                </div>
+                                            </v-row>
+                                        </v-sheet>
+                                    </v-col>
+                                </template>
+                            </template>
+                        </v-row>
+                    </v-carousel-item>
+                </template>
+            </v-carousel>
+
+        </v-main>
 
     </v-app>
-  </div>
+</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-  <script>
-    new Vue({
-      el: '#app',
-      vuetify: new Vuetify(),
-    })
-  </script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+<script>
+    var app = new Vue({
+  el: '#app',
+  vuetify: new Vuetify(),
+  data(){
+        return {
+      slider: [
+        "red",
+        "green",
+        "orange",
+        "blue",
+        "pink",
+        "purple",
+        "indigo",
+        "cyan",
+        "deep-purple",
+        "light-green",
+        "deep-orange",
+        "blue-grey"
+      ]
+}
+  },
+  computed: {
+    columns() {
+      if (this.$vuetify.breakpoint.xl) {
+        return 4;
+      }
+
+      if (this.$vuetify.breakpoint.lg) {
+        return 3;
+      }
+
+      if (this.$vuetify.breakpoint.md) {
+        return 2;
+      }
+
+      return 1;
+    }
+  },
+})
+
+
+</script>
+
 </body>
 </html>
