@@ -12,24 +12,15 @@
 <div id="app">
     <v-app>
         <v-main>
-
             <template>
-                <v-parallax dark src="https://informatics.ru/img/intro/intro-inter-progressive.jpg"  height="900">
-                    <template>
+            <v-parallax dark src="https://informatics.ru/img/intro/intro-inter-progressive.jpg" height="900">
+                <div class="d-flex justify-end">
+                    <v-btn plain=True>
+                        Зарегистрироваться/Войти
+                    </v-btn>
+                </div>
 
-                        <v-container class="mb-2">
-
-                            <v-row justify="end">
-
-                                <v-col lg="1">
-                                    <v-btn plain=True>
-                                        Зарегистрироваться/Войти
-                                    </v-btn>
-                                </v-col>
-                            </v-row>
-                        </v-container>
-                    </template>
-                    <v-row align="center" justify="center">
+                <v-row align="center" justify="center">
 
                       <v-col class="text-center" cols="6" align="center">
                             <div style="height: 60px; border-radius: 15px; background: rgba(138,202,244,0.4) ">
@@ -37,23 +28,25 @@
                                     Сайт курса "Промышленное программирование"
                                 </h2>
 
-                            </div>
-                        </v-col>
+                        </div>
+                    </v-col>
 
-                    </v-row>
+                </v-row>
+                <div>
 
-                </v-parallax>
-                <v-container>
-                    <v-row align="center" justify="center">
+                </div>
+            </v-parallax>
+            <v-container>
+                <v-row align="center" justify="center">
 
-                        <v-col class="text-center" cols="12">
-                            <h1 class="text-h4 font-weight-normal mb-4">
-                                Последние проекты:
-                            </h1>
-                        </v-col>
+                    <v-col class="text-center" cols="12">
+                        <h1 class="text-h4 font-weight-normal mb-4">
+                            Последние проекты:
+                        </h1>
+                    </v-col>
 
-                    </v-row>
-                </v-container>
+                </v-row>
+            </v-container>
             </template>
 
             <v-carousel hide-delimiters interval="5000" cycle show-arrows-on-hover>
@@ -71,8 +64,8 @@
                                                  height="100%"
                                         >
                                             <v-row
-                                                   align="center"
-                                                   justify="center"
+                                                    align="center"
+                                                    justify="center"
                                             >
                                                 <div class="display-3">
                                                     <template>
