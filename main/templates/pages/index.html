@@ -13,47 +13,38 @@
     <v-app>
         <v-main>
 
-            <template>
-                <v-parallax dark src="https://informatics.ru/img/intro/intro-inter-progressive.jpg" height="900">
-                    <template>
+            <v-parallax dark src="https://informatics.ru/img/intro/intro-inter-progressive.jpg" height="900">
+                <v-btn plain=True class="justify-end">
+                    Зарегистрироваться/Войти
+                </v-btn>
 
-                        <v-container class="mb-2">
+                <v-row align="center" justify="center">
 
-                            <v-row justify="end">
-                                <v-btn plain=True>
-                                    Зарегистрироваться/Войти
-                                </v-btn>
-                            </v-row>
-                        </v-container>
-                    </template>
+                    <v-col class="text-center" cols="6" align="center">
+                        <div style="height: 55px; border-radius: 15px; background: rgba(138,202,244,0.4) ">
+                            <h2 class="text-h4 font-weight-bold mb-4" style="">
+                                Сайт курса "Промышленное программирование"
+                            </h2>
 
-                    <v-row align="center" justify="center">
+                        </div>
+                    </v-col>
 
-                        <v-col class="text-center" cols="6" align="center">
-                            <div style="height: 55px; border-radius: 15px; background: rgba(138,202,244,0.4) ">
-                                <h2 class="text-h4 font-weight-bold mb-4" style="">
-                                    Сайт курса "Промышленное программирование"
-                                </h2>
+                </v-row>
+                <div>
 
-                            </div>
-                        </v-col>
+                </div>
+            </v-parallax>
+            <v-container>
+                <v-row align="center" justify="center">
 
-                    </v-row>
-                    <div>
+                    <v-col class="text-center" cols="12">
+                        <h1 class="text-h4 font-weight-normal mb-4">
+                            Последние проекты:
+                        </h1>
+                    </v-col>
 
-                    </div>
-                </v-parallax>
-                <v-container>
-                    <v-row align="center" justify="center">
-
-                        <v-col class="text-center" cols="12">
-                            <h1 class="text-h4 font-weight-normal mb-4">
-                                Последние проекты:
-                            </h1>
-                        </v-col>
-
-                    </v-row>
-                </v-container>
+                </v-row>
+            </v-container>
             </template>
 
 
