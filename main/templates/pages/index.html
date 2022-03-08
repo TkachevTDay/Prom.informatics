@@ -32,7 +32,7 @@
                     <v-row align="center" justify="center">
 
                       <v-col class="text-center" cols="6" align="center">
-                            <div style="height: 55px; border-radius: 15px; background: rgba(138,202,244,0.4) ">
+                            <div style="height: 60px; border-radius: 15px; background: rgba(138,202,244,0.4) ">
                                 <h2 class="text-h4 font-weight-bold mb-4" style="">
                                     Сайт курса "Промышленное программирование"
                                 </h2>
@@ -56,11 +56,11 @@
                 </v-container>
             </template>
 
-
-            <v-carousel hide-delimiters cycle>
+            <v-carousel hide-delimiters interval="5000" cycle show-arrows-on-hover>
                 <template v-for="(item, index) in slider">
                     <v-carousel-item v-if="(index + 1) % columns === 1 || columns === 1"
                                      :key="index"
+                                     smartSpeed:10
                     >
                         <v-row class="flex-nowrap" style="height:100%">
                             <template v-for="(n,i) in columns">
