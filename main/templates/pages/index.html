@@ -137,12 +137,32 @@
                             <p class="ma-0">Django 2.1</p>
                             <p class="ma-0">SQLite 3</p>
                         </v-col>
-                        <v-col class="d-flex justify-center align-center">
-                            <v-img
-                                    max-height="230"
-                                    max-width="230"
-                                    src="https://www.meme-arsenal.com/memes/93da8ee2c78577c10aa5dbe102b7ae65.jpg"
-                            ></v-img>
+                        <v-col class="d-flex justify-end align-right">
+                            <template>
+                              <v-carousel v-model="model" >
+                                <v-carousel-item
+                                  v-for="(n, i) in columns"
+                                  :key="i"
+                                >
+                                  <v-sheet
+                                    height="100%"
+                                    width="500px"
+                                    tile
+                                  >
+                                    <v-row
+                                      class="fill-height"
+                                      align="center"
+                                      justify="center"
+                                    >
+                                      <v-img
+                                        src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+                                        height="100%"></v-img>
+                                    </v-row>
+                                  </v-sheet>
+                                </v-carousel-item>
+                              </v-carousel>
+                            </template>
+
                         </v-col>
                     </v-row>
                     <v-row class="mx-2 my-1 text-center" >
