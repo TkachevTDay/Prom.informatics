@@ -91,14 +91,7 @@
                                                                 1,000 miles of wonder
                                                             </v-card-subtitle>
 
-                                                            <v-card-actions>
-                                                                <v-btn
-                                                                        color="orange lighten-2"
-                                                                        text
-                                                                >
-                                                                    Explore
-                                                                </v-btn>
-                                                            </v-card-actions>
+
                                                         </v-card>
                                                     </template>
                                                 </div>
@@ -112,6 +105,73 @@
                 </template>
             </v-carousel>
 
+
+            <div class="d-flex justify-center">
+                <v-card style="width: 1000px" elevation="2" class="blue">
+                    <v-card-title class="grey">
+                        <v-col>
+                            <h2>Проект "Redline"</h2>
+                        </v-col>
+                        <v-col class="d-flex justify-end">
+                            <v-btn class="mr-2">Запустить проект</v-btn>
+                            <v-btn>Исходный код</v-btn>
+                        </v-col>
+                    </v-card-title>
+                    <v-row class="mx-2 my-1 text-center">
+                        <v-col>
+                            <h2>Краткое описание</h2>
+                            <p>Web-сервис актуализации контактной информации пользователя, размещённой в социальных
+                                сетях</p>
+
+                            <h2>Технологический стек</h2>
+                            <p class="ma-0">Python 3</p>
+                            <p class="ma-0">Django 2.1</p>
+                            <p class="ma-0">SQLite 3</p>
+                        </v-col>
+                        <v-col class="d-flex justify-end align-right">
+                            <template>
+                              <v-carousel v-model="model" >
+                                <v-carousel-item
+                                  v-for="(n, i) in columns"
+                                  :key="i"
+                                >
+                                  <v-sheet
+                                    height="100%"
+                                    tile
+                                  >
+                                    <v-row
+                                      class="fill-height"
+                                      align="center"
+                                      justify="center"
+                                    >
+                                      <v-img
+                                        src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+                                        height="100%"></v-img>
+                                    </v-row>
+                                  </v-sheet>
+                                </v-carousel-item>
+                              </v-carousel>
+                            </template>
+
+                        </v-col>
+                    </v-row>
+                    <v-row class="mx-2 my-1 text-center" >
+                        <v-col>
+                            <h2>Год: 2018-19</h2>
+                        </v-col>
+                        <v-col>
+                            <h2>Отделение: Яндекс</h2>
+                        </v-col>
+                        <v-col>
+                            <h2>Группа: 308</h2>
+                        </v-col>
+                        <v-col>
+                            <h2>Оценка: 5-</h2>
+                        </v-col>
+                    </v-row>
+                </v-card>
+            </div>
+            <br>
         </v-main>
 
     </v-app>
