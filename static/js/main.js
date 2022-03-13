@@ -3,6 +3,7 @@
   vuetify: new Vuetify(),
   data(){
         return {
+        dialog: false,
       slider: [
         "red",
         "green",

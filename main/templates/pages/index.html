@@ -13,48 +13,48 @@
     <v-app>
         <v-main>
             <template>
-            <v-parallax dark src="https://informatics.ru/img/intro/intro-inter-progressive.jpg" height="900">
-                <div class="d-flex justify-end">
-                    <v-btn plain=True>
-                        Зарегистрироваться/Войти
-                    </v-btn>
-                </div>
+                <v-parallax dark src="https://informatics.ru/img/intro/intro-inter-progressive.jpg" height="900">
+                    <div class="d-flex justify-end">
+                        <v-btn plain=True>
+                            Зарегистрироваться/Войти
+                        </v-btn>
+                    </div>
 
-                <v-row align="center" justify="center">
-                    <v-card class="d-flex pa-1" color="rgba(255, 255, 255, 0.8)">
+                    <v-row align="center" justify="center">
+                        <v-card class="d-flex pa-1" color="rgba(255, 255, 255, 0.8)">
 
 
-                              <v-card-title primary-title class="justify-center">
+                            <v-card-title primary-title class="justify-center">
 
                                 <h3 align=center class="text-h3 font-weight-thin mb-1" style="font-size:10px">
                                     Сайт проектов курса "Промышленное программирование"
                                 </h3>
 
-                              </v-card-title>
+                            </v-card-title>
 
 
                         </v-card>
-                </v-row>
+                    </v-row>
 
 
-                <div>
+                    <div>
 
-                </div>
-            </v-parallax>
-            <v-container>
-                <v-row align="center" justify="center">
+                    </div>
+                </v-parallax>
+                <v-container>
+                    <v-row align="center" justify="center">
 
-                    <v-col class="text-center" cols="12">
-                        <h1 class="text-h4 font-weight-normal mb-4">
-                            Последние проекты:
-                        </h1>
-                    </v-col>
+                        <v-col class="text-center" cols="12">
+                            <h1 class="text-h4 font-weight-normal mb-4">
+                                Последние проекты:
+                            </h1>
+                        </v-col>
 
-                </v-row>
-            </v-container>
+                    </v-row>
+                </v-container>
             </template>
 
-            <v-carousel hide-delimiters interval="5000" cycle show-arrows-on-hover>
+            <v-carousel hide-delimiters show-arrows-on-hover>
                 <template v-for="(item, index) in slider">
                     <v-carousel-item v-if="(index + 1) % columns === 1 || columns === 1"
                                      :key="index"
@@ -75,6 +75,7 @@
                                                 <div class="display-3">
                                                     <template>
                                                         <v-card
+                                                                @click.stop="dialog = true"
                                                                 class="mx-auto"
                                                                 max-width="450"
                                                         >
@@ -93,6 +94,80 @@
 
 
                                                         </v-card>
+                                                        <v-dialog
+                                                                v-model="dialog"
+                                                                max-width="1000"
+                                                                height="100%"
+                                                        >
+                                                            <div class="d-flex justify-center">
+                                                                <v-card style="width: 1000px" elevation="2"
+                                                                        class="blue">
+                                                                    <v-card-title class="grey">
+                                                                        <v-col>
+                                                                            <h2>Проект "Redline"</h2>
+                                                                        </v-col>
+                                                                        <v-col class="d-flex justify-end">
+                                                                            <v-btn class="mr-2">Запустить проект</v-btn>
+                                                                            <v-btn>Исходный код</v-btn>
+                                                                        </v-col>
+                                                                    </v-card-title>
+                                                                    <v-row class="mx-2 my-1 text-center">
+                                                                        <v-col>
+                                                                            <h2>Краткое описание</h2>
+                                                                            <p>Web-сервис актуализации контактной
+                                                                                информации пользователя, размещённой в
+                                                                                социальных
+                                                                                сетях</p>
+
+                                                                            <h2>Технологический стек</h2>
+                                                                            <p class="ma-0">Python 3</p>
+                                                                            <p class="ma-0">Django 2.1</p>
+                                                                            <p class="ma-0">SQLite 3</p>
+                                                                        </v-col>
+                                                                        <v-col class="d-flex justify-end align-right">
+                                                                            <template>
+                                                                                <v-carousel v-model="model">
+                                                                                    <v-carousel-item
+                                                                                            v-for="(n, i) in columns"
+                                                                                            :key="i"
+                                                                                    >
+                                                                                        <v-sheet
+                                                                                                height="100%"
+                                                                                                tile
+                                                                                        >
+                                                                                            <v-row
+                                                                                                    class="fill-height"
+                                                                                                    align="center"
+                                                                                                    justify="center"
+                                                                                            >
+                                                                                                <v-img
+                                                                                                        src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+                                                                                                        height="100%"></v-img>
+                                                                                            </v-row>
+                                                                                        </v-sheet>
+                                                                                    </v-carousel-item>
+                                                                                </v-carousel>
+                                                                            </template>
+
+                                                                        </v-col>
+                                                                    </v-row>
+                                                                    <v-row class="mx-2 my-1 text-center">
+                                                                        <v-col>
+                                                                            <h2>Год: 2018-19</h2>
+                                                                        </v-col>
+                                                                        <v-col>
+                                                                            <h2>Отделение: Яндекс</h2>
+                                                                        </v-col>
+                                                                        <v-col>
+                                                                            <h2>Группа: 308</h2>
+                                                                        </v-col>
+                                                                        <v-col>
+                                                                            <h2>Оценка: 5-</h2>
+                                                                        </v-col>
+                                                                    </v-row>
+                                                                </v-card>
+                                                            </div>
+                                                        </v-dialog>
                                                     </template>
                                                 </div>
                                             </v-row>
@@ -104,73 +179,6 @@
                     </v-carousel-item>
                 </template>
             </v-carousel>
-
-
-            <div class="d-flex justify-center">
-                <v-card style="width: 1000px" elevation="2" class="blue">
-                    <v-card-title class="grey">
-                        <v-col>
-                            <h2>Проект "Redline"</h2>
-                        </v-col>
-                        <v-col class="d-flex justify-end">
-                            <v-btn class="mr-2">Запустить проект</v-btn>
-                            <v-btn>Исходный код</v-btn>
-                        </v-col>
-                    </v-card-title>
-                    <v-row class="mx-2 my-1 text-center">
-                        <v-col>
-                            <h2>Краткое описание</h2>
-                            <p>Web-сервис актуализации контактной информации пользователя, размещённой в социальных
-                                сетях</p>
-
-                            <h2>Технологический стек</h2>
-                            <p class="ma-0">Python 3</p>
-                            <p class="ma-0">Django 2.1</p>
-                            <p class="ma-0">SQLite 3</p>
-                        </v-col>
-                        <v-col class="d-flex justify-end align-right">
-                            <template>
-                              <v-carousel v-model="model" >
-                                <v-carousel-item
-                                  v-for="(n, i) in columns"
-                                  :key="i"
-                                >
-                                  <v-sheet
-                                    height="100%"
-                                    tile
-                                  >
-                                    <v-row
-                                      class="fill-height"
-                                      align="center"
-                                      justify="center"
-                                    >
-                                      <v-img
-                                        src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-                                        height="100%"></v-img>
-                                    </v-row>
-                                  </v-sheet>
-                                </v-carousel-item>
-                              </v-carousel>
-                            </template>
-
-                        </v-col>
-                    </v-row>
-                    <v-row class="mx-2 my-1 text-center" >
-                        <v-col>
-                            <h2>Год: 2018-19</h2>
-                        </v-col>
-                        <v-col>
-                            <h2>Отделение: Яндекс</h2>
-                        </v-col>
-                        <v-col>
-                            <h2>Группа: 308</h2>
-                        </v-col>
-                        <v-col>
-                            <h2>Оценка: 5-</h2>
-                        </v-col>
-                    </v-row>
-                </v-card>
-            </div>
             <br>
         </v-main>
 
