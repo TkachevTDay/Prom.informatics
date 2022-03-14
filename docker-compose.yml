@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  prominformatics:
+    build: .
+    image: prominformatics
+    container_name: prominformatics
+    enviroment:
+      - ENV=dev
+    volumes:
+      - .
