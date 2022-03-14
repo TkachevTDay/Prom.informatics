@@ -188,6 +188,58 @@
                 </template>
             </v-carousel>
             <br>
+
+            <div class="d-flex justify-center">
+                <form class="blue px-3 pt-3 pb-3 rounded-lg" style="width: 1000px;">
+                    <v-row class="my-0 mx-3">
+                        <v-text-field
+                                v-model="name"
+                                label="Поисковой запрос"
+                                @input="$v.name.$touch()"
+                                @blur="$v.name.$touch()"
+                        ></v-text-field>
+                    </v-row>
+                    <v-row class="ma-0">
+                        <v-col>
+                            <v-select
+
+                                    v-model="select"
+                                    :items="['2017-18', '2018-19', '2019-20',]"
+                                    item-text="text"
+                                    item-value="value"
+                                    label="Год"
+                                    @change="$v.select.$touch()"
+                                    @blur="$v.select.$touch()"
+                            ></v-select>
+                        </v-col>
+                        <v-col>
+                            <v-select
+                                    v-model="select"
+                                    :items="['Королев', 'Мытищи', 'Онлайн', 'Физтехпарк']"
+                                    label="Филиал"
+                                    @change="$v.select.$touch()"
+                                    @blur="$v.select.$touch()"
+                            ></v-select>
+                        </v-col>
+                        <v-col>
+                            <v-select
+                                    v-model="select"
+                                    :items="['5+', '5', '5-', '4+', '4', '4-']"
+                                    label="Полученная оценка"
+                                    @change="$v.select.$touch()"
+                                    @blur="$v.select.$touch()"
+                            ></v-select>
+                        </v-col>
+                    </v-row>
+                    <v-row class="my-0 mr-0 ml-3">
+                        <v-btn class="mr-4" @click="submit">найти</v-btn>
+                    </v-row>
+                </form>
+
+            </div>
+
+            <div style="height: 100px"></div>
+
         </v-main>
 
     </v-app>
