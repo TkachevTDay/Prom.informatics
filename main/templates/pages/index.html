@@ -13,45 +13,45 @@
     <v-app>
         <v-main>
             <template>
-            <v-parallax dark src="https://informatics.ru/img/intro/intro-inter-progressive.jpg" height="900">
-                <div class="d-flex justify-end">
-                    <v-btn plain=True>
-                        Зарегистрироваться/Войти
-                    </v-btn>
-                </div>
+                <v-parallax dark src="https://informatics.ru/img/intro/intro-inter-progressive.jpg" height="900">
+                    <div class="d-flex justify-end">
+                        <v-btn plain=True>
+                            Зарегистрироваться/Войти
+                        </v-btn>
+                    </div>
 
-                <v-row align="center" justify="center">
-                    <v-card class="d-flex pa-1" color="rgba(255, 255, 255, 0.8)">
+                    <v-row align="center" justify="center">
+                        <v-card class="d-flex pa-1" color="rgba(255, 255, 255, 0.8)">
 
 
-                              <v-card-title primary-title class="justify-center">
+                            <v-card-title primary-title class="justify-center">
 
                                 <h3 align=center class="text-h3 font-weight-thin mb-1" style="font-size:10px">
                                     Сайт проектов курса "Промышленное программирование"
                                 </h3>
 
-                              </v-card-title>
+                            </v-card-title>
 
 
                         </v-card>
-                </v-row>
+                    </v-row>
 
 
-                <div>
+                    <div>
 
-                </div>
-            </v-parallax>
-            <v-container>
-                <v-row align="center" justify="center">
+                    </div>
+                </v-parallax>
+                <v-container>
+                    <v-row align="center" justify="center">
 
-                    <v-col class="text-center" cols="12">
-                        <h1 class="text-h4 font-weight-normal mb-4">
-                            Последние проекты:
-                        </h1>
-                    </v-col>
+                        <v-col class="text-center" cols="12">
+                            <h1 class="text-h4 font-weight-normal mb-4">
+                                Последние проекты:
+                            </h1>
+                        </v-col>
 
-                </v-row>
-            </v-container>
+                    </v-row>
+                </v-container>
             </template>
 
             <v-carousel hide-delimiters interval="5000" cycle show-arrows-on-hover>
@@ -130,32 +130,32 @@
                         </v-col>
                         <v-col class="d-flex justify-end align-right">
                             <template>
-                              <v-carousel v-model="model" >
-                                <v-carousel-item
-                                  v-for="(n, i) in columns"
-                                  :key="i"
-                                >
-                                  <v-sheet
-                                    height="100%"
-                                    tile
-                                  >
-                                    <v-row
-                                      class="fill-height"
-                                      align="center"
-                                      justify="center"
+                                <v-carousel v-model="model">
+                                    <v-carousel-item
+                                            v-for="(n, i) in columns"
+                                            :key="i"
                                     >
-                                      <v-img
-                                        src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-                                        height="100%"></v-img>
-                                    </v-row>
-                                  </v-sheet>
-                                </v-carousel-item>
-                              </v-carousel>
+                                        <v-sheet
+                                                height="100%"
+                                                tile
+                                        >
+                                            <v-row
+                                                    class="fill-height"
+                                                    align="center"
+                                                    justify="center"
+                                            >
+                                                <v-img
+                                                        src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+                                                        height="100%"></v-img>
+                                            </v-row>
+                                        </v-sheet>
+                                    </v-carousel-item>
+                                </v-carousel>
                             </template>
 
                         </v-col>
                     </v-row>
-                    <v-row class="mx-2 my-1 text-center" >
+                    <v-row class="mx-2 my-1 text-center">
                         <v-col>
                             <h2>Год: 2018-19</h2>
                         </v-col>
@@ -172,6 +172,58 @@
                 </v-card>
             </div>
             <br>
+
+            <div class="d-flex justify-center">
+                <form class="blue px-3 pt-3 pb-3 rounded-lg" style="width: 1000px;">
+                    <v-row class="my-0 mx-3">
+                        <v-text-field
+                                v-model="name"
+                                label="Поисковой запрос"
+                                @input="$v.name.$touch()"
+                                @blur="$v.name.$touch()"
+                        ></v-text-field>
+                    </v-row>
+                    <v-row class="ma-0">
+                        <v-col>
+                            <v-select
+
+                                    v-model="select"
+                                    :items="['2017-18', '2018-19', '2019-20',]"
+                                    item-text="text"
+                                    item-value="value"
+                                    label="Год"
+                                    @change="$v.select.$touch()"
+                                    @blur="$v.select.$touch()"
+                            ></v-select>
+                        </v-col>
+                        <v-col>
+                            <v-select
+                                    v-model="select"
+                                    :items="['Королев', 'Мытищи', 'Онлайн', 'Физтехпарк']"
+                                    label="Филиал"
+                                    @change="$v.select.$touch()"
+                                    @blur="$v.select.$touch()"
+                            ></v-select>
+                        </v-col>
+                        <v-col>
+                            <v-select
+                                    v-model="select"
+                                    :items="['5+', '5', '5-', '4+', '4', '4-']"
+                                    label="Полученная оценка"
+                                    @change="$v.select.$touch()"
+                                    @blur="$v.select.$touch()"
+                            ></v-select>
+                        </v-col>
+                    </v-row>
+                    <v-row class="my-0 mr-0 ml-3">
+                        <v-btn class="mr-4" @click="submit">найти</v-btn>
+                    </v-row>
+                </form>
+
+            </div>
+
+            <div style="height: 100px"></div>
+
         </v-main>
 
     </v-app>
