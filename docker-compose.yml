@@ -1,11 +1,14 @@
 version: "3"
 
 services:
-  prominformatics:
+  web:
     build: .
     image: prominformatics
     container_name: prominformatics
-    enviroment:
+    command: python manage.py runserver 0.0.0.0:8000
+    environment:
       - ENV=dev
     volumes:
       - .
+    ports:
+      - "8000:8000"
