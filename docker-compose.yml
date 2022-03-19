@@ -7,3 +7,10 @@ services:
       - 8080:8080
     image: prominformatics
     command: python3 manage.py runserver 0.0.0.0:8080
+
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
