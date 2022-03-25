@@ -1,3 +1,4 @@
 Django
 sphinx
 docker
+psycopg2-binary

@@ -1,16 +1,24 @@
 version: "3"
 
 services:
+  db:
+    image: postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
   web:
     build: .
     ports:
       - 8080:8080
     image: prominformatics
+    volumes:
+      - .:/prominf
     command: python3 manage.py runserver 0.0.0.0:8080
+    depends_on:
+      - db
 
-  db:
-    image: postgres
-    environment:
-      - POSTGRES_NAME=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+

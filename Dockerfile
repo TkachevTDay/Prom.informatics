@@ -1,7 +1,6 @@
 FROM python:3-alpine
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 WORKDIR /prominf/
-COPY . .
-ENV ENV=dev
+COPY . /prominf/
 RUN pip install -r requirements.txt
-RUN python3 manage.py makemigrations
-RUN python3 manage.py migrate
