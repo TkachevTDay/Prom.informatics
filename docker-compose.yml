@@ -2,7 +2,10 @@ version: "3"
 
 services:
   db:
+    restart: always
     image: postgres
+    ports:
+      - "5432:5432"
     volumes:
       - ./data/db:/var/lib/postgresql/data
     environment:
@@ -13,11 +16,12 @@ services:
   web:
     build: .
     ports:
-      - 8080:8080
+      - "8080:8080"
     image: prominformatics
     volumes:
       - .:/prominf
     command: python3 manage.py runserver 0.0.0.0:8080
+    restart: always
     depends_on:
       - db
 
