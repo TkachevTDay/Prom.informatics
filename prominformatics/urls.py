@@ -15,10 +15,31 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls import include
 import main.views
+from rest_framework import routers, serializers, viewsets
+from main.models import Project
 
+
+class ProjectSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Project
+        fields = ['url', 'name', 'description', 'path_link', 'upload_date', 'last_open_date', 'author', 'department',
+                  'mark']
+
+
+class ProjectViewSet(viewsets.ModelViewSet):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+
+
+router = routers.DefaultRouter()
+
+router.register(r'projects', ProjectViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', main.views.index_page),
+    path('api/', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
