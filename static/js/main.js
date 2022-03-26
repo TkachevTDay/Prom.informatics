@@ -1,16 +1,4 @@
-let xhr = new XMLHttpRequest();
-xhr.open("GET", "http://127.0.0.1:8000/api/projects/?format=json", true)
-xhr.send()
-xhr.onreadystatechange = function() {
-  if (xhr.readyState == 3) {
-    // загрузка
-  }
-  if (xhr.readyState == 4) {
-    let response=xhr.response
-    let a = JSON.parse(response)
-    alert(a)
-  }
-};
+
 
 
 
@@ -40,11 +28,7 @@ var app = new Vue({
       ],
       selectedItem: 1,
       items: [
-        { icon: 'mdi-clock', name: 'zxc', department: 'zxc', author: 'zxc', year: 'zxc'},
-        { icon: 'mdi-clock', name: 'zxc', department: 'zxc', author: 'zxc', year: 'zxc'},
-        { icon: 'mdi-clock', name: 'zxc', department: 'zxc', author: 'zxc', year: 'zxc'},
-        { icon: 'mdi-clock', name: 'zxc', department: 'zxc', author: 'zxc', year: 'zxc'},
-        { icon: 'mdi-clock', name: 'zxc', department: 'zxc', author: 'zxc', year: 'zxc'},
+
       ]
     }
   },
@@ -67,18 +51,24 @@ var app = new Vue({
   },
   methods: {
     update: function (){
-        this.items.push(
-            { icon: 'mdi-clock', name: 'zxc', department: 'zxc', author: 'zxc', year: 'zxc'},
-            { icon: 'mdi-clock', name: 'zxc', department: 'zxc', author: 'zxc', year: 'zxc'},
-            { icon: 'mdi-clock', name: 'zxc', department: 'zxc', author: 'zxc', year: 'zxc'},
-            { icon: 'mdi-clock', name: 'zxc', department: 'zxc', author: 'zxc', year: 'zxc'},
-            { icon: 'mdi-clock', name: 'zxc', department: 'zxc', author: 'zxc', year: 'zxc'}
-        );
-    },
-    print: function(){
-        alert(this.items);
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", "http://127.0.0.1:8000/api/projects/?format=json", true)
+        xhr.send()
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == 3) {
+            // загрузка
+          }
+          if (xhr.readyState == 4) {
+            let response=xhr.response
+            let a = JSON.parse(response)
+            app.items = app.items.concat(a)
+          }
+        };
     },
 
 
+  },
+  beforeMount(){
+    this.update()
   }
 })
