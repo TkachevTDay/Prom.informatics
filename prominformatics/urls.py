@@ -39,7 +39,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
 
 
-        queryset = Project.objects.all()[start:number]
+        queryset = Project.objects.all()[start:start + number]
 
 
         return queryset

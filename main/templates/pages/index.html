@@ -8,14 +8,13 @@
 </head>
 <body>
 
-
 <div id="app">
     <v-app>
         <v-main>
             <template>
                 <v-parallax dark src="https://informatics.ru/img/intro/intro-inter-progressive.jpg" height="900">
                     <div class="d-flex justify-end">
-                        <v-btn plain=True>
+                        <v-btn plain>
                             Зарегистрироваться/Войти
                         </v-btn>
                     </div>
@@ -65,7 +64,7 @@
                                 <template v-if="(+index + i) < slider.length">
                                     <v-col :key="i">
                                         <v-sheet v-if="(+index + i) < slider.length"
-                                                 :color="white"
+
                                                  height="100%"
                                         >
                                             <v-row
@@ -134,7 +133,7 @@
                                                                         </v-col>
                                                                         <v-col class="d-flex justify-end align-right">
                                                                             <template>
-                                                                                <v-carousel v-model="model">
+                                                                                <v-carousel v-model="carousel">
                                                                                     <v-carousel-item
                                                                                             v-for="(n, i) in columns"
                                                                                             :key="i"
@@ -188,45 +187,27 @@
                 </template>
             </v-carousel>
 
-
-
-
-            <script src="https://code.jquery.com/jquery-3.5.1.js"
-                    integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-                    crossorigin="anonymous"></script>
-
-
-
-
-
-
             <div class="d-flex justify-center">
 
                 <form action="" method="post"
-                      class="blue px-3 pt-3 pb-3 rounded-lg"
+                      class="blue lighten-5 px-3 pt-3 pb-3 rounded-lg"
                       style="width: 1000px;">
-
                         {% csrf_token %}
-
                     <v-row class="my-0 mx-3">
                         <v-text-field
                                 name="name"
                                 label="Поисковой запрос"
-                                @input="$v.name.$touch()"
-                                @blur="$v.name.$touch()"
                         ></v-text-field>
                     </v-row>
                     <v-row class="ma-0">
                         <v-col>
-
                             <v-select
                                     name="year"
                                     :items="['2017-18', '2018-19', '2019-20',]"
                                     item-text="text"
                                     item-value="value"
                                     label="Год"
-                                    @change="$v.select.$touch()"
-                                    @blur="$v.select.$touch()"
+                                    v-model="selectedYear"
                             ></v-select>
                         </v-col>
                         <v-col>
@@ -234,8 +215,7 @@
                                     name="department"
                                     :items="['Королев', 'Мытищи', 'Онлайн', 'Физтехпарк']"
                                     label="Филиал"
-                                    @change="$v.select.$touch()"
-                                    @blur="$v.select.$touch()"
+                                    v-model="selectedDepartment"
                             ></v-select>
                         </v-col>
                         <v-col>
@@ -243,22 +223,18 @@
                                     name="mark"
                                     :items="['5+', '5', '5-', '4+', '4', '4-']"
                                     label="Полученная оценка"
-                                    @change="$v.select.$touch()"
-                                    @blur="$v.select.$touch()"
+                                    v-model="selectedMark"
                             ></v-select>
                         </v-col>
                     </v-row>
                     <v-row class="my-0 mr-0 ml-3">
-
-                        <button name="sumbit_filter_form" value='1' color="warning" type="submit">Submit</button>
+                        <v-btn name="submit_filter_form" @click='filter' type="button">Найти</v-btn>
                     </v-row>
                 </form>
-
             </div>
             <br>
             <br>
             <br>
-
 
             <template>
                 <v-card class="mx-auto" max-width="70%" tile>
@@ -284,8 +260,7 @@
                             </v-list-item>
                         </v-list-item-group>
                     </v-list>
-                    <v-btn elevation="2" @click="update">Update</v-btn>
-
+                    <v-btn elevation="2" @click="update">Показать ещё</v-btn>
                 </v-card>
             </template>
             <br>
