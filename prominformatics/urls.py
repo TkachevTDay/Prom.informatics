@@ -26,7 +26,7 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Project
         fields = ['url', 'name', 'description', 'path_link', 'upload_date', 'last_open_date', 'author', 'department',
-                  'mark']
+                  'mark', 'year']
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
