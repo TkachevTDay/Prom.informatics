@@ -47,8 +47,6 @@ class ProjectViewSet(viewsets.ModelViewSet):
 router = routers.DefaultRouter()
 router.register(r'projects', ProjectViewSet)
 
-
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', main.views.index_page),

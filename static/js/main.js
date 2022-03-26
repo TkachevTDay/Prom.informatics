@@ -95,7 +95,6 @@ var app = new Vue({
             app.departmentItems = a.departments;
             app.authorItems = a.authors;
             app.markItems = a.marks;
-            alert(app.markItems[0]['mark']);
           }
         };
     }
