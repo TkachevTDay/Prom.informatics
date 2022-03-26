@@ -1,5 +1,6 @@
 import json
 
+from django.http import JsonResponse
 from django.shortcuts import render
 from .models import Project
 
@@ -15,7 +16,7 @@ def index_page(request):
         name_filt = filter_data["name"]
         # year_filt = request.POST.get("year")
         department_filt = filter_data["department"]
-        mark_filt =  filter_data["mark"]
+        mark_filt = filter_data["mark"]
 
         if name_filt:
             projects_by_filter = projects_by_filter.filter(name=name_filt)
@@ -31,3 +32,12 @@ def index_page(request):
         "last_projects": last_projects,
     }
     return render(request, 'index.html', context)
+
+
+def send_filter_params(request):
+    departments = Project.objects.all().values('department').distinct()
+    departments = Project.objects.all().values('department').distinct()
+    departments = Project.objects.all().values('department').distinct()
+    departments = Project.objects.all().values('department').distinct()
+    print(projects)
+    return JsonResponse({})

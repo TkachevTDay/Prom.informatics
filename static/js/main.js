@@ -69,7 +69,7 @@ var app = new Vue({
     },
     update: function (){
         let xhr = new XMLHttpRequest();
-        xhr.open("GET", `http://127.0.0.1:8000/api/projects/?start=${this.items.length}&number=1&format=json`, true)
+        xhr.open("GET", `http://127.0.0.1:8000/api/projects/?start=${this.items.length}&number=2&format=json`, true)
         xhr.send()
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
@@ -79,6 +79,10 @@ var app = new Vue({
           }
         };
     },
+    getFilterParams: function(){
+    let xhr = new XMLHttpRequest();
+    xhr.open("GET", `http://127.0.0.1:8000/api/projects?/format=json`, true)
+    }
   },
   mounted(){
     this.update()

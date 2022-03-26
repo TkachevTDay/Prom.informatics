@@ -34,24 +34,25 @@ class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
 
     def get_queryset(self):
-        start = int(self.request.query_params.get('start'))
-        number = int(self.request.query_params.get('number'))
-
-
-
-        queryset = Project.objects.all()[start:start + number]
-
-
+        start = self.request.query_params.get('start')
+        number = self.request.query_params.get('number')
+        if start is None:
+            start = 0
+        if number is None:
+            number = len(Project.objects.all())
+        queryset = Project.objects.all()[int(start):int(start) + int(number)]
         return queryset
 
 
 router = routers.DefaultRouter()
-
 router.register(r'projects', ProjectViewSet)
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', main.views.index_page),
     path('api/', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('filter_params/', main.views.send_filter_params),
 ]
