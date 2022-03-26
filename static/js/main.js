@@ -24,9 +24,12 @@ var app = new Vue({
       selectedDepartment: '',
       selectedYear: '',
       searchText: '',
-      items: [
-
-      ]
+      selectedAuthor: '',
+      items: [],
+      markItems: [],
+      departmentItems: [],
+      authorItems: [],
+      yearItems: [],
     }
   },
   computed: {
@@ -57,6 +60,7 @@ var app = new Vue({
             department: this.selectedDepartment,
             mark: this.selectedMark,
             name: this.searchText,
+            author: this.selectedAuthor,
         }
 
         xhr.send(JSON.stringify(filter_data))
@@ -69,22 +73,36 @@ var app = new Vue({
     },
     update: function (){
         let xhr = new XMLHttpRequest();
-        xhr.open("GET", `http://127.0.0.1:8000/api/projects/?start=${this.items.length}&number=2&format=json`, true)
-        xhr.send()
+        xhr.open("GET", `http://127.0.0.1:8000/api/projects/?start=${this.items.length}&number=2&format=json`, true);
+        xhr.send();
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
-            let response=xhr.response
-            let a = JSON.parse(response)
-            app.items = app.items.concat(a)
+            let response=xhr.response;
+            let a = JSON.parse(response);
+            app.items = app.items.concat(a);
           }
         };
     },
     getFilterParams: function(){
-    let xhr = new XMLHttpRequest();
-    xhr.open("GET", `http://127.0.0.1:8000/api/projects?/format=json`, true)
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", `http://127.0.0.1:8000/filter_params`, true);
+        xhr.send();
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4) {
+            let response=xhr.response;
+            let a = JSON.parse(response);
+            app.yearItems = a.years;
+            app.departmentItems = a.departments;
+            app.authorItems = a.authors;
+            app.markItems = a.marks;
+            alert(app.markItems[0]['mark']);
+          }
+        };
     }
   },
   mounted(){
-    this.update()
+    this.update();
+    this.getFilterParams();
+
   }
 })

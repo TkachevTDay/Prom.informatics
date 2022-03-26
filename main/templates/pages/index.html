@@ -203,7 +203,7 @@
                         <v-col>
                             <v-select
                                     name="year"
-                                    :items="['2017-18', '2018-19', '2019-20',]"
+                                    :items="yearItems"
                                     item-text="text"
                                     item-value="value"
                                     label="Год"
@@ -213,15 +213,23 @@
                         <v-col>
                             <v-select
                                     name="department"
-                                    :items="['Королев', 'Мытищи', 'Онлайн', 'Физтехпарк']"
+                                    :items="departmentItems"
                                     label="Филиал"
                                     v-model="selectedDepartment"
                             ></v-select>
                         </v-col>
                         <v-col>
                             <v-select
+                                    name="author"
+                                    :items="authorItems"
+                                    label="Группа"
+                                    v-model="selectedAuthor"
+                            ></v-select>
+                        </v-col>
+                        <v-col>
+                            <v-select
                                     name="mark"
-                                    :items="['5+', '5', '5-', '4+', '4', '4-']"
+                                    :items="markItems"
                                     label="Полученная оценка"
                                     v-model="selectedMark"
                             ></v-select>
