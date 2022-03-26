@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.db.models import Model
 from django.urls import path
 from django.conf.urls import include
 import main.views
@@ -31,6 +32,17 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+
+    def get_queryset(self):
+        start = int(self.request.query_params.get('start'))
+        number = int(self.request.query_params.get('number'))
+
+
+
+        queryset = Project.objects.all()[start:number]
+
+
+        return queryset
 
 
 router = routers.DefaultRouter()
