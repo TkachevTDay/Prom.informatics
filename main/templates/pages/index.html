@@ -55,7 +55,7 @@
             </template>
 
             <v-carousel hide-delimiters show-arrows-on-hover>
-                <template v-for="(item, index) in last_projects">
+                <template v-for="(item, index) in slider">
                     <v-carousel-item v-if="(index + 1) % columns === 1 || columns === 1"
                                      :key="index"
                                      smartSpeed:10
@@ -187,7 +187,7 @@
                     </v-carousel-item>
                 </template>
             </v-carousel>
-            <br>
+
 
 
 
@@ -195,10 +195,10 @@
                     integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
                     crossorigin="anonymous"></script>
 
-            <div style="height: 100px"></div>
 
 
-            <hr>
+
+
 
             <div class="d-flex justify-center">
 
