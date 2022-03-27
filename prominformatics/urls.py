@@ -52,5 +52,5 @@ urlpatterns = [
     path('', main.views.index_page),
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('filter_params/', main.views.send_filter_params),
+    path('api/filter_params/', main.views.send_filter_params),
 ]
