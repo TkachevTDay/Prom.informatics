@@ -1,23 +1,10 @@
 var app = new Vue({
   el: '#app',
+  delimiters: ['[[', ']]'],
   vuetify: new Vuetify(),
   data(){
     return {
       dialog: false,
-      slider: [
-        "red",
-        "green",
-        "orange",
-        "blue",
-        "pink",
-        "purple",
-        "indigo",
-        "cyan",
-        "deep-purple",
-        "light-green",
-        "deep-orange",
-        "blue-grey"
-      ],
       selectedItem: 1,
       carousel: 0,
       selectedMark: '',

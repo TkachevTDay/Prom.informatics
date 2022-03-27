@@ -54,16 +54,16 @@
             </template>
 
             <v-carousel hide-delimiters show-arrows-on-hover>
-                <template v-for="(item, index) in slider">
+                <template v-for="(item, index) in items">
                     <v-carousel-item v-if="(index + 1) % columns === 1 || columns === 1"
                                      :key="index"
                                      smartSpeed:10
                     >
                         <v-row class="flex-nowrap" style="height:100%">
                             <template v-for="(n,i) in columns">
-                                <template v-if="(+index + i) < slider.length">
+                                <template v-if="(+index + i) < items.length">
                                     <v-col :key="i">
-                                        <v-sheet v-if="(+index + i) < slider.length"
+                                        <v-sheet v-if="(+index + i) < items.length"
 
                                                  height="100%"
                                         >
