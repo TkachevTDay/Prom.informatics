@@ -85,7 +85,7 @@ var app = new Vue({
     },
     getFilterParams: function(){
         let xhr = new XMLHttpRequest();
-        xhr.open("GET", `http://127.0.0.1:8000/filter_params`, true);
+        xhr.open("GET", `http://127.0.0.1:8000/api/filter_params`, true);
         xhr.send();
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
