@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'prominformatics.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
+        'NAME': 'db',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': 'db',

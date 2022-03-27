@@ -6,10 +6,8 @@ services:
     image: postgres
     ports:
       - "5432:5432"
-    volumes:
-      - ./data/db:/var/lib/postgresql/data
     environment:
-      - POSTGRES_NAME=postgres
+      - POSTGRES_NAME=db
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
@@ -36,5 +34,3 @@ services:
     restart: always
     depends_on:
       - db
-
-
