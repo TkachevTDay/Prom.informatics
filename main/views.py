@@ -3,7 +3,7 @@ import json
 from django.http import JsonResponse
 from django.shortcuts import render
 from .models import Project
-
+from main import searchAlgorithm
 
 # Create your views here.
 
@@ -20,7 +20,8 @@ def index_page(request):
         author_filt = filter_data["author"]
 
         if name_filt:
-            projects_by_filter = projects_by_filter.filter(name=name_filt)
+            projects_by_filter = projects_by_filter.filter(
+                id__in=searchAlgorithm.search_same(name_filt, projects_by_filter))
         if year_filt:
             projects_by_filter = projects_by_filter.filter(year=year_filt)
         if department_filt:

@@ -1,4 +1,5 @@
-Django
+Django~=4.0.2
 sphinx
 docker
-djangorestframework
+djangorestframework~=3.13.1
+python-Levenshtein
