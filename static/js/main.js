@@ -17,6 +17,7 @@ var app = new Vue({
       departmentItems: [],
       authorItems: [],
       yearItems: [],
+      baseUrl: 'http://127.0.0.1:8000/'
     }
   },
   computed: {
@@ -39,7 +40,7 @@ var app = new Vue({
   methods: {
     filter: function(){
         let xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://127.0.0.1:8000/", true)
+        xhr.open("POST", this.baseUrl, true)
         let CSRF_token = document.querySelector('[name=csrfmiddlewaretoken]').value
         xhr.setRequestHeader("X-CSRFToken", CSRF_token);
         let filter_data = {
@@ -60,7 +61,7 @@ var app = new Vue({
     },
     update: function (){
         let xhr = new XMLHttpRequest();
-        xhr.open("GET", `http://127.0.0.1:8000/api/projects/?start=${this.items.length}&number=2&format=json`, true);
+        xhr.open("GET", `${this.baseUrl}api/projects/?start=${this.items.length}&number=2&format=json`, true);
         xhr.send();
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
@@ -72,7 +73,7 @@ var app = new Vue({
     },
     getFilterParams: function(){
         let xhr = new XMLHttpRequest();
-        xhr.open("GET", `http://127.0.0.1:8000/api/filter_params`, true);
+        xhr.open("GET", `${this.baseUrl}api/filter_params`, true);
         xhr.send();
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
