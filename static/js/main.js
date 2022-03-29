@@ -1,95 +1,81 @@
 var app = new Vue({
-  el: '#app',
-  delimiters: ['[[', ']]'],
-  vuetify: new Vuetify(),
-  data(){
-    return {
-      dialog: false,
-      selectedItem: 1,
-      carousel: 0,
-      selectedMark: '',
-      selectedDepartment: '',
-      selectedYear: '',
-      searchText: '',
-      selectedAuthor: '',
-      items: [],
-      markItems: [],
-      departmentItems: [],
-      authorItems: [],
-      yearItems: [],
-      baseUrl: 'http://127.0.0.1:8000/'
-    }
-  },
-  computed: {
-    columns() {
-      if (this.$vuetify.breakpoint.xl) {
-        return 4;
-      }
+    el: '#app',
+    delimiters: ['[[', ']]'],
+    vuetify: new Vuetify(),
+    data(){
+        return {
+            dialog: false,
+            selectedItem: 1,
+            carousel: 0,
+            selectedMark: '',
+            selectedDepartment: '',
+            selectedYear: '',
+            searchText: '',
+            selectedAuthor: '',
+            items: [],
+            markItems: [],
+            departmentItems: [],
+            authorItems: [],
+            yearItems: [],
+            baseUrl: 'http://127.0.0.1:8000/',
 
-      if (this.$vuetify.breakpoint.lg) {
-        return 3;
-      }
-
-      if (this.$vuetify.breakpoint.md) {
-        return 2;
-      }
-
-      return 1;
-    }
-  },
-  methods: {
-    filter: function(){
-        let xhr = new XMLHttpRequest();
-        xhr.open("POST", this.baseUrl, true)
-        let CSRF_token = document.querySelector('[name=csrfmiddlewaretoken]').value
-        xhr.setRequestHeader("X-CSRFToken", CSRF_token);
-        let filter_data = {
-            year: this.selectedYear,
-            department: this.selectedDepartment,
-            mark: this.selectedMark,
-            name: this.searchText,
-            author: this.selectedAuthor,
         }
-
-        xhr.send(JSON.stringify(filter_data))
-         xhr.onreadystatechange = function() {
-          if (xhr.readyState == 4) {
-            console.log('300 bucks')
-          }
-        };
-
     },
-    update: function (){
-        let xhr = new XMLHttpRequest();
-        xhr.open("GET", `${this.baseUrl}api/projects/?start=${this.items.length}&number=2&format=json`, true);
-        xhr.send();
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState == 4) {
-            let response=xhr.response;
-            let a = JSON.parse(response);
-            app.items = app.items.concat(a);
-          }
-        };
+    computed: {
+        columns() {
+            if (this.$vuetify.breakpoint.xl) {
+            return 4;
+            }
+
+            if (this.$vuetify.breakpoint.lg) {
+            return 3;
+            }
+
+            if (this.$vuetify.breakpoint.md) {
+            return 2;
+            }
+
+            return 1;
+        }
     },
-    getFilterParams: function(){
-        let xhr = new XMLHttpRequest();
-        xhr.open("GET", `${this.baseUrl}api/filter_params`, true);
-        xhr.send();
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState == 4) {
-            let response=xhr.response;
-            let a = JSON.parse(response);
-            app.yearItems = a.years;
-            app.departmentItems = a.departments;
-            app.authorItems = a.authors;
-            app.markItems = a.marks;
-          }
-        };
-    }
-  },
+    methods: {
+
+        update: function (){
+            let xhr = new XMLHttpRequest();
+            let c = `${this.baseUrl}api/projects/?start=${this.items.length}&number=5&year=${this.selectedYear}&department=${this.selectedDepartment}&mark=${this.selectedMark}&author=${this.selectedAuthor}&name=${this.searchText}&format=json`
+            xhr.open("GET", c, true);
+            xhr.send();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    let response=xhr.response;
+                    let a = JSON.parse(response);
+                    app.items = app.items.concat(a);
+                }
+            };
+        },
+        filter: function() {
+            this.items = [];
+            this.update();
+        },
+        getFilterParams: function(){
+            let xhr = new XMLHttpRequest();
+            xhr.open("GET", `${this.baseUrl}api/filter_params`, true);
+            xhr.send();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    let response=xhr.response;
+                    let a = JSON.parse(response);
+                    app.yearItems = a.years;
+                    app.departmentItems = a.departments;
+                    app.authorItems = a.authors;
+                    app.markItems = a.marks;
+                }
+            };
+        },
+    },
   mounted(){
+
     this.update();
     this.getFilterParams();
-
   }
 })

@@ -1,41 +1,47 @@
 import json
-
 from django.http import JsonResponse
 from django.shortcuts import render
+from rest_framework import viewsets
 from .models import Project
 from main import searchAlgorithm
 
 # Create your views here.
+from .serializers import ProjectSerializer
+
+
+class ProjectViewSet(viewsets.ModelViewSet):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+
+    def get_queryset(self):
+        start = self.request.query_params.get('start')
+        number = self.request.query_params.get('number')
+        name_filter = self.request.query_params.get('name')
+        department_filter = self.request.query_params.get('department')
+        author_filter = self.request.query_params.get('author')
+        year_filter = self.request.query_params.get('year')
+        mark_filter = self.request.query_params.get('mark')
+        projects_by_filter = Project.objects.all()
+        if name_filter:
+            projects_by_filter = projects_by_filter.filter(id__in=searchAlgorithm.search_same(name_filter, projects_by_filter))
+        if department_filter:
+            projects_by_filter = projects_by_filter.filter(department=department_filter)
+        if author_filter:
+            projects_by_filter = projects_by_filter.filter(author=author_filter)
+        if year_filter:
+            projects_by_filter = projects_by_filter.filter(year=year_filter)
+        if mark_filter:
+            projects_by_filter = projects_by_filter.filter(mark=mark_filter)
+        if start is None:
+            start = 0
+        if number is None:
+            number = len(projects_by_filter)
+        queryset = projects_by_filter[int(start):int(start) + int(number)]
+        return queryset
+
 
 def index_page(request):
-    last_projects = Project.objects.all()
-    if request.method == 'POST':
-        projects_by_filter = Project.objects.all()
-        body = request.body.decode('utf-8')
-        filter_data = json.loads(body)
-        name_filt = filter_data["name"]
-        year_filt = filter_data["year"]
-        department_filt = filter_data["department"]
-        mark_filt = filter_data["mark"]
-        author_filt = filter_data["author"]
-
-        if name_filt:
-            projects_by_filter = projects_by_filter.filter(
-                id__in=searchAlgorithm.search_same(name_filt, projects_by_filter))
-        if year_filt:
-            projects_by_filter = projects_by_filter.filter(year=year_filt)
-        if department_filt:
-            projects_by_filter = projects_by_filter.filter(department=department_filt)
-        if mark_filt:
-            projects_by_filter = projects_by_filter.filter(mark=mark_filt)
-        if author_filt:
-            projects_by_filter = projects_by_filter.filter(author=author_filt)
-        print(projects_by_filter)
-
-    context = {
-        "last_projects": last_projects,
-    }
-    return render(request, 'index.html', context)
+    return render(request, 'index.html', {})
 
 
 def send_filter_params(request):

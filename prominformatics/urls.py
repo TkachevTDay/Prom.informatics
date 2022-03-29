@@ -20,29 +20,7 @@ from django.conf.urls import include
 import main.views
 from rest_framework import routers, serializers, viewsets
 from main.models import Project
-
-
-class ProjectSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Project
-        fields = ['url', 'name', 'description', 'path_link', 'upload_date', 'last_open_date', 'author', 'department',
-                  'mark', 'year']
-
-
-class ProjectViewSet(viewsets.ModelViewSet):
-    queryset = Project.objects.all()
-    serializer_class = ProjectSerializer
-
-    def get_queryset(self):
-        start = self.request.query_params.get('start')
-        number = self.request.query_params.get('number')
-        if start is None:
-            start = 0
-        if number is None:
-            number = len(Project.objects.all())
-        queryset = Project.objects.all()[int(start):int(start) + int(number)]
-        return queryset
-
+from main.views import ProjectViewSet
 
 router = routers.DefaultRouter()
 router.register(r'projects', ProjectViewSet)
