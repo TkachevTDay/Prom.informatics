@@ -1,0 +1,21 @@
+<div class="display-3">
+    <template>
+        <v-card
+                @click.stop="dialog = true"
+                class="mx-auto"
+                max-width="1200"
+                max-height="700"
+        >
+            <v-img
+                    src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+                    height="550px"
+            ></v-img>
+
+            <v-card-title>
+                [[ item.name ]]
+            </v-card-title>
+
+        </v-card>
+        {% include 'dialog-card.html' %}
+    </template>
+</div>

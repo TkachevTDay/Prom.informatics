@@ -24,11 +24,13 @@ from main.views import ProjectViewSet
 
 router = routers.DefaultRouter()
 router.register(r'projects', ProjectViewSet)
+router.register(r'recent_projects', main.views.RecentProjectViewSet)
+router.register(r'images', main.views.ImagesViewsSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', main.views.index_page),
     path('api/', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('api/auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/filter_params/', main.views.send_filter_params),
 ]

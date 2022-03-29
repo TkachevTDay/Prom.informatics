@@ -1,0 +1,79 @@
+<v-dialog
+        v-model="dialog"
+        max-width="1000"
+        height="75%"
+>
+    <div class="d-flex justify-center">
+        <v-card style="width: 1000px" elevation="2"
+                class = "blue lighten-5 rounded lg">
+            <v-card-title class="blue lighten-4">
+                <v-col>
+                    <h2>[[ item.name ]]</h2>
+                </v-col>
+                <v-col class="d-flex justify-end">
+                    <v-btn class="mr-2" big>
+                        <v-icon dark >
+                            mdi-play
+                        </v-icon>
+                    </v-btn>
+                    <v-btn big>
+                        <span class="material-icons">
+                            code
+                        </span>
+                    </v-btn>
+                </v-col>
+            </v-card-title>
+            <v-row class="mx-2 my-1 text-center">
+                <v-col>
+                    <h2>Краткое описание</h2>
+                    <p>[[ item.description ]]</p>
+
+                    <h2>Технологический стек</h2>
+                    <p class="ma-0">Python 3</p>
+                    <p class="ma-0">Django 2.1</p>
+                    <p class="ma-0">SQLite 3</p>
+                </v-col>
+                <v-col class="d-flex justify-end align-right">
+                    <template>
+                        <v-carousel v-model="carousel" hide-delimiters height="500px">
+                            <v-carousel-item
+                                    v-for="(n, i) in columns"
+                                    :key="i"
+                            >
+                                <v-sheet
+                                        height="100%"
+                                        tile
+                                >
+                                    <v-row
+                                            class="fill-height"
+                                            align="center"
+                                            justify="center"
+                                    >
+                                        <v-img
+                                                src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+                                                height="100%"></v-img>
+                                    </v-row>
+                                </v-sheet>
+                            </v-carousel-item>
+                        </v-carousel>
+                    </template>
+
+                </v-col>
+            </v-row>
+            <v-row class="mx-2 my-1 text-center">
+                <v-col>
+                    <h2>Год: [[item.year]]</h2>
+                </v-col>
+                <v-col>
+                    <h2>Отделение: [[item.department]]</h2>
+                </v-col>
+                <v-col>
+                    <h2>Группа: [[item.author]]</h2>
+                </v-col>
+                <v-col>
+                    <h2>Оценка: [[item.mark]]</h2>
+                </v-col>
+            </v-row>
+        </v-card>
+    </div>
+</v-dialog>

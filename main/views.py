@@ -2,11 +2,11 @@ import json
 from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework import viewsets
-from .models import Project
+from .models import Project, Images
 from main import searchAlgorithm
 
 # Create your views here.
-from .serializers import ProjectSerializer
+from .serializers import ProjectSerializer, ImagesSerializer
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
@@ -23,7 +23,8 @@ class ProjectViewSet(viewsets.ModelViewSet):
         mark_filter = self.request.query_params.get('mark')
         projects_by_filter = Project.objects.all()
         if name_filter:
-            projects_by_filter = projects_by_filter.filter(id__in=searchAlgorithm.search_same(name_filter, projects_by_filter))
+            projects_by_filter = projects_by_filter.filter(
+                id__in=searchAlgorithm.search_same(name_filter, projects_by_filter))
         if department_filter:
             projects_by_filter = projects_by_filter.filter(department=department_filter)
         if author_filter:
@@ -38,6 +39,16 @@ class ProjectViewSet(viewsets.ModelViewSet):
             number = len(projects_by_filter)
         queryset = projects_by_filter[int(start):int(start) + int(number)]
         return queryset
+
+
+class RecentProjectViewSet(viewsets.ModelViewSet):
+    queryset = Project.objects.order_by("upload_date")[:5]
+    serializer_class = ProjectSerializer
+
+
+class ImagesViewsSet(viewsets.ModelViewSet):
+    queryset = Images.objects.all()
+    serializer_class = ImagesSerializer
 
 
 def index_page(request):

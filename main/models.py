@@ -15,6 +15,12 @@ class Project(models.Model):
     mark = models.TextField(max_length=10)
 
 
-class Docker_ISO(models.Model):
+class Images(models.Model):
+    project_id = models.ForeignKey(to=Project, on_delete=models.CASCADE)
+    src = models.TextField(max_length=255)
+    status = models.TextField(max_length=255, default='ordinary')
+
+
+class DockerISO(models.Model):
     project_id = models.ForeignKey(to=Project, on_delete=models.CASCADE)
     link_to_iso = models.TextField(max_length=255)
