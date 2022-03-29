@@ -24,22 +24,21 @@ var app = new Vue({
     computed: {
         columns() {
             if (this.$vuetify.breakpoint.xl) {
-            return 4;
+                return 4;
             }
 
             if (this.$vuetify.breakpoint.lg) {
-            return 3;
+                return 3;
             }
 
             if (this.$vuetify.breakpoint.md) {
-            return 2;
+                return 2;
             }
 
             return 1;
         }
     },
     methods: {
-
         update: function (){
             let xhr = new XMLHttpRequest();
             let c = `${this.baseUrl}api/projects/?start=${this.items.length}&number=5&year=${this.selectedYear}&department=${this.selectedDepartment}&mark=${this.selectedMark}&author=${this.selectedAuthor}&name=${this.searchText}&format=json`
