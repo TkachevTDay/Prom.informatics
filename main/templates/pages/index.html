@@ -49,20 +49,22 @@
                             :cycle="false">
                     <template v-slot:prev="{ on, attrs }">
                         <v-btn
-                                color="success"
+                                color="blue lighten-4"
                                 v-bind="attrs"
                                 v-on="on"
                                 @click="carouselPrev"
+                                fab
                         >
                             <img src="https://fonts.gstatic.com/s/i/materialicons/chevron_left/v16/24px.svg" />
                         </v-btn>
                     </template>
                     <template v-slot:next="{ on, attrs }">
                         <v-btn
-                                color="info"
+                                color="blue lighten-4"
                                 v-bind="attrs"
                                 v-on="on"
                                 @click="carouselNext"
+                                fab
                         >
                             <img src="https://fonts.gstatic.com/s/i/materialicons/chevron_right/v16/24px.svg" />
                         </v-btn>
@@ -79,7 +81,7 @@
             </template>
             <div class="d-flex justify-center" style="margin-bottom: -40px">
                 <form action="" method="post"
-                      class="grey lighten-5 px-3 pt-3 pb-3 rounded-lg"
+                      class="blue lighten-3 px-3 pt-3 pb-3 rounded-lg"
                       style="width: 1000px;">
                     {% csrf_token %}
                     <v-row class="my-0 mx-3">
