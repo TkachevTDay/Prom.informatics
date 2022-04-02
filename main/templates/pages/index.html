@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
 <head>
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
@@ -45,32 +45,35 @@
                 </v-container>
             </template>
             <template>
-                <v-carousel height="700px" hide-delimiters style="margin-bottom: -20px; margin-top: 20px" :cycle="false">
+                <v-carousel height="700px" hide-delimiters style="margin-bottom: -20px; margin-top: 20px"
+                            :cycle="false">
                     <template v-slot:prev="{ on, attrs }">
-                    <v-btn
-                            color="success"
-                            v-bind="attrs"
-                            v-on="on"
-                            @click="carouselPrev"
-                          >Previous slide
-                    </v-btn>
+                        <v-btn
+                                color="success"
+                                v-bind="attrs"
+                                v-on="on"
+                                @click="carouselPrev"
+                        >
+                            <img src="https://fonts.gstatic.com/s/i/materialicons/chevron_left/v16/24px.svg" />
+                        </v-btn>
                     </template>
                     <template v-slot:next="{ on, attrs }">
-                      <v-btn
-                            color="info"
-                            v-bind="attrs"
-                            v-on="on"
-                            @click="carouselNext"
-                          >Next slide
-                      </v-btn>
+                        <v-btn
+                                color="info"
+                                v-bind="attrs"
+                                v-on="on"
+                                @click="carouselNext"
+                        >
+                            <img src="https://fonts.gstatic.com/s/i/materialicons/chevron_right/v16/24px.svg" />
+                        </v-btn>
                     </template>
-                                    <v-carousel-item
-                      v-for="(item, i) in recentProjects"
-                      reverse-transition="fade-transition"
-                      transition="fade-transition"
-                      :key = i
+                    <v-carousel-item
+                            v-for="(item, i) in recentProjects"
+                            reverse-transition="fade-transition"
+                            transition="fade-transition"
+                            :key=i
                     >
-                       {% include 'card.html' %}
+                        {% include 'card.html' %}
                     </v-carousel-item>
                 </v-carousel>
             </template>
@@ -78,7 +81,7 @@
                 <form action="" method="post"
                       class="grey lighten-5 px-3 pt-3 pb-3 rounded-lg"
                       style="width: 1000px;">
-                        {% csrf_token %}
+                    {% csrf_token %}
                     <v-row class="my-0 mx-3">
                         <v-text-field
                                 name="name"
