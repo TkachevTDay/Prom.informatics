@@ -42,7 +42,8 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
 
 class RecentProjectViewSet(viewsets.ModelViewSet):
-    queryset = Project.objects.order_by("upload_date")[:5]
+    recent_projects_amount = 5
+    queryset = Project.objects.order_by("upload_date")[:recent_projects_amount]
     serializer_class = ProjectSerializer
 
 

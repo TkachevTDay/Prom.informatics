@@ -41,6 +41,22 @@ var app = new Vue({
         }
     },
     methods: {
+        carouselNext: function(){
+            if (this.recentProjects.length - 1 == this.carouselIterator){
+                this.carouselIterator = 0
+            }
+            else{
+                this.carouselIterator += 1
+        }
+        },
+        carouselPrev: function(){
+            if (this.carouselIterator == 0){
+                this.carouselIterator = this.recentProjects.length - 1
+            }
+            else{
+                this.carouselIterator -= 1
+            }
+        },
         update: function (){
             let xhr = new XMLHttpRequest();
             let c = `${this.baseUrl}api/projects/?start=${this.items.length}&number=2&year=${this.selectedYear}&department=${this.selectedDepartment}&mark=${this.selectedMark}&author=${this.selectedAuthor}&name=${this.searchText}&format=json`
@@ -82,6 +98,7 @@ var app = new Vue({
                     let response=xhr.response;
                     let a = JSON.parse(response);
                     app.recentProjects = a
+
                 }
             };
         }

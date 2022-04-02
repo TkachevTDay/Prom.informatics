@@ -8,7 +8,7 @@
         <v-card style="width: 1000px; overflow:  hidden;" elevation="2" class="grey lighten-4">
             <v-card-title class="grey lighten-3">
                 <v-col>
-                    <h2 class="text-h4 font-weight-light">[[ item.name ]], [[ i ]]</h2>
+                    <h2 class="text-h4 font-weight-light">[[ recentProjects[carouselIterator].name ]], [[ carouselIterator ]]</h2>
                 </v-col>
                 <v-col class="d-flex justify-end">
                     <v-btn class="mr-2" big>
@@ -26,7 +26,7 @@
             <v-row class="mx-2 my-1 text-center" max-height="100px">
                 <v-col>
                     <h3 class="font-weight-light">Краткое описание</h3>
-                    <p class="font-weight-thin">[[ item.description ]]</p>
+                    <p class="font-weight-thin">[[ recentProjects[carouselIterator].description ]]</p>
 
                     <h3 class="font-weight-light">Технологический стек</h3>
                     <p class="ma-0 font-weight-thin">Python 3</p>
@@ -64,19 +64,19 @@
             <v-row class="mx-2 my-1 text-center">
                 <v-col>
                     <h4 class="font-weight-light">Год:</h4>
-                     <h5  class="ma-0 font-weight-thin"> [[item.year]]</h5>
+                     <h5  class="ma-0 font-weight-thin"> [[recentProjects[carouselIterator].year]]</h5>
                 </v-col>
                 <v-col>
                     <h4 class="font-weight-light">Отделение:</h4>
-                     <h5  class="ma-0 font-weight-thin"> [[item.department]]</h5>
+                     <h5  class="ma-0 font-weight-thin"> [[recentProjects[carouselIterator].department]]</h5>
                 </v-col>
                 <v-col>
                     <h4 class="font-weight-light">Группа:</h4>
-                     <h5  class="ma-0 font-weight-thin"> [[item.author]]</h5>
+                     <h5  class="ma-0 font-weight-thin"> [[recentProjects[carouselIterator].author]]</h5>
                 </v-col>
                 <v-col>
                     <h4 class="font-weight-light">Оценка:</h4>
-                    <h5  class="ma-0 font-weight-thin"> [[item.mark]]</h5>
+                    <h5  class="ma-0 font-weight-thin"> [[recentProjects[carouselIterator].mark]]</h5>
                 </v-col>
             </v-row>
         </v-card>
