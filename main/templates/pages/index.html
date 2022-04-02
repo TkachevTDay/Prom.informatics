@@ -5,6 +5,8 @@
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <link href="static/css/main.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
 </head>
 <body>
 <div id="tmp" style="display: none">
@@ -43,21 +45,20 @@
                 </v-container>
             </template>
             <template>
-              <v-carousel height="700px" hide-delimiters style="margin-bottom: 20px; margin-top: 20px">
-                <v-carousel-item
-                  v-for="(item, i) in recentProjects"
-                  reverse-transition="fade-transition"
-                  transition="fade-transition"
-                  :key = i
-
-                >
-                   {% include 'card.html' %}
-                </v-carousel-item>
-              </v-carousel>
+                <v-carousel height="700px" hide-delimiters style="margin-bottom: 20px; margin-top: 20px">
+                    <v-carousel-item
+                      v-for="(item, i) in recentProjects"
+                      reverse-transition="fade-transition"
+                      transition="fade-transition"
+                      :key = i
+                    >
+                       {% include 'card.html' %}
+                    </v-carousel-item>
+                </v-carousel>
             </template>
             <div class="d-flex justify-center" style="margin-bottom: -40px">
                 <form action="" method="post"
-                      class="blue lighten-5 px-3 pt-3 pb-3 rounded-lg"
+                      class="grey lighten-5 px-3 pt-3 pb-3 rounded-lg"
                       style="width: 1000px;">
                         {% csrf_token %}
                     <v-row class="my-0 mx-3">
@@ -65,11 +66,13 @@
                                 name="name"
                                 label="Поисковой запрос"
                                 v-model="searchText"
+                                color="grey"
                         ></v-text-field>
                     </v-row>
                     <v-row class="ma-0">
                         <v-col>
                             <v-select
+                                    color="grey"
                                     name="year"
                                     :items="yearItems"
                                     item-text="text"
@@ -80,6 +83,7 @@
                         </v-col>
                         <v-col>
                             <v-select
+                                    color="grey"
                                     name="department"
                                     :items="departmentItems"
                                     label="Филиал"
@@ -88,6 +92,7 @@
                         </v-col>
                         <v-col>
                             <v-select
+                                    color="grey"
                                     name="author"
                                     :items="authorItems"
                                     label="Группа"
@@ -96,6 +101,7 @@
                         </v-col>
                         <v-col>
                             <v-select
+                                    color="grey"
                                     name="mark"
                                     :items="markItems"
                                     label="Полученная оценка"
@@ -116,7 +122,7 @@
                 <v-card class="mx-auto" max-width="70%" tile>
                     <v-list>
                         <v-subheader>Projects</v-subheader>
-                        <v-list-item-group v-model="selectedItem" color="primary">
+                        <v-list-item-group v-model="selectedItem" color="grey">
                             <v-list-item v-for="(item, i) in items" :key="i">
                                 <v-list-item-icon>
                                     <v-icon v-text="item.icon"></v-icon>

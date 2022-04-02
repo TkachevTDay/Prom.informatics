@@ -19,6 +19,7 @@ var app = new Vue({
             yearItems: [],
             recentProjects: [],
             baseUrl: 'http://127.0.0.1:8000/',
+            carouselIterator: 0,
 
         }
     },
@@ -42,7 +43,7 @@ var app = new Vue({
     methods: {
         update: function (){
             let xhr = new XMLHttpRequest();
-            let c = `${this.baseUrl}api/projects/?start=${this.items.length}&number=5&year=${this.selectedYear}&department=${this.selectedDepartment}&mark=${this.selectedMark}&author=${this.selectedAuthor}&name=${this.searchText}&format=json`
+            let c = `${this.baseUrl}api/projects/?start=${this.items.length}&number=2&year=${this.selectedYear}&department=${this.selectedDepartment}&mark=${this.selectedMark}&author=${this.selectedAuthor}&name=${this.searchText}&format=json`
             xhr.open("GET", c, true);
             xhr.send();
             xhr.onreadystatechange = function() {

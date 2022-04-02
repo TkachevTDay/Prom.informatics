@@ -2,13 +2,13 @@
         v-model="dialog"
         max-width="1000"
         height="75%"
+        style="height: 100px"
 >
     <div class="d-flex justify-center">
-        <v-card style="width: 1000px" elevation="2"
-                class = "blue lighten-5 rounded lg">
-            <v-card-title class="blue lighten-4">
+        <v-card style="width: 1000px; overflow:  hidden;" elevation="2" class="grey lighten-4">
+            <v-card-title class="grey lighten-3">
                 <v-col>
-                    <h2>[[ item.name ]]</h2>
+                    <h2 class="text-h4 font-weight-light">[[ item.name ]], [[ i ]]</h2>
                 </v-col>
                 <v-col class="d-flex justify-end">
                     <v-btn class="mr-2" big>
@@ -23,22 +23,23 @@
                     </v-btn>
                 </v-col>
             </v-card-title>
-            <v-row class="mx-2 my-1 text-center">
+            <v-row class="mx-2 my-1 text-center" max-height="100px">
                 <v-col>
-                    <h2>Краткое описание</h2>
-                    <p>[[ item.description ]]</p>
+                    <h3 class="font-weight-light">Краткое описание</h3>
+                    <p class="font-weight-thin">[[ item.description ]]</p>
 
-                    <h2>Технологический стек</h2>
-                    <p class="ma-0">Python 3</p>
-                    <p class="ma-0">Django 2.1</p>
-                    <p class="ma-0">SQLite 3</p>
+                    <h3 class="font-weight-light">Технологический стек</h3>
+                    <p class="ma-0 font-weight-thin">Python 3</p>
+                    <p class="ma-0 font-weight-thin">Django 2.1</p>
+                    <p class="ma-0 font-weight-thin">SQLite 3</p>
                 </v-col>
                 <v-col class="d-flex justify-end align-right">
                     <template>
-                        <v-carousel v-model="carousel" hide-delimiters height="500px">
+                        <v-carousel v-model="carousel" hide-delimiters height="400px" style="margin-bottom: -10px">
                             <v-carousel-item
                                     v-for="(n, i) in columns"
                                     :key="i"
+                                    transition="fade-transition"
                             >
                                 <v-sheet
                                         height="100%"
@@ -62,16 +63,20 @@
             </v-row>
             <v-row class="mx-2 my-1 text-center">
                 <v-col>
-                    <h2>Год: [[item.year]]</h2>
+                    <h4 class="font-weight-light">Год:</h4>
+                     <h5  class="ma-0 font-weight-thin"> [[item.year]]</h5>
                 </v-col>
                 <v-col>
-                    <h2>Отделение: [[item.department]]</h2>
+                    <h4 class="font-weight-light">Отделение:</h4>
+                     <h5  class="ma-0 font-weight-thin"> [[item.department]]</h5>
                 </v-col>
                 <v-col>
-                    <h2>Группа: [[item.author]]</h2>
+                    <h4 class="font-weight-light">Группа:</h4>
+                     <h5  class="ma-0 font-weight-thin"> [[item.author]]</h5>
                 </v-col>
                 <v-col>
-                    <h2>Оценка: [[item.mark]]</h2>
+                    <h4 class="font-weight-light">Оценка:</h4>
+                    <h5  class="ma-0 font-weight-thin"> [[item.mark]]</h5>
                 </v-col>
             </v-row>
         </v-card>
