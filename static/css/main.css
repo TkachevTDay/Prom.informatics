@@ -1,33 +1,3 @@
 body {
     font-family: 'Montserrat';font-size: 22px;
 }
-    .animated {
-    -webkit-animation-duration: 2s;
-    animation-duration: 2s;
-    -webkit-animation-fill-mode: both;
-    animation-fill-mode: both;
-    }
-
-    .animated.delay-1s {
-    -webkit-animation-delay: 1s;
-    animation-delay: 1s;
-    }
-
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            -webkit-transform: translate3d(0, 100%, 0);
-            transform: translate3d(0, 100%, 0);
-        }
-
-        to {
-            opacity: 1;
-            -webkit-transform: none;
-            transform: none;
-        }
-    }
-
-    .fadeInUp {
-        -webkit-animation-name: fadeInUp;
-        animation-name: fadeInUp;
-    }
