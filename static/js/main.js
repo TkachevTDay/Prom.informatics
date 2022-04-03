@@ -20,7 +20,9 @@ var app = new Vue({
             recentProjects: [],
             baseUrl: 'http://127.0.0.1:8000/',
             carouselIterator: 0,
-
+            images: [],
+            currentProjectImages: [],
+            currentProjectAvatar: '',
         }
     },
     computed: {
@@ -47,15 +49,19 @@ var app = new Vue({
             }
             else{
                 this.carouselIterator += 1
+
         }
+        this.updateCurrentImagesList();
         },
         carouselPrev: function(){
             if (this.carouselIterator == 0){
                 this.carouselIterator = this.recentProjects.length - 1
+
             }
             else{
                 this.carouselIterator -= 1
             }
+            this.updateCurrentImagesList();
         },
         update: function (){
             let xhr = new XMLHttpRequest();
@@ -69,6 +75,26 @@ var app = new Vue({
                     app.items = app.items.concat(a);
                 }
             };
+        },
+
+        updateCurrentImagesList: function(){
+            this.currentProjectImages = app.images.filter(i => (i.project_id - 1 == this.carouselIterator))
+            this.currentProjectAvatar = app.images.filter(i => ((i.project_id - 1 == this.carouselIterator) && (i.status=='avatar')))[0]
+
+        },
+        getImages: function(){
+            let xhr = new XMLHttpRequest();
+            xhr.open("GET", `${this.baseUrl}api/images/?filter=json`, true);
+            xhr.send();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    let response=xhr.response;
+                    let a = JSON.parse(response);
+                    app.images = a
+                    app.updateCurrentImagesList();
+                }
+            };
+
         },
         filter: function() {
             this.items = [];
@@ -104,9 +130,10 @@ var app = new Vue({
         }
     },
   mounted(){
-
     this.update();
     this.getFilterParams();
     this.getRecentProjects();
-  }
+    this.getImages();
+
+  },
 })

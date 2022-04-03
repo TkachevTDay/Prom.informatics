@@ -12,6 +12,8 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ImagesSerializer(serializers.HyperlinkedModelSerializer):
+    project_id = serializers.IntegerField(source='project_id.id', read_only=True)
+
     class Meta:
         model = Images
         fields = ['url', 'src', 'project_id', 'status']

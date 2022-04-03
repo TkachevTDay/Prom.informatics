@@ -37,7 +37,7 @@
                     <template>
                         <v-carousel v-model="carousel" hide-delimiters height="400px" style="margin-bottom: -10px">
                             <v-carousel-item
-                                    v-for="(n, i) in columns"
+                                    v-for="(n, i) in currentProjectImages"
                                     :key="i"
                                     transition="fade-transition"
                             >
@@ -51,7 +51,7 @@
                                             justify="center"
                                     >
                                         <v-img
-                                                src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+                                                :src="n.src"
                                                 height="100%"></v-img>
                                     </v-row>
                                 </v-sheet>
