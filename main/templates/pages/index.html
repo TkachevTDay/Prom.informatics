@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
 <head>
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
@@ -45,24 +45,29 @@
                 </v-container>
             </template>
             <template>
-                <v-carousel height="700px" hide-delimiters style="margin-bottom: -20px; margin-top: 20px" :cycle="false" >
+                <v-carousel height="700px" hide-delimiters style="margin-bottom: -20px; margin-top: 20px"
+                            :cycle="false">
                     <template v-slot:prev="{ on, attrs }">
-                    <v-btn
-                            color="success"
-                            v-bind="attrs"
-                            v-on="on"
-                            @click="carouselPrev"
-                          >Previous slide
-                    </v-btn>
+                        <v-btn
+                                color="blue lighten-4"
+                                v-bind="attrs"
+                                v-on="on"
+                                @click="carouselPrev"
+                                fab
+                        >
+                            <img src="https://fonts.gstatic.com/s/i/materialicons/chevron_left/v16/24px.svg" />
+                        </v-btn>
                     </template>
                     <template v-slot:next="{ on, attrs }">
-                      <v-btn
-                            color="info"
-                            v-bind="attrs"
-                            v-on="on"
-                            @click="carouselNext"
-                          >Next slide
-                      </v-btn>
+                        <v-btn
+                                color="blue lighten-4"
+                                v-bind="attrs"
+                                v-on="on"
+                                @click="carouselNext"
+                                fab
+                        >
+                            <img src="https://fonts.gstatic.com/s/i/materialicons/chevron_right/v16/24px.svg" />
+                        </v-btn>
                     </template>
                                     <v-carousel-item
                       v-for="(item, i) in recentProjects"
@@ -70,7 +75,7 @@
                       transition="fade"
                       reverse-transition="fade"
                     >
-                       {% include 'card.html' %}
+                        {% include 'card.html' %}
                     </v-carousel-item>
                 </v-carousel>
             </template>
