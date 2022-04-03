@@ -63,7 +63,6 @@
                     </v-row>
                 </v-container>
             </template>
-            <template>
                 <v-carousel height="700px" hide-delimiters style="margin-bottom: -20px; margin-top: 20px"
                             :cycle="false">
                     <template v-slot:prev="{ on, attrs }">
@@ -99,9 +98,8 @@
                       v-for="(item, i) in recentProjects"
                       :key = i>
                 </v-carousel>
-            </template>
             <div class="d-flex justify-center" style="margin-bottom: -40px">
-                <form action="" method="post"
+                <div
                       class="grey lighten-5 px-3 pt-3 pb-3 rounded-lg"
                       style="width: 1000px;">
                         {% csrf_token %}
@@ -156,7 +154,7 @@
                     <v-row class="my-0 mr-0 ml-3">
                         <v-btn @click='filter'>Найти</v-btn>
                     </v-row>
-                </form>
+                </div>
             </div>
             <br>
             <br>

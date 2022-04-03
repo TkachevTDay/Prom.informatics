@@ -70,9 +70,11 @@ var app = new Vue({
             xhr.send();
             xhr.onreadystatechange = function() {
                 if (xhr.readyState == 4) {
-                    let response=xhr.response;
-                    let a = JSON.parse(response);
-                    app.items = app.items.concat(a);
+                    if (xhr.status == 200) {
+                        let response=xhr.response;
+                        let a = JSON.parse(response);
+                        app.items = app.items.concat(a);
+                    }
                 }
             };
         },
@@ -80,7 +82,6 @@ var app = new Vue({
         updateCurrentImagesList: function(){
             this.currentProjectImages = app.images.filter(i => (i.project_id - 1 == this.carouselIterator))
             this.currentProjectAvatar = app.images.filter(i => ((i.project_id - 1 == this.carouselIterator) && (i.status=='avatar')))[0]
-
         },
         getImages: function(){
             let xhr = new XMLHttpRequest();
@@ -88,10 +89,12 @@ var app = new Vue({
             xhr.send();
             xhr.onreadystatechange = function() {
                 if (xhr.readyState == 4) {
-                    let response=xhr.response;
-                    let a = JSON.parse(response);
-                    app.images = a
-                    app.updateCurrentImagesList();
+                    if (xhr.status == 200) {
+                        let response=xhr.response;
+                        let a = JSON.parse(response);
+                        app.images = a
+                        app.updateCurrentImagesList();
+                    }
                 }
             };
 
@@ -106,12 +109,14 @@ var app = new Vue({
             xhr.send();
             xhr.onreadystatechange = function() {
                 if (xhr.readyState == 4) {
-                    let response=xhr.response;
-                    let a = JSON.parse(response);
-                    app.yearItems = a.years;
-                    app.departmentItems = a.departments;
-                    app.authorItems = a.authors;
-                    app.markItems = a.marks;
+                    if (xhr.status == 200) {
+                        let response=xhr.response;
+                        let a = JSON.parse(response);
+                        app.yearItems = a.years;
+                        app.departmentItems = a.departments;
+                        app.authorItems = a.authors;
+                        app.markItems = a.marks;
+                    }
                 }
             };
         },
@@ -121,10 +126,11 @@ var app = new Vue({
             xhr.send();
             xhr.onreadystatechange = function() {
                 if (xhr.readyState == 4) {
-                    let response=xhr.response;
-                    let a = JSON.parse(response);
-                    app.recentProjects = a
-
+                    if (xhr.status == 200) {
+                        let response=xhr.response;
+                        let a = JSON.parse(response);
+                        app.recentProjects = a
+                    }
                 }
             };
         }
