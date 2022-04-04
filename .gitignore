@@ -1,7 +1,7 @@
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,django,venv,pycharm+all,windows,linux,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,django,venv,pycharm+all,windows,linux,macos
-
+staticfiles/
 ### Django ###
 *.log
 *.pot
