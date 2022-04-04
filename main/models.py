@@ -8,7 +8,7 @@ class Project(models.Model):
     description = models.TextField(default="", max_length=2047)
     path_link = models.TextField(max_length=255)
     year = models.TextField(default='', max_length=255)
-    upload_date = models.DateTimeField()
+    upload_date = models.DateTimeField(default=timezone.now)
     last_open_date = models.DateTimeField(default=timezone.now)
     author = models.TextField(max_length=255)
     department = models.TextField(max_length=255)
