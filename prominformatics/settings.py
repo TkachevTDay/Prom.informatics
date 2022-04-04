@@ -86,8 +86,14 @@ WSGI_APPLICATION = 'prominformatics.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(BASE_DIR / 'db.sqlite3'),
+        #'ENGINE': 'django.db.backends.sqlite3',
+        #'NAME': str(BASE_DIR / 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'prominformatics_db',
+        'USER': 's104_prominformatics_user',
+        'PASSWORD': 's104_pr0m1nF0Rm4t1cs_Pa5S',
+        'HOST': 'db',
+        'PORT': '5432',
     }
 }
 

@@ -1,0 +1,40 @@
+version: "3"
+
+services:
+  db:
+    restart: always
+    container_name: db
+    image: postgres:alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=prominformatics_db
+      - POSTGRES_USER=s104_prominformatics_user
+      - POSTGRES_PASSWORD=s104_pr0m1nF0Rm4t1cs_Pa5S
+      - POSTGRES_HOST_AUTH_METHOD=trust
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: demo-pgadmin
+    depends_on:
+      - db
+    ports:
+      - "5051:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: root
+    restart: always
+
+  web:
+    build: .
+    ports:
+      - "8080:8080"
+    image: prominformatics
+    volumes:
+      - .:/prominf
+    command: ./script.sh
+    restart: always
+    depends_on:
+      - db
+    links:
+      - db:db

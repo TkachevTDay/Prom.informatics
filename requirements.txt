@@ -2,4 +2,4 @@ Django~=4.0.2
 sphinx
 docker
 djangorestframework~=3.13.1
-python-Levenshtein
+psycopg2-binary

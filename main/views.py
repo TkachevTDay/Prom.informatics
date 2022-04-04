@@ -3,7 +3,6 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework import viewsets
 from .models import Project, Images
-from main import searchAlgorithm
 
 # Create your views here.
 from .serializers import ProjectSerializer, ImagesSerializer
@@ -23,8 +22,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         mark_filter = self.request.query_params.get('mark')
         projects_by_filter = Project.objects.all()
         if name_filter:
-            projects_by_filter = projects_by_filter.filter(
-                id__in=searchAlgorithm.search_same(name_filter, projects_by_filter))
+            projects_by_filter = projects_by_filter.filter(name=name_filter)
         if department_filter:
             projects_by_filter = projects_by_filter.filter(department=department_filter)
         if author_filter:
