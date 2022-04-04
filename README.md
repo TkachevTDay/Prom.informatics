@@ -2,9 +2,11 @@
 
 Установка и запуск:
 
->1. `sudo docker build -t prominformatics .`
->2. `sudo docker run -t --rm -p 8080:8080 prominformatics:latest`
+>1. `sudo docker-compose build`
+>2. `sudo docker-conpose up`
 
-Container kill:
->1. `docker rm -f $(docker ps -a -q)`
+Приостановка работы контейнеров:
+>1. `sudo docker-compose down` or `CTRL+C`
+
+
 
