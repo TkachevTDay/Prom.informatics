@@ -5,6 +5,8 @@ services:
     restart: always
     container_name: db
     image: postgres:alpine
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     environment:
