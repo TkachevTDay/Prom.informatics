@@ -18,7 +18,7 @@ var app = new Vue({
             authorItems: [],
             yearItems: [],
             recentProjects: [],
-            baseUrl: 'http://127.0.0.1:8000/',
+            baseUrl: 'http://0.0.0.0:8080/',
             carouselIterator: 0,
             images: [],
             currentProjectImages: [],
@@ -30,15 +30,12 @@ var app = new Vue({
             if (this.$vuetify.breakpoint.xl) {
                 return 4;
             }
-
             if (this.$vuetify.breakpoint.lg) {
                 return 3;
             }
-
             if (this.$vuetify.breakpoint.md) {
                 return 2;
             }
-
             return 1;
         }
     },
