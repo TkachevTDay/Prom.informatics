@@ -38,9 +38,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         queryset = projects_by_filter[int(start):int(start) + int(number)]
         return queryset
 
-    class Meta:
-        db_table = u'main_project'
-        managed = False
+
 
 class RecentProjectViewSet(viewsets.ModelViewSet):
     recent_projects_amount = 5
@@ -56,6 +54,8 @@ class ImagesViewsSet(viewsets.ModelViewSet):
 def index_page(request):
     a = Project(name='a', author='s104', year='1984')
     a.save()
+    b = Images(project_id = a, src = "https://www.getbidbar.com/assets/blog/programming_topics.jpg", status='avatar')
+    b.save()
     return render(request, 'index.html', {})
 
 
