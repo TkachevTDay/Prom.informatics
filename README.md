@@ -2,7 +2,7 @@
 
 Установка и запуск:
 
->1. `sudo docker-compose build`
+>1. `sudo docker-compose build` (только в первый раз / при изменении Dockerfile)
 >2. `sudo docker-conpose up`
 
 Приостановка работы контейнеров:
