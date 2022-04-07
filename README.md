@@ -2,7 +2,7 @@
 
 Установка и запуск:
 
->1. `sudo docker-compose build` (только в первый раз / при изменении Dockerfile)
+>1. `sudo docker-compose build` (только в первый раз / при изменении Dockerfile/Django files)
 >2. `sudo docker-compose up`
 
 Приостановка работы контейнеров:
