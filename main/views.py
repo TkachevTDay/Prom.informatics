@@ -3,6 +3,8 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework import viewsets
 from .models import Project, Images
+from django.core.mail import send_mail
+
 
 # Create your views here.
 from .serializers import ProjectSerializer, ImagesSerializer
@@ -56,6 +58,16 @@ def index_page(request):
     a.save()
     b = Images(project_id = a, src = "https://www.getbidbar.com/assets/blog/programming_topics.jpg", status='avatar')
     b.save()
+    if request.method == 'POST':
+        body = request.body.decode('utf-8')
+        filter_data = json.loads(body)['item']
+        send_mail(
+            'Новый проект выслан на модерацию.',
+            f'Новый проект (ID:{ filter_data["id"] }) с именем { filter_data["name"] }, автор { filter_data["author"] } ожидает Вашей модерации.',
+            'prominfnotification@yandex.ru',
+            ['matgost@yandex.ru'],
+            fail_silently=False,
+        )
     return render(request, 'index.html', {})
 
 

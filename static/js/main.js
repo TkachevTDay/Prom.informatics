@@ -21,6 +21,7 @@ var app = new Vue({
             baseUrl: 'http://0.0.0.0:8080/',
             carouselIterator: 0,
             images: [],
+            filterShow: false,
             currentProjectImages: [],
             currentProjectAvatar: '',
         }
@@ -40,6 +41,9 @@ var app = new Vue({
         }
     },
     methods: {
+        showFilter: function(){
+            this.filterShow = !this.filterShow
+        },
         carouselNext: function(){
             if (this.recentProjects.length - 1 == this.carouselIterator){
                 this.carouselIterator = 0
@@ -62,7 +66,7 @@ var app = new Vue({
         },
         update: function (){
             let xhr = new XMLHttpRequest();
-            let c = `${this.baseUrl}api/projects/?start=${this.items.length}&number=2&year=${this.selectedYear}&department=${this.selectedDepartment}&mark=${this.selectedMark}&author=${this.selectedAuthor}&name=${this.searchText}&format=json`
+            let c = `${this.baseUrl}api/projects/?start=${this.items.length}&number=5&year=${this.selectedYear}&department=${this.selectedDepartment}&mark=${this.selectedMark}&author=${this.selectedAuthor}&name=${this.searchText}&format=json`
             xhr.open("GET", c, true);
             xhr.send();
             xhr.onreadystatechange = function() {
@@ -97,8 +101,20 @@ var app = new Vue({
 
         },
         filter: function() {
-            this.items = [];
-            this.update();
+            let xhr = new XMLHttpRequest();
+            let c = `${this.baseUrl}api/projects/?start=${this.items.length}&number=2&year=${this.selectedYear}&department=${this.selectedDepartment}&mark=${this.selectedMark}&author=${this.selectedAuthor}&name=${this.searchText}&format=json`
+            xhr.open("GET", c, true);
+            xhr.send();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        this.items = [];
+                        let response=xhr.response;
+                        let a = JSON.parse(response);
+                        app.items = app.items.concat(a);
+                    }
+                }
+            };
         },
         getFilterParams: function(){
             let xhr = new XMLHttpRequest();
@@ -130,7 +146,24 @@ var app = new Vue({
                     }
                 }
             };
-        }
+        },
+        sendNotification: function(item){
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", `${this.baseUrl}`, true);
+            let CSRF_token = document.querySelector('[name=csrfmiddlewaretoken]').value
+            xhr.setRequestHeader("X-CSRFToken", CSRF_token);
+            let data = {
+                'item': item
+            }
+
+            xhr.send(JSON.stringify(data))
+             xhr.onreadystatechange = function() {
+              if (xhr.readyState == 4) {
+                console.log('300 bucks')
+              }
+            };
+
+        },
     },
   mounted(){
     this.update();
