@@ -33,7 +33,7 @@ services:
       - "8080:8080"
     image: prominformatics
     volumes:
-      - .:/prominf
+      - /var/run/docker.sock:/var/run/docker.sock
     command: ./script.sh
     restart: always
     depends_on:
