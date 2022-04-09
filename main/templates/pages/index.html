@@ -179,7 +179,7 @@
                     <v-list>
                         <v-subheader>Projects</v-subheader>
                         <v-list-item-group v-model="selectedItem" color="grey">
-                            <v-list-item v-for="(item, i) in items" :key="i" @click.stop="dialog = true" @click="updateCurrentData(item);">
+                            <v-list-item v-for="(item, i) in items" :key="i" @click.stop="showDialog" @click="updateCurrentData(item);">
                                 <v-list-item-icon>
                                     <v-icon v-text="item.icon"></v-icon>
                                 </v-list-item-icon>
@@ -195,7 +195,6 @@
                                 <v-list-item-content>
                                     <v-list-item-title v-text="item.year"></v-list-item-title>
                                 </v-list-item-content>
-                                {% include 'dialog-card.html' %}
                             </v-list-item>
                         </v-list-item-group>
                     </v-list>

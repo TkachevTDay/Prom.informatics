@@ -53,8 +53,8 @@ var app = new Vue({
         showFilter: function(){
             this.filterShow = !this.filterShow
         },
-        updateCurrentData: function(item = "none"){
-            if (item == "none") {
+        updateCurrentData: function(item = null){
+            if (item == null) {
                 this.currentName=this.recentProjects[this.carouselIterator].name
                 this.currentDescription=this.recentProjects[this.carouselIterator].description
                 this.currentAuthor=this.recentProjects[this.carouselIterator].author
@@ -80,6 +80,7 @@ var app = new Vue({
 
         }
         this.updateCurrentImagesList();
+        this.updateCurrentData();
         },
         carouselPrev: function(){
             if (this.carouselIterator == 0){
@@ -90,6 +91,7 @@ var app = new Vue({
                 this.carouselIterator -= 1
             }
             this.updateCurrentImagesList();
+            this.updateCurrentData();
         },
         update: function (){
             let xhr = new XMLHttpRequest();
