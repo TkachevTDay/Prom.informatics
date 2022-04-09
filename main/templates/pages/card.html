@@ -2,6 +2,7 @@
     <template>
         <v-card
                 @click.stop="dialog = true"
+                @click="updateCurrentData(); updateCurrentImagesList();"
                 class="mx-auto"
                 max-width="1200"
                 max-height="700"

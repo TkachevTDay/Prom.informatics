@@ -12,6 +12,12 @@ var app = new Vue({
             selectedYear: '',
             searchText: '',
             selectedAuthor: '',
+            currentName: '',
+            currentDescription: '',
+            currentAuthor: '',
+            currentDepartment: '',
+            currentMark: '',
+            currentYear: '',
             items: [],
             markItems: [],
             departmentItems: [],
@@ -41,8 +47,29 @@ var app = new Vue({
         }
     },
     methods: {
+        showDialog: function(){
+            this.dialog = true;
+        },
         showFilter: function(){
             this.filterShow = !this.filterShow
+        },
+        updateCurrentData: function(item = "none"){
+            if (item == "none") {
+                this.currentName=this.recentProjects[this.carouselIterator].name
+                this.currentDescription=this.recentProjects[this.carouselIterator].description
+                this.currentAuthor=this.recentProjects[this.carouselIterator].author
+                this.currentDepartment=this.recentProjects[this.carouselIterator].department
+                this.currentMark=this.recentProjects[this.carouselIterator].mark
+                this.currentYear=this.recentProjects[this.carouselIterator].year
+            } else {
+                this.currentName=item.name
+                this.currentDescription=item.description
+                this.currentAuthor=item.author
+                this.currentDepartment=item.department
+                this.currentMark=item.mark
+                this.currentYear=item.year
+            }
+
         },
         carouselNext: function(){
             if (this.recentProjects.length - 1 == this.carouselIterator){
@@ -170,6 +197,5 @@ var app = new Vue({
     this.getFilterParams();
     this.getRecentProjects();
     this.getImages();
-
   },
 })
