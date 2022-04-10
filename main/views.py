@@ -44,7 +44,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
 class RecentProjectViewSet(viewsets.ModelViewSet):
     recent_projects_amount = 5
-    queryset = Project.objects.order_by("upload_date")[:recent_projects_amount]
+    queryset = Project.objects.order_by("-upload_date")[:recent_projects_amount]
     serializer_class = ProjectSerializer
 
 
@@ -54,7 +54,7 @@ class ImagesViewsSet(viewsets.ModelViewSet):
 
 
 def index_page(request):
-    a = Project(name='a', author='s104', year='1984')
+    a = Project(name='b', author='s104', year='1984')
     a.save()
     b = Images(project_id = a, src = "https://www.getbidbar.com/assets/blog/programming_topics.jpg", status='avatar')
     b.save()
