@@ -5,6 +5,7 @@ var app = new Vue({
     data(){
         return {
             dialog: false,
+            userProjects: [{"name": "avtor", "description": "eto proect", "author": "matvey","mark":5,"year":2020},{"name": "avtor", "description": "eto proect", "author": "matvey","mark":5,"year":2020}],
             selectedItem: 1,
             carousel: 0,
             selectedMark: '',
