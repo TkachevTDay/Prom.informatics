@@ -5,7 +5,8 @@ var app = new Vue({
     data(){
         return {
             dialog: false,
-            userProjects: [{"name": "avtor", "description": "eto proect", "author": "matvey","mark":5,"year":2020},{"name": "avtor", "description": "eto proect", "author": "matvey","mark":5,"year":2020}],
+            dialogAdd: false,
+            userProjects: [{"name": "avtor", "description": "eto proect","load_date": "2019","department": "Online", "author": "matvey","mark":5},{"name": "avtor2","load_date": "2019","department": "Online", "description": "eto proect2", "author": "matvey2","mark":4,"load_date": "2022",}],
             selectedItem: 1,
             carousel: 0,
             selectedMark: '',
@@ -13,12 +14,21 @@ var app = new Vue({
             selectedYear: '',
             searchText: '',
             selectedAuthor: '',
+
             currentName: '',
             currentDescription: '',
             currentAuthor: '',
             currentDepartment: '',
             currentMark: '',
             currentYear: '',
+
+
+            currentAddName: '',
+            currentAddDescription: '',
+            currentAddAuthor: '',
+            currentAddDepartment: '',
+            currentAddMark: '',
+            currentAddYear: '',
             items: [],
             markItems: [],
             departmentItems: [],
@@ -51,6 +61,9 @@ var app = new Vue({
         showDialog: function(){
             this.dialog = true;
         },
+        showDialog: function(){
+            this.dialogAdd = true;
+        },
         showFilter: function(){
             this.filterShow = !this.filterShow
         },
@@ -69,6 +82,17 @@ var app = new Vue({
                 this.currentDepartment=item.department
                 this.currentMark=item.mark
                 this.currentYear=item.year
+            }
+
+        },
+        updateCurrentAddData: function(index = null){
+            if (index == null) {
+                this.currentAddName=this.userProjects[].name
+                this.currentAddDescription=this.recentProjects[].description
+                this.currentAddAuthor=this.recentProjects[].author
+                this.currentAddDepartment=this.recentProjects[].department
+                this.currentAddMark=this.recentProjects[].mark
+                this.currentAddYear=this.recentProjects[].year
             }
 
         },
