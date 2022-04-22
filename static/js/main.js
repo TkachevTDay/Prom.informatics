@@ -61,7 +61,7 @@ var app = new Vue({
         showDialog: function(){
             this.dialog = true;
         },
-        showDialog: function(){
+        showAddDialog: function(){
             this.dialogAdd = true;
         },
         showFilter: function(){
@@ -86,13 +86,13 @@ var app = new Vue({
 
         },
         updateCurrentAddData: function(index = null){
-            if (index == null) {
-                this.currentAddName=this.userProjects[].name
-                this.currentAddDescription=this.recentProjects[].description
-                this.currentAddAuthor=this.recentProjects[].author
-                this.currentAddDepartment=this.recentProjects[].department
-                this.currentAddMark=this.recentProjects[].mark
-                this.currentAddYear=this.recentProjects[].year
+            if (index != null) {
+                this.currentAddName=this.userProjects[index].name
+                this.currentAddDescription=this.userProjects[index].description
+                this.currentAddAuthor=this.userProjects[index].author
+                this.currentAddDepartment=this.userProjects[index].department
+                this.currentAddMark=this.userProjects[index].mark
+                this.currentAddYear=this.userProjects[index].year
             }
 
         },

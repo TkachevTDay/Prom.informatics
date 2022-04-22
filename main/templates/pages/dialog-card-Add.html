@@ -1,0 +1,82 @@
+<v-dialog
+        v-model="dialogAdd"
+        max-width="1000"
+        height="75%"
+        style="height: 100px"
+>
+    <div class="d-flex justify-center">
+        <v-card style="width: 1000px; overflow:  hidden;" elevation="2" class="grey lighten-4">
+            <v-card-title class="grey lighten-3">
+                <v-col>
+                    <h2 class="text-h4 font-weight-light">[[ currentAddName ]]</h2>
+                </v-col>
+                <v-col class="d-flex justify-end">
+                    <v-btn class="mr-2" big>
+                        <v-icon dark >
+                            mdi-play
+                        </v-icon>
+                    </v-btn>
+                    <v-btn big>
+                        <img src="https://fonts.gstatic.com/s/i/materialicons/code/v11/24px.svg"/>
+                    </v-btn>
+                </v-col>
+            </v-card-title>
+            <v-row class="mx-2 my-1 text-center" max-height="100px">
+                <v-col>
+                    <h3 class="font-weight-light">Краткое описание</h3>
+                    <p class="font-weight-thin">[[ currentAddDescription ]]</p>
+
+                    <h3 class="font-weight-light">Технологический стек</h3>
+                    <p class="ma-0 font-weight-thin">Python 3</p>
+                    <p class="ma-0 font-weight-thin">Django 2.1</p>
+                    <p class="ma-0 font-weight-thin">SQLite 3</p>
+                </v-col>
+                <v-col class="d-flex justify-end align-right">
+                    <template>
+                        <v-carousel v-model="carousel" hide-delimiters height="400px" style="margin-bottom: -10px">
+                            <v-carousel-item
+                                    v-for="(n, i) in currentProjectImages"
+                                    :key="i"
+                                    transition="fade-transition"
+                            >
+                                <v-sheet
+                                        height="100%"
+                                        tile
+                                >
+                                    <v-row
+                                            class="fill-height"
+                                            align="center"
+                                            justify="center"
+                                    >
+                                        <v-img
+                                                :src="n.src"
+                                                height="100%"></v-img>
+                                    </v-row>
+                                </v-sheet>
+                            </v-carousel-item>
+                        </v-carousel>
+                    </template>
+
+                </v-col>
+            </v-row>
+            <v-row class="mx-2 my-1 text-center">
+                <v-col>
+                    <h4 class="font-weight-light">Год:</h4>
+                     <h5  class="ma-0 font-weight-thin"> [[currentAddYear]]</h5>
+                </v-col>
+                <v-col>
+                    <h4 class="font-weight-light">Отделение:</h4>
+                     <h5  class="ma-0 font-weight-thin"> [[currentAddDepartment]]</h5>
+                </v-col>
+                <v-col>
+                    <h4 class="font-weight-light">Группа:</h4>
+                     <h5  class="ma-0 font-weight-thin"> [[currentAddAuthor]]</h5>
+                </v-col>
+                <v-col>
+                    <h4 class="font-weight-light">Оценка:</h4>
+                    <h5  class="ma-0 font-weight-thin"> [[currentAddMark]]</h5>
+                </v-col>
+            </v-row>
+        </v-card>
+    </div>
+</v-dialog>
