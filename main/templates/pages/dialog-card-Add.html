@@ -4,6 +4,7 @@
         height="75%"
         style="height: 100px"
 >
+    {% csrf_token %}
     <div class="d-flex justify-center">
         <v-card style="width: 1000px; overflow:  hidden;" elevation="2" class="grey lighten-4">
             <v-card-title class="grey lighten-3">
@@ -98,6 +99,9 @@
                         color="grey"
                     ></v-text-field>
                 </v-col>
+            </v-row>
+            <v-row class="my-0 mr-0 ml-10">
+                <v-btn @click='Add'>Отправить</v-btn>
             </v-row>
         </v-card>
     </div>
