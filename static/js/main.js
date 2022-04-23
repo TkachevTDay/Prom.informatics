@@ -157,20 +157,8 @@ var app = new Vue({
 
         },
         filter: function() {
-            let xhr = new XMLHttpRequest();
-            let c = `${this.baseUrl}api/projects/?start=${this.items.length}&number=2&year=${this.selectedYear}&department=${this.selectedDepartment}&mark=${this.selectedMark}&author=${this.selectedAuthor}&name=${this.searchText}&format=json`
-            xhr.open("GET", c, true);
-            xhr.send();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4) {
-                    if (xhr.status == 200) {
-                        this.items = [];
-                        let response=xhr.response;
-                        let a = JSON.parse(response);
-                        app.items = app.items.concat(a);
-                    }
-                }
-            };
+            this.items = [];
+            this.update();
         },
         getFilterParams: function(){
             let xhr = new XMLHttpRequest();
