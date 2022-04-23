@@ -2,7 +2,7 @@
     <template>
         <v-card
                 @click.stop="showDialog"
-                @click="updateCurrentData(); updateCurrentImagesList();"
+                @click="updateCurrentData(); updateCurrentImagesList(); setModeratableState(false)"
                 class="mx-auto"
                 max-width="1200"
                 max-height="700"

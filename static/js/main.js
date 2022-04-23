@@ -14,15 +14,13 @@ var app = new Vue({
             selectedYear: '',
             searchText: '',
             selectedAuthor: '',
-
+            isCardModeratable: false,
             currentName: '',
             currentDescription: '',
             currentAuthor: '',
             currentDepartment: '',
             currentMark: '',
             currentYear: '',
-
-
             currentAddName: '',
             currentAddDescription: '',
             currentAddAuthor: '',
@@ -135,7 +133,9 @@ var app = new Vue({
                 }
             };
         },
-
+        setModeratableState(state){
+            this.isCardModeratable = state
+        },
         updateCurrentImagesList: function(){
             this.currentProjectImages = app.images.filter(i => (i.project_id - 1 == this.carouselIterator))
             this.currentProjectAvatar = app.images.filter(i => ((i.project_id - 1 == this.carouselIterator) && (i.status=='avatar')))[0]
