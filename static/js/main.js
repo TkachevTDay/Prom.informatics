@@ -40,7 +40,7 @@ var app = new Vue({
             filterShow: false,
             currentProjectImages: [],
             currentProjectAvatar: '',
-        }
+        };
     },
     computed: {
         columns() {

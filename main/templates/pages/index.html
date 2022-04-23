@@ -30,7 +30,7 @@
                                     <v-list-item
                                             v-for="(item, i) in userProjects"
                                             :key="i"
-                                            @click="updateCurrentAddData(i); setModeratableState(true)"
+                                            @click="updateCurrentAddData(i); isCardModeratable = true"
                                             @click.stop="showDialog"
                                     >
                                         <v-row align="center" justify="center">
