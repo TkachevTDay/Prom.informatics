@@ -17,7 +17,10 @@
                     ></v-text-field>
                 </v-col>
                 <v-row class="my-0 mr-0 ml-10" v-if="isCardModeratable==true">
-                    <v-btn @click='Add'>Отправить</v-btn>
+                    <form method="post">
+                        {% csrf_token %}
+                        <v-btn @click='sendProjectOnModerate()'>Отправить</v-btn>
+                    </form>
                 </v-row>
                 <v-col class="d-flex justify-end" v-if="isCardModeratable==false">
                     <v-btn class="mr-2" big>

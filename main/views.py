@@ -58,12 +58,21 @@ def index_page(request):
     a.save()
     b = Images(project_id = a, src = "https://www.getbidbar.com/assets/blog/programming_topics.jpg", status='avatar')
     b.save()
+
     if request.method == 'POST':
         body = request.body.decode('utf-8')
-        filter_data = json.loads(body)['item']
+        name = json.loads(body)["currentAddName"]
+        author = json.loads(body)["currentAddAuthor"]
+        description = json.loads(body)['currentAddDescription']
+        #todo: make tech stack
+        department = json.loads(body)['currentAddDepartment']
+        mark = json.loads(body)['currentAddMark']
+        year = json.loads(body)['currentAddYear']
+        item = Project(name = name, author = author, description = description, mark = mark, year = year, department = department)
+        item.save()
         send_mail(
             'Новый проект выслан на модерацию.',
-            f'Новый проект (ID:{ filter_data["id"] }) с именем { filter_data["name"] }, автор { filter_data["author"] } ожидает Вашей модерации.',
+            f'Новый проект с именем { name}, автор { author } ожидает Вашей модерации.',
             'prominfnotification@yandex.ru',
             ['matgost@yandex.ru'],
             fail_silently=False,

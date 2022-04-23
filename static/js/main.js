@@ -203,19 +203,26 @@ var app = new Vue({
                 }
             };
         },
-        sendNotification: function(item){
+
+        sendProjectOnModerate: function(item){
             let xhr = new XMLHttpRequest();
             xhr.open("POST", `${this.baseUrl}`, true);
             let CSRF_token = document.querySelector('[name=csrfmiddlewaretoken]').value
             xhr.setRequestHeader("X-CSRFToken", CSRF_token);
             let data = {
-                'item': item
+                'currentAddName': this.currentAddName,
+                'currentAddDescription': this.currentAddDescription,
+                'currentAddAuthor': this.currentAddAuthor,
+                'currentAddTech': this.currentAddTech,
+                'currentAddDepartment': this.currentAddDepartment,
+                'currentAddMark': this.currentAddMark,
+                'currentAddYear': this.currentAddYear,
             }
 
             xhr.send(JSON.stringify(data))
              xhr.onreadystatechange = function() {
               if (xhr.readyState == 4) {
-                console.log('300 bucks')
+                console.log('POST-request with add config has been successfully sent')
               }
             };
 
