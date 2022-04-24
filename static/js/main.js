@@ -85,6 +85,8 @@ var app = new Vue({
                 this.currentDepartment=this.recentProjects[this.carouselIterator].department
                 this.currentMark=this.recentProjects[this.carouselIterator].mark
                 this.currentYear=this.recentProjects[this.carouselIterator].year
+                this.currentProjectImages=this.recentProjects[this.carouselIterator].images
+                this.currentProjectAvatar=this.recentProjects[this.carouselIterator].icon
             } else {
                 this.currentName=item.name
                 this.currentDescription=item.description
@@ -92,6 +94,8 @@ var app = new Vue({
                 this.currentDepartment=item.department
                 this.currentMark=item.mark
                 this.currentYear=item.year
+                this.currentProjectImages=item.images
+                this.currentProjectAvatar=item.icon
             }
 
         },
@@ -115,7 +119,6 @@ var app = new Vue({
                 this.carouselIterator += 1
 
         }
-        this.updateCurrentImagesList();
         this.updateCurrentData();
         },
         carouselPrev: function(){
@@ -126,7 +129,6 @@ var app = new Vue({
             else{
                 this.carouselIterator -= 1
             }
-            this.updateCurrentImagesList();
             this.updateCurrentData();
         },
         update: function (){
@@ -147,26 +149,7 @@ var app = new Vue({
         setModeratableState(state){
             this.isCardModeratable = state
         },
-        updateCurrentImagesList: function(){
-            this.currentProjectImages = app.images.filter(i => (i.project_id - 1 == this.carouselIterator))
-            this.currentProjectAvatar = app.images.filter(i => ((i.project_id - 1 == this.carouselIterator) && (i.status=='avatar')))[0]
-        },
-        getImages: function(){
-            let xhr = new XMLHttpRequest();
-            xhr.open("GET", `${this.baseUrl}api/images/?filter=json`, true);
-            xhr.send();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4) {
-                    if (xhr.status == 200) {
-                        let response=xhr.response;
-                        let a = JSON.parse(response);
-                        app.images = a
-                        app.updateCurrentImagesList();
-                    }
-                }
-            };
 
-        },
         filter: function() {
             this.items = [];
             this.update();
@@ -231,6 +214,5 @@ var app = new Vue({
     this.update();
     this.getFilterParams();
     this.getRecentProjects();
-    this.getImages();
   },
 })

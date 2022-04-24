@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-
+from django.contrib.postgres.fields import ArrayField
 
 # Create your models here.
 class Project(models.Model):
@@ -13,13 +13,8 @@ class Project(models.Model):
     author = models.TextField(max_length=255)
     department = models.TextField(max_length=255)
     mark = models.TextField(max_length=10)
-
-
-class Images(models.Model):
-    project_id = models.ForeignKey(to=Project, on_delete=models.CASCADE)
-    src = models.TextField(max_length=255)
-    status = models.TextField(max_length=255, default='ordinary')
-
+    icon = models.TextField(max_length=255, default='https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Circle-icons-computer.svg/2048px-Circle-icons-computer.svg.png')
+    images = models.JSONField(default=list)
 
 class DockerISO(models.Model):
     project_id = models.ForeignKey(to=Project, on_delete=models.CASCADE)

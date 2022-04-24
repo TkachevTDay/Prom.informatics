@@ -2,13 +2,13 @@
     <template>
         <v-card
                 @click.stop="showDialog"
-                @click="updateCurrentData(); updateCurrentImagesList(); isCardModeratable = false"
+                @click="updateCurrentData(); isCardModeratable = false"
                 class="mx-auto"
                 max-width="1200"
                 max-height="700"
         >
             <v-img
-                    :src="currentProjectAvatar.src"
+                    :src="currentProjectAvatar"
                     height="550px"
             ></v-img>
 

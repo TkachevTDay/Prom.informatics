@@ -25,7 +25,6 @@ from main.views import ProjectViewSet
 router = routers.DefaultRouter()
 router.register(r'projects', ProjectViewSet)
 router.register(r'recent_projects', main.views.RecentProjectViewSet)
-router.register(r'images', main.views.ImagesViewsSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
