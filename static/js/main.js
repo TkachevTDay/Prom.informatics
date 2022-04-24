@@ -5,6 +5,8 @@ var app = new Vue({
     data(){
         return {
             dialog: false,
+            dialogAdd: false,
+            userProjects: [{"name": "avtor", "description": "eto proect","load_date": "2019","department": "Online", "author": "matvey","mark":"5","tech":"Django"},{"name": "avtor2","load_date": "2019","department": "Online", "description": "eto proect2", "author": "matvey2","mark":"4","load_date": "2022","tech":"Django"}],
             selectedItem: 1,
             carousel: 0,
             selectedMark: '',
@@ -12,12 +14,20 @@ var app = new Vue({
             selectedYear: '',
             searchText: '',
             selectedAuthor: '',
+            isCardModeratable: false,
             currentName: '',
             currentDescription: '',
             currentAuthor: '',
             currentDepartment: '',
             currentMark: '',
             currentYear: '',
+            currentAddName: '',
+            currentAddDescription: '',
+            currentAddAuthor: '',
+            currentAddTech: '',
+            currentAddDepartment: '',
+            currentAddMark: '',
+            currentAddYear: '',
             items: [],
             markItems: [],
             departmentItems: [],
@@ -30,9 +40,20 @@ var app = new Vue({
             filterShow: false,
             currentProjectImages: [],
             currentProjectAvatar: '',
-        }
+            rules: {
+              value: [val => (val || '').length > 0 || 'Это поле необходимо заполнить!']
+            },
+        };
     },
     computed: {
+        formIsValid () {
+            return (
+              this.currentAddAuthor &&
+              this.currentAddDepartment &&
+              this.currentAddDescription &&
+              this.currentAddMark && this.currentAddName && this.currentAddName && this.currentAddTech && this.currentAddYear
+            )
+          },
         columns() {
             if (this.$vuetify.breakpoint.xl) {
                 return 4;
@@ -48,7 +69,10 @@ var app = new Vue({
     },
     methods: {
         showDialog: function(){
-            this.dialog = true;
+            this.dialog = !this.dialog;
+        },
+        showAddDialog: function(){
+            this.dialogAdd = true;
         },
         showFilter: function(){
             this.filterShow = !this.filterShow
@@ -68,6 +92,18 @@ var app = new Vue({
                 this.currentDepartment=item.department
                 this.currentMark=item.mark
                 this.currentYear=item.year
+            }
+
+        },
+        updateCurrentAddData: function(index = null){
+            if (index != null) {
+                this.currentAddName=this.userProjects[index].name
+                this.currentAddDescription=this.userProjects[index].description
+                this.currentAddAuthor=this.userProjects[index].author
+                this.currentAddDepartment=this.userProjects[index].department
+                this.currentAddMark=this.userProjects[index].mark
+                this.currentAddYear=this.userProjects[index].year
+                this.currentAddTech=this.userProjects[index].tech
             }
 
         },
@@ -108,7 +144,9 @@ var app = new Vue({
                 }
             };
         },
-
+        setModeratableState(state){
+            this.isCardModeratable = state
+        },
         updateCurrentImagesList: function(){
             this.currentProjectImages = app.images.filter(i => (i.project_id - 1 == this.carouselIterator))
             this.currentProjectAvatar = app.images.filter(i => ((i.project_id - 1 == this.carouselIterator) && (i.status=='avatar')))[0]
@@ -130,20 +168,8 @@ var app = new Vue({
 
         },
         filter: function() {
-            let xhr = new XMLHttpRequest();
-            let c = `${this.baseUrl}api/projects/?start=${this.items.length}&number=2&year=${this.selectedYear}&department=${this.selectedDepartment}&mark=${this.selectedMark}&author=${this.selectedAuthor}&name=${this.searchText}&format=json`
-            xhr.open("GET", c, true);
-            xhr.send();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4) {
-                    if (xhr.status == 200) {
-                        this.items = [];
-                        let response=xhr.response;
-                        let a = JSON.parse(response);
-                        app.items = app.items.concat(a);
-                    }
-                }
-            };
+            this.items = [];
+            this.update();
         },
         getFilterParams: function(){
             let xhr = new XMLHttpRequest();
@@ -176,19 +202,26 @@ var app = new Vue({
                 }
             };
         },
-        sendNotification: function(item){
+
+        sendProjectOnModerate: function(item){
             let xhr = new XMLHttpRequest();
             xhr.open("POST", `${this.baseUrl}`, true);
             let CSRF_token = document.querySelector('[name=csrfmiddlewaretoken]').value
             xhr.setRequestHeader("X-CSRFToken", CSRF_token);
             let data = {
-                'item': item
+                'currentAddName': this.currentAddName,
+                'currentAddDescription': this.currentAddDescription,
+                'currentAddAuthor': this.currentAddAuthor,
+                'currentAddTech': this.currentAddTech,
+                'currentAddDepartment': this.currentAddDepartment,
+                'currentAddMark': this.currentAddMark,
+                'currentAddYear': this.currentAddYear,
             }
 
             xhr.send(JSON.stringify(data))
              xhr.onreadystatechange = function() {
               if (xhr.readyState == 4) {
-                console.log('300 bucks')
+                console.log('POST-request with add config has been successfully sent')
               }
             };
 

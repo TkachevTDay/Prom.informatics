@@ -15,6 +15,7 @@
     <v-app>
         <v-main>
             <template>
+                        {% include 'dialog-card.html' %}
                 <v-parallax dark src="https://informatics.ru/img/intro/intro-inter-progressive.jpg" height="900">
                     <div class="d-flex justify-end">
                         <v-menu
@@ -28,18 +29,18 @@
                                 {% csrf_token %}
                                 <v-list>
                                     <v-list-item
-                                            v-for="(item, i) in items"
+                                            v-for="(item, i) in userProjects"
                                             :key="i"
-                                            @click="sendNotification(item)"
+                                            @click="updateCurrentAddData(i); isCardModeratable = true"
+                                            @click.stop="showDialog"
                                     >
                                         <v-row align="center" justify="center">
                                             <div style='display: inline-block'>
                                                 <h4 class="font-weight-thin mr-2">[[ item.name ]]</h4>
                                             </div>
                                             <div style='display: inline-block'>
-                                                <h4 class="font-weight-thin">[[ item.upload_date ]]</h4>
+                                                <h4 class="font-weight-thin">[[ item.load_date ]]</h4>
                                             </div>
-
                                         </v-row>
                                     </v-list-item>
                                 </v-list>
@@ -73,6 +74,7 @@
                     </v-row>
                 </v-container>
             </template>
+
             <v-carousel height="700px" hide-delimiters style="margin-bottom: -20px; margin-top: 40px"
                         :cycle="false">
                 <template v-slot:prev="{ on, attrs }">
@@ -179,7 +181,7 @@
                     <v-list>
                         <v-subheader>Projects</v-subheader>
                         <v-list-item-group v-model="selectedItem" color="grey">
-                            <v-list-item v-for="(item, i) in items" :key="i" @click.stop="showDialog" @click="updateCurrentData(item);">
+                            <v-list-item v-for="(item, i) in items" :key="i" @click.stop="showDialog" @click="updateCurrentData(item); isCardModeratable=false">
                                 <v-list-item-icon>
                                     <v-icon v-text="item.icon"></v-icon>
                                 </v-list-item-icon>
