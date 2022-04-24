@@ -6,8 +6,7 @@ var app = new Vue({
         return {
             dialog: false,
             dialogAdd: false,
-            valid: false,
-            userProjects: [{"name": "avtor", "description": "eto proect","load_date": "2019","department": "Online", "author": "matvey","mark":5,"tech":"Django"},{"name": "avtor2","load_date": "2019","department": "Online", "description": "eto proect2", "author": "matvey2","mark":4,"load_date": "2022","tech":"Django"}],
+            userProjects: [{"name": "avtor", "description": "eto proect","load_date": "2019","department": "Online", "author": "matvey","mark":"5","tech":"Django"},{"name": "avtor2","load_date": "2019","department": "Online", "description": "eto proect2", "author": "matvey2","mark":"4","load_date": "2022","tech":"Django"}],
             selectedItem: 1,
             carousel: 0,
             selectedMark: '',
@@ -42,11 +41,19 @@ var app = new Vue({
             currentProjectImages: [],
             currentProjectAvatar: '',
             rules: {
-              value: [val => (val || '').length > 0 || 'Это поле необходимо заполнить!'],
+              value: [val => (val || '').length > 0 || 'Это поле необходимо заполнить!']
             },
         };
     },
     computed: {
+        formIsValid () {
+            return (
+              this.currentAddAuthor &&
+              this.currentAddDepartment &&
+              this.currentAddDescription &&
+              this.currentAddMark && this.currentAddName && this.currentAddName && this.currentAddTech && this.currentAddYear
+            )
+          },
         columns() {
             if (this.$vuetify.breakpoint.xl) {
                 return 4;

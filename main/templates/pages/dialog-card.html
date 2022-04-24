@@ -27,7 +27,7 @@
                     <v-row class="my-0 mr-0 ml-10" v-if="isCardModeratable==true">
                         <form method="post">
                             {% csrf_token %}
-                            <v-btn @click='sendProjectOnModerate()' :disabled="!valid" @click.stop="showDialog">Отправить</v-btn>
+                            <v-btn @click='sendProjectOnModerate()' :disabled="!formIsValid" @click.stop="showDialog">Отправить</v-btn>
                         </form>
                     </v-row>
                     <v-col class="d-flex justify-end" v-if="isCardModeratable==false">
@@ -135,8 +135,8 @@
                                       name="currentAddMark"
                                       label="Оценка:"
                                       v-model="currentAddMark"
-                                      :rules="rules.value"
                                       color="grey"
+                                      :rules="rules.value"
                                       required
                         ></v-text-field>
                     </v-col>
