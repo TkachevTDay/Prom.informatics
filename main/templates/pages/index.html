@@ -15,6 +15,7 @@
     <v-app>
         <v-main>
             <template>
+                        {% include 'dialog-card.html' %}
                 <v-parallax dark src="https://informatics.ru/img/intro/intro-inter-progressive.jpg" height="900">
                     <div class="d-flex justify-end">
                         <v-menu
@@ -41,7 +42,6 @@
                                                 <h4 class="font-weight-thin">[[ item.load_date ]]</h4>
                                             </div>
                                         </v-row>
-                                        {% include 'dialog-card.html' %}
                                     </v-list-item>
                                 </v-list>
                             </form>
