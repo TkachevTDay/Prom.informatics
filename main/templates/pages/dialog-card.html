@@ -1,146 +1,141 @@
-<v-form
-        ref="form"
-        lazy-validation>
+<v-dialog
+        v-model="dialog"
+        max-width="1000"
+        height="75%"
+        style="height: 100px"
+        :retain-focus="false"
+>
+    <div class="d-flex justify-center">
+        <v-card style="width: 1000px; overflow:  hidden;" elevation="2" class="grey lighten-4">
+            <v-card-title class="grey lighten-3">
+                <v-col>
+                    <h2 v-if="isCardModeratable==false" class="text-h4 font-weight-light">[[ currentName ]]</h2>
+                    <v-text-field v-if="isCardModeratable==true"
+                                  name="currentAddName"
+                                  label="Название"
+                                  v-model="currentAddName"
+                                  :rules="rules.value"
+                                  required
+                                  color="grey"
+                    ></v-text-field>
+                </v-col>
+                <v-row class="my-0 mr-0 ml-10" v-if="isCardModeratable==true">
+                    <form method="post">
+                        {% csrf_token %}
+                        <v-btn @click='sendProjectOnModerate()' :disabled="!formIsValid" @click.stop="showDialog">Отправить</v-btn>
+                    </form>
+                </v-row>
+                <v-col class="d-flex justify-end" v-if="isCardModeratable==false">
+                    <v-btn class="mr-2" big>
+                        <v-icon dark>
+                            mdi-play
+                        </v-icon>
+                    </v-btn>
+                    <v-btn big>
+                        <img src="https://fonts.gstatic.com/s/i/materialicons/code/v11/24px.svg"/>
+                    </v-btn>
+                </v-col>
+            </v-card-title>
+            <v-row class="mx-2 my-1 text-center" max-height="100px">
+                <v-col>
+                    <h3 class="font-weight-light">Краткое описание</h3>
+                    <p v-if="isCardModeratable==false" class="font-weight-thin">[[ currentDescription ]]</p>
+                    <v-text-field v-if="isCardModeratable==true"
+                                  name="currentAddDescription"
+                                  label="Краткое описание"
+                                  :rules="rules.value"
+                                  v-model="currentAddDescription"
+                                  color="grey"
+                                  required
+                    ></v-text-field>
+                    <h3 class="font-weight-light">Технологический стек</h3>
+                    <v-text-field v-if="isCardModeratable==true"
+                                  name="currentAddTech"
+                                  :rules="rules.value"
+                                  label="Технологический стек"
+                                  v-model="currentAddTech"
+                                  color="grey"
+                                  required
+                    ></v-text-field>
+                </v-col>
+                <v-col class="d-flex justify-end align-right">
+                    <v-carousel v-model="carousel" hide-delimiters height="400px" style="margin-bottom: -10px">
 
-    <v-dialog
-            v-model="dialog"
-            max-width="1000"
-            height="75%"
-            style="height: 100px"
-            :retain-focus="false"
-    >
-        <div class="d-flex justify-center">
-            <v-card style="width: 1000px; overflow:  hidden;" elevation="2" class="grey lighten-4">
-                <v-card-title class="grey lighten-3">
-                    <v-col>
-                        <h2 v-if="isCardModeratable==false" class="text-h4 font-weight-light">[[ currentName ]]</h2>
-                        <v-text-field v-if="isCardModeratable==true"
-                                      name="currentAddName"
-                                      label="Название"
-                                      v-model="currentAddName"
-                                      :rules="rules.value"
-                                      required
-                                      color="grey"
-                        ></v-text-field>
-                    </v-col>
-                    <v-row class="my-0 mr-0 ml-10" v-if="isCardModeratable==true">
-                        <form method="post">
-                            {% csrf_token %}
-                            <v-btn @click='sendProjectOnModerate()' :disabled="!formIsValid" @click.stop="showDialog">Отправить</v-btn>
-                        </form>
-                    </v-row>
-                    <v-col class="d-flex justify-end" v-if="isCardModeratable==false">
-                        <v-btn class="mr-2" big>
-                            <v-icon dark>
-                                mdi-play
-                            </v-icon>
-                        </v-btn>
-                        <v-btn big>
-                            <img src="https://fonts.gstatic.com/s/i/materialicons/code/v11/24px.svg"/>
-                        </v-btn>
-                    </v-col>
-                </v-card-title>
-                <v-row class="mx-2 my-1 text-center" max-height="100px">
-                    <v-col>
-                        <h3 class="font-weight-light">Краткое описание</h3>
-                        <p v-if="isCardModeratable==false" class="font-weight-thin">[[ currentDescription ]]</p>
-                        <v-text-field v-if="isCardModeratable==true"
-                                      name="currentAddDescription"
-                                      label="Краткое описание"
-                                      :rules="rules.value"
-                                      v-model="currentAddDescription"
-                                      color="grey"
-                                      required
-                        ></v-text-field>
-                        <h3 class="font-weight-light">Технологический стек</h3>
-                        <v-text-field v-if="isCardModeratable==true"
-                                      name="currentAddTech"
-                                      :rules="rules.value"
-                                      label="Технологический стек"
-                                      v-model="currentAddTech"
-                                      color="grey"
-                                      required
-                        ></v-text-field>
-                    </v-col>
-                    <v-col class="d-flex justify-end align-right">
-                        <v-carousel v-model="carousel" hide-delimiters height="400px" style="margin-bottom: -10px">
-
-                            <v-carousel-item
-                                    v-if="isCardModeratable==false"
-                                    v-for="(n, i) in currentProjectImages"
-                                    :key="i"
-                                    transition="fade-transition"
+                        <v-carousel-item
+                                v-if="isCardModeratable==false"
+                                v-for="(n, i) in currentProjectImages"
+                                :key="i"
+                                transition="fade-transition"
+                        >
+                            <v-sheet
+                                    height="100%"
+                                    tile
                             >
-                                <v-sheet
-                                        height="100%"
-                                        tile
+                                <v-row
+                                        class="fill-height"
+                                        align="center"
+                                        justify="center"
                                 >
-                                    <v-row
-                                            class="fill-height"
-                                            align="center"
-                                            justify="center"
-                                    >
-                                        <v-img
-                                                :src="n.src"
-                                                height="100%"></v-img>
-                                    </v-row>
-                                </v-sheet>
-                            </v-carousel-item>
-                        </v-carousel>
+                                    <v-img
+                                            :src="n.src"
+                                            height="100%"></v-img>
+                                </v-row>
+                            </v-sheet>
+                        </v-carousel-item>
+                    </v-carousel>
 
-                    </v-col>
-                </v-row>
-                <v-row class="mx-2 my-1 text-center">
-                    <v-col>
-                        <h4 class="font-weight-light">Год:</h4>
-                        <h5 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentYear]]</h5>
-                        <v-text-field v-if="isCardModeratable==true"
-                                      name="currentAddYear"
-                                      label="Год:"
-                                      v-model="currentAddYear"
-                                      :rules="rules.value"
-                                      color="grey"
-                                      required
-                        ></v-text-field>
-                    </v-col>
-                    <v-col>
-                        <h4 class="font-weight-light">Отделение:</h4>
-                        <h5 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentDepartment]]</h5>
-                        <v-text-field v-if="isCardModeratable==true"
-                                      name="currentAddDepartment"
-                                      label="Отделение:"
-                                      v-model="currentAddDepartment"
-                                      color="grey"
-                                      :rules="rules.value"
-                                      required
-                        ></v-text-field>
-                    </v-col>
-                    <v-col>
-                        <h4 class="font-weight-light">Группа:</h4>
-                        <h5 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentAuthor]]</h5>
-                        <v-text-field v-if="isCardModeratable==true"
-                                      name="currentAddAuthor"
-                                      label="Группа:"
-                                      v-model="currentAddAuthor"
-                                      color="grey"
-                                      :rules="rules.value"
-                                      required
-                        ></v-text-field>
-                    </v-col>
-                    <v-col>
-                        <h4 class="font-weight-light">Оценка:</h4>
-                        <h5 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentMark]]</h5>
-                        <v-text-field v-if="isCardModeratable==true"
-                                      name="currentAddMark"
-                                      label="Оценка:"
-                                      v-model="currentAddMark"
-                                      color="grey"
-                                      :rules="rules.value"
-                                      required
-                        ></v-text-field>
-                    </v-col>
-                </v-row>
-            </v-card>
-        </div>
-    </v-dialog>
-</v-form>
+                </v-col>
+            </v-row>
+            <v-row class="mx-2 my-1 text-center">
+                <v-col>
+                    <h4 class="font-weight-light">Год:</h4>
+                    <h5 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentYear]]</h5>
+                    <v-text-field v-if="isCardModeratable==true"
+                                  name="currentAddYear"
+                                  label="Год:"
+                                  v-model="currentAddYear"
+                                  :rules="rules.value"
+                                  color="grey"
+                                  required
+                    ></v-text-field>
+                </v-col>
+                <v-col>
+                    <h4 class="font-weight-light">Отделение:</h4>
+                    <h5 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentDepartment]]</h5>
+                    <v-text-field v-if="isCardModeratable==true"
+                                  name="currentAddDepartment"
+                                  label="Отделение:"
+                                  v-model="currentAddDepartment"
+                                  color="grey"
+                                  :rules="rules.value"
+                                  required
+                    ></v-text-field>
+                </v-col>
+                <v-col>
+                    <h4 class="font-weight-light">Группа:</h4>
+                    <h5 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentAuthor]]</h5>
+                    <v-text-field v-if="isCardModeratable==true"
+                                  name="currentAddAuthor"
+                                  label="Группа:"
+                                  v-model="currentAddAuthor"
+                                  color="grey"
+                                  :rules="rules.value"
+                                  required
+                    ></v-text-field>
+                </v-col>
+                <v-col>
+                    <h4 class="font-weight-light">Оценка:</h4>
+                    <h5 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentMark]]</h5>
+                    <v-text-field v-if="isCardModeratable==true"
+                                  name="currentAddMark"
+                                  label="Оценка:"
+                                  v-model="currentAddMark"
+                                  color="grey"
+                                  :rules="rules.value"
+                                  required
+                    ></v-text-field>
+                </v-col>
+            </v-row>
+        </v-card>
+    </div>
+</v-dialog>
