@@ -181,6 +181,7 @@ var app = new Vue({
                         let response=xhr.response;
                         let a = JSON.parse(response);
                         app.recentProjects = a
+                        app.updateCurrentData()
                     }
                 }
             };

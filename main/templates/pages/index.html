@@ -176,33 +176,34 @@
             <br>
             <br>
             <br>
-            <template>
                 <v-card class="mx-auto" max-width="70%" tile>
-                    <v-list>
-                        <v-subheader>Projects</v-subheader>
-                        <v-list-item-group v-model="selectedItem" color="grey">
-                            <v-list-item v-for="(item, i) in items" :key="i" @click.stop="showDialog" @click="updateCurrentData(item); isCardModeratable=false">
-                                <v-list-item-icon>
-                                    <v-icon v-text="item.icon"></v-icon>
-                                </v-list-item-icon>
-                                <v-list-item-content>
-                                    <v-list-item-title v-text="item.name"></v-list-item-title>
-                                </v-list-item-content>
-                                <v-list-item-content>
-                                    <v-list-item-title v-text="item.department"></v-list-item-title>
-                                </v-list-item-content>
-                                <v-list-item-content>
-                                    <v-list-item-title v-text="item.author"></v-list-item-title>
-                                </v-list-item-content>
-                                <v-list-item-content>
-                                    <v-list-item-title v-text="item.year"></v-list-item-title>
-                                </v-list-item-content>
-                            </v-list-item>
-                        </v-list-item-group>
-                    </v-list>
-                    <v-btn elevation="2" @click="update">Показать ещё</v-btn>
+                            <v-card v-for="(item, i) in items" :key="i" height="150px" @click.stop="showDialog" @click="updateCurrentData(item); isCardModeratable=false">
+                                <v-row>
+                                    <v-col>
+                                        <v-row>
+                                            <v-col>
+                                                <v-img class="ml-2" width="100px" height="100px" :src="item.icon"></v-img>
+                                            </v-col>
+                                            <v-col cols="8">
+                                                <h1 class="text-h3 font-weight-thin">[[item.name]]</h1>
+                                                <h3 class="text-h5 font-weight-thin">todo: tags should be here</h3>
+                                            </v-col>
+
+                                        </v-row>
+
+                                    </v-col>
+                                    <v-col>
+
+                                    </v-col>
+                                    <v-col>
+
+
+                                    </v-col>
+                                </v-row>
+                            </v-card>
+                     <v-btn elevation="2" @click="update">Показать ещё</v-btn>
                 </v-card>
-            </template>
+
             <br>
             <br>
             <br>
