@@ -22,6 +22,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         author_filter = self.request.query_params.get('author')
         year_filter = self.request.query_params.get('year')
         mark_filter = self.request.query_params.get('mark')
+        print(mark_filter)
         projects_by_filter = Project.objects.all()
         if name_filter:
             projects_by_filter = projects_by_filter.filter(name=name_filter)

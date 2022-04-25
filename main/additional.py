@@ -3,17 +3,27 @@
 """
 
 def color_mark_define(mark):
-    if mark == '3':
-        return '#EF5350'
-    if mark == '3+':
-        return '#EF9A9A'
-    if mark == '4-':
+    if mark == '2-':
+        return '#E53935'
+    elif mark == '2':
+        return '#E53935'
+    elif mark == '2+':
+        return '#E53935'
+    elif mark == '3-':
+        return '#FDD835'
+    elif mark == '3':
+        return '#FFA726'
+    elif mark == '3+':
+        return '#FDD835'
+    elif mark == '4-':
         return '#B9F6CA'
-    if mark == '4':
+    elif mark == '4':
         return '#69F0AE'
-    if mark == '4+':
+    elif mark == '4+':
         return '#00E676'
-    if mark == '5':
+    elif mark == '5':
         return '#00C853'
-    if mark == '5+':
+    elif mark == '5+':
         return '#7E57C2'
+    else:
+        return '#BDBDBD'

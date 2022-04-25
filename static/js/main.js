@@ -126,14 +126,14 @@ var app = new Vue({
                 this.carouselIterator = this.recentProjects.length - 1
 
             }
-            else{
+            else {
                 this.carouselIterator -= 1
             }
             this.updateCurrentData();
         },
         update: function (){
             let xhr = new XMLHttpRequest();
-            let c = `${this.baseUrl}api/projects/?start=${this.items.length}&number=5&year=${this.selectedYear}&department=${this.selectedDepartment}&mark=${this.selectedMark}&author=${this.selectedAuthor}&name=${this.searchText}&format=json`
+            let c = `${this.baseUrl}api/projects/?start=${this.items.length}&number=5&year=${encodeURIComponent(this.selectedYear)}&department=${encodeURIComponent(this.selectedDepartment)}&mark=${encodeURIComponent(this.selectedMark)}&author=${encodeURIComponent(this.selectedAuthor)}&name=${encodeURIComponent(this.searchText)}&format=json`
             xhr.open("GET", c, true);
             xhr.send();
             xhr.onreadystatechange = function() {
@@ -193,15 +193,14 @@ var app = new Vue({
             let CSRF_token = document.querySelector('[name=csrfmiddlewaretoken]').value
             xhr.setRequestHeader("X-CSRFToken", CSRF_token);
             let data = {
-                'currentAddName': this.currentAddName,
-                'currentAddDescription': this.currentAddDescription,
-                'currentAddAuthor': this.currentAddAuthor,
-                'currentAddTech': this.currentAddTech,
-                'currentAddDepartment': this.currentAddDepartment,
-                'currentAddMark': this.currentAddMark,
-                'currentAddYear': this.currentAddYear,
+                'currentAddName': this.currentAddName.trim(),
+                'currentAddDescription': this.currentAddDescription.trim(),
+                'currentAddAuthor': this.currentAddAuthor.trim(),
+                'currentAddTech': this.currentAddTech.trim(),
+                'currentAddDepartment': this.currentAddDepartment.trim(),
+                'currentAddMark': this.currentAddMark.trim(),
+                'currentAddYear': this.currentAddYear.trim(),
             }
-
             xhr.send(JSON.stringify(data))
              xhr.onreadystatechange = function() {
               if (xhr.readyState == 4) {
