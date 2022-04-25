@@ -57,17 +57,23 @@
                                   color="grey"
                                   required
                     ></v-text-field>
+                    <h3 v-if="isCardModeratable==true" class="font-weight-light"> Ссылка на картинку </h3>
+                    <v-text-field v-if="isCardModeratable==true"
+                                  name="currentAddImg"
+                                  label="Ссылка на картинку"
+                                  v-model="currentAddImg"
+                                  color="grey"
+                    ></v-text-field>
+                    <v-btn v-if="isCardModeratable==true" @click="uploadImg" color="grey"> Загрузить картинку </v-btn>
                 </v-col>
                 <v-col class="d-flex justify-end align-right">
                     <v-carousel v-model="carousel" hide-delimiters height="400px" style="margin-bottom: -10px">
 
                         <v-carousel-item
-                                v-if="isCardModeratable==false"
                                 v-for="(n, i) in currentProjectImages"
                                 :key="i"
                                 transition="fade-transition"
                                 width="650px"
-
                         >
 
                                 <v-row

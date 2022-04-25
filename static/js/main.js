@@ -25,6 +25,7 @@ var app = new Vue({
             currentAddDescription: '',
             currentAddAuthor: '',
             currentAddTech: '',
+            currentAddImg: '',
             currentAddDepartment: '',
             currentAddMark: '',
             currentAddYear: '',
@@ -39,6 +40,7 @@ var app = new Vue({
             images: [],
             filterShow: false,
             currentProjectImages: [],
+            currentAddImgs: [],
             currentProjectAvatar: '',
             rules: {
               value: [val => (val || '').length > 0 || 'Это поле необходимо заполнить!']
@@ -69,13 +71,19 @@ var app = new Vue({
     },
     methods: {
         showDialog: function(){
+        this.currentProjectImages=[];
             this.dialog = !this.dialog;
         },
         showAddDialog: function(){
+            this.currentProjectImages=[];
             this.dialogAdd = true;
         },
         showFilter: function(){
             this.filterShow = !this.filterShow
+        },
+        uploadImg: function(){
+            this.currentProjectImages.push(this.currentAddImg);
+            this.currentAddImg = '';
         },
         updateCurrentData: function(item = null){
             if (item == null) {
@@ -200,6 +208,7 @@ var app = new Vue({
                 'currentAddDepartment': this.currentAddDepartment.trim(),
                 'currentAddMark': this.currentAddMark.trim(),
                 'currentAddYear': this.currentAddYear.trim(),
+                'currentAddImages': this.currentProjectImages,
             }
             xhr.send(JSON.stringify(data))
              xhr.onreadystatechange = function() {
