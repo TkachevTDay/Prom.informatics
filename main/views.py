@@ -39,7 +39,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
             number = len(projects_by_filter)
         queryset = projects_by_filter[int(start):int(start) + int(number)]
         return queryset
-
+        #todo: fix problem with filter on '5+', '4+', '3+'-type values
 
 
 class RecentProjectViewSet(viewsets.ModelViewSet):
