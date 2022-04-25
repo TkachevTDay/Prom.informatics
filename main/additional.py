@@ -1,7 +1,6 @@
 """
     Additional calc function's
 """
-
 def color_mark_define(mark):
     if mark == '2-':
         return '#E53935'
