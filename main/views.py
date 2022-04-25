@@ -33,14 +33,13 @@ class ProjectViewSet(viewsets.ModelViewSet):
         if year_filter:
             projects_by_filter = projects_by_filter.filter(year=year_filter)
         if mark_filter:
-            projects_by_filter = projects_by_filter.filter(mark = {'value': str(mark_filter), 'color' : color_mark_define(str(mark_filter))})
+            projects_by_filter = projects_by_filter.filter(mark = mark_filter)
         if start is None:
             start = 0
         if number is None:
             number = len(projects_by_filter)
         queryset = projects_by_filter[int(start):int(start) + int(number)]
         return queryset
-        #todo: fix problem with filter on '5+', '4+', '3+'-type values
 
 
 class RecentProjectViewSet(viewsets.ModelViewSet):
@@ -60,7 +59,7 @@ def index_page(request):
         mark = json.loads(body)['currentAddMark']
         year = json.loads(body)['currentAddYear']
         images = json.loads(body)['currentAddImages']
-        item = Project(name = name, author = author, description = description, mark = {'value': mark, 'color':color_mark_define(mark)}, year = year, department = department, images = images, icon=images[0])
+        item = Project(name = name, author = author, description = description, mark = mark, year = year, department = department, images = images, icon=images[0] if images else '')
         item.save()
         send_mail(
             'Новый проект выслан на модерацию.',
@@ -76,7 +75,7 @@ def send_filter_params(request):
     departments = [dep['department'] for dep in list(Project.objects.all().values('department').distinct())]
     years = [ye['year'] for ye in list(Project.objects.all().values('year').distinct())]
     authors = [aut['author'] for aut in list(Project.objects.all().values('author').distinct())]
-    marks = [mar['mark']['value'] for mar in list(Project.objects.all().values('mark').distinct())]
+    marks = [mar['mark'] for mar in list(Project.objects.all().values('mark').distinct())]
 
     return JsonResponse(
         {

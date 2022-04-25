@@ -4,6 +4,20 @@ var app = new Vue({
     vuetify: new Vuetify(),
     data(){
         return {
+            markColors: {
+                '2-': '#E53935',
+                '2': '#E53935',
+                '2+': '#E53935',
+                '3-': '#FDD835',
+                '3': '#FFA726',
+                '3+': '#FDD835',
+                '4-': '#B9F6CA',
+                '4': '#69F0AE',
+                '4+': '#00E676',
+                '5-': '#00C853',
+                '5': '#9575CD',
+                '5+': '#7E57C2',
+            },
             dialog: false,
             dialogAdd: false,
             userProjects: [{"name": "avtor", "description": "eto proect","load_date": "2019","department": "Online", "author": "matvey","mark":"5","tech":"Django"},{"name": "avtor2","load_date": "2019","department": "Online", "description": "eto proect2", "author": "matvey2","mark":"4","load_date": "2022","tech":"Django"}],
