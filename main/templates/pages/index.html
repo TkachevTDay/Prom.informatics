@@ -16,6 +16,7 @@
         <v-main>
             <template>
                 {% include 'dialog-card.html' %}
+                {% include 'dialog-reg.html' %}
                 <v-parallax dark src="https://informatics.ru/img/intro/intro-inter-progressive.jpg" height="900">
                     <div class="d-flex justify-end">
                         <v-menu
@@ -47,7 +48,7 @@
                             </form>
                         </v-menu>
 
-                        <v-btn plain color="white">
+                        <v-btn plain color="white" @click="dialogReg=true">
                             Зарегистрироваться/Войти
                         </v-btn>
 

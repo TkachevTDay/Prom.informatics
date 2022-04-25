@@ -1,0 +1,27 @@
+<v-dialog v-model="dialogReg" :retain-focus="false" max-width="600px">
+    <v-card width="600px" height="800px" color="white">
+        <v-container>
+            <v-row cols="2">
+                    <v-card color="#FAFAFA" class="rounded-0" fluid>
+                        <h2 style="margin: 50px" class="text-h2 font-weight-thin">Гайд по регистрации</h2>
+                    </v-card>
+            </v-row>
+        <v-row cols="8">
+            <h4 style="margin: 50px" class="text-h4 font-weight-thin">Здесь должен быть гайд</h4>
+        </v-row>
+        <v-row cols="2" align="end">
+            <v-text-field         style="margin: 100px"
+                                  label="Персональный токен доступа"
+                                  v-model="personalAccessToken"
+                                  color="grey">
+            </v-text-field>
+        </v-row>
+        <v-row cols="1" justify="center" >
+            <v-btn @click="registry">
+                Отправить
+            </v-btn>
+        </v-row>
+        </v-container>
+    </v-card>
+
+</v-dialog>

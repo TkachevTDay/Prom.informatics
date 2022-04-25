@@ -18,8 +18,10 @@ var app = new Vue({
                 '5': '#9575CD',
                 '5+': '#7E57C2',
             },
+            personalAccessToken: '',
             dialog: false,
             dialogAdd: false,
+            dialogReg: false,
             userProjects: [{"name": "avtor", "description": "eto proect","load_date": "2019","department": "Online", "author": "matvey","mark":"5","tech":"Django"},{"name": "avtor2","load_date": "2019","department": "Online", "description": "eto proect2", "author": "matvey2","mark":"4","load_date": "2022","tech":"Django"}],
             selectedItem: 1,
             carousel: 0,
@@ -84,6 +86,9 @@ var app = new Vue({
         }
     },
     methods: {
+        registry: function(){
+
+        },
         showDialog: function(){
         this.currentProjectImages=[];
             this.dialog = !this.dialog;
