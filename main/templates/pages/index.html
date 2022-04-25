@@ -176,30 +176,39 @@
             <br>
             <br>
             <br>
-                <v-card class="mx-auto" max-width="70%" tile>
-                            <v-card v-for="(item, i) in items" :key="i" height="150px" @click.stop="showDialog" @click="updateCurrentData(item); isCardModeratable=false">
+                <v-card class="mx-auto" max-width="70%">
+                            <v-card class="mx-auto" v-for="(item, i) in items" :key="i" @click.stop="showDialog" @click="updateCurrentData(item); isCardModeratable=false">
+                                <v-container fill-height fluid>
                                 <v-row>
-                                    <v-col>
+                                    <v-col cols="5">
+                                        <v-container fill-height fluid>
                                         <v-row>
-                                            <v-col>
-                                                <v-img class="ml-2" width="100px" height="100px" :src="item.icon"></v-img>
+                                            <v-col cols="4">
+
+                                                    <v-img  :src="item.icon"></v-img>
+
                                             </v-col>
                                             <v-col cols="8">
                                                 <h1 class="text-h3 font-weight-thin">[[item.name]]</h1>
                                                 <h3 class="text-h5 font-weight-thin">todo: tags should be here</h3>
                                             </v-col>
-
                                         </v-row>
-
+                                        </v-container>
                                     </v-col>
-                                    <v-col>
+                                    <v-col cols="1">
+                                        <v-container fill-height fluid>
+                                            <v-card height="50px" width="50px" :color=item.mark.color>
+                                                    <v-card-title align="center" class="text-h4 font-weight white--text">[[item.mark.value]]</v-card-title>
 
+                                            </v-card>
+                                        </v-container>
                                     </v-col>
                                     <v-col>
 
 
                                     </v-col>
                                 </v-row>
+                                </v-container>
                             </v-card>
                      <v-btn elevation="2" @click="update">Показать ещё</v-btn>
                 </v-card>
