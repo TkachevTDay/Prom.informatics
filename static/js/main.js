@@ -42,12 +42,16 @@ var app = new Vue({
             currentProjectImages: [],
             currentAddImgs: [],
             currentProjectAvatar: '',
+            err: false,
             rules: {
               value: [val => (val || '').length > 0 || 'Это поле необходимо заполнить!']
             },
         };
     },
     computed: {
+        checkURL () {
+            return /^https?:\/\/.+\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(this.currentAddImg);
+        },
         formIsValid () {
             return (
               this.currentAddAuthor &&
