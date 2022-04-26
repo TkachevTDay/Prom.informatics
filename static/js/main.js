@@ -19,6 +19,7 @@ var app = new Vue({
                 '5+': '#7E57C2',
             },
             personalAccessToken: '',
+            userId: 0,
             dialog: false,
             dialogAdd: false,
             dialogReg: false,
@@ -86,8 +87,44 @@ var app = new Vue({
         }
     },
     methods: {
-        registry: function(){
 
+        getId: function(){
+            let xhr = new XMLHttpRequest();
+            let c = `https://gitlab.informatics.ru/api/v4/personal_access_tokens`
+            xhr.open("GET", c, true);
+            xhr.setRequestHeader('PRIVATE-TOKEN', `${this.personalAccessToken}`)
+            xhr.send();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        let response=xhr.response;
+                        let a = JSON.parse(response);
+                        app.userId = a[0].user_id;
+                    }
+                }
+            };
+
+        },
+        getUserProjects: function(){
+            let xhr = new XMLHttpRequest();
+            let c = `https://gitlab.informatics.ru/api/v4/users/${app.userId}/projects`
+            xhr.open("GET", c, true);
+            xhr.setRequestHeader('PRIVATE-TOKEN', `${this.personalAccessToken}`)
+            xhr.send();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        let response=xhr.response;
+                        let a = JSON.parse(response);
+                        app.userProjects = a;
+                        alert(app.userProjects);
+                    }
+                }
+            };
+        },
+        registry: function(){
+            this.getId();
+            this.getUserProjects();
         },
         showDialog: function(){
         this.currentProjectImages=[];
