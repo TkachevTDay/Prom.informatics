@@ -59,7 +59,8 @@ def index_page(request):
         mark = json.loads(body)['currentAddMark']
         year = json.loads(body)['currentAddYear']
         images = json.loads(body)['currentAddImages']
-        item = Project(name = name, author = author, description = description, mark = mark, year = year, department = department, images = images, icon=images[0] if images else '')
+        path_link = json.loads(body)['currentAddPathLink']
+        item = Project(name = name, path_link=path_link, author = author, description = description, mark = mark, year = year, department = department, images = images, icon=images[0] if images else '')
         item.save()
         send_mail(
             'Новый проект выслан на модерацию.',

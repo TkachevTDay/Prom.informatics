@@ -46,6 +46,7 @@ var app = new Vue({
             currentAddDepartment: '',
             currentAddMark: '',
             currentAddYear: '',
+            currentAddPathLink: '',
             items: [],
             markItems: [],
             departmentItems: [],
@@ -172,6 +173,7 @@ var app = new Vue({
                 this.currentAddMark=this.userProjects[index].mark
                 this.currentAddYear=this.userProjects[index].year
                 this.currentAddTech=this.userProjects[index].tech
+                this.currentAddPathLink=this.userProjects[index].http_url_to_repo
             }
 
         },
@@ -265,6 +267,7 @@ var app = new Vue({
                 'currentAddMark': this.currentAddMark.trim(),
                 'currentAddYear': this.currentAddYear.trim(),
                 'currentAddImages': this.currentProjectImages,
+                'currentAddPathLink': this.currentAddPathLink,
             }
             xhr.send(JSON.stringify(data))
              xhr.onreadystatechange = function() {

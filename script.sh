@@ -1,4 +1,4 @@
 #!/bin/sh
 python3 manage.py migrate
 python3 manage.py collectstatic --noinput
-python3 manage.py runserver 0.0.0.0:8080
+daphne -b 0.0.0.0 --port 8080 prominformatics.asgi:application

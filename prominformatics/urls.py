@@ -15,12 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.db.models import Model
-from django.urls import path
+from django.urls import path, re_path
 from django.conf.urls import include
 import main.views
 from rest_framework import routers, serializers, viewsets
 from main.models import Project
 from main.views import ProjectViewSet
+from django.contrib.staticfiles.views import serve
+def return_static(request, path, insecure=True, **kwargs):
+  return serve(request, path, insecure, **kwargs)
+
 
 router = routers.DefaultRouter()
 router.register(r'projects', ProjectViewSet)
@@ -32,4 +36,5 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('api/auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/filter_params/', main.views.send_filter_params),
+    re_path(r'^static/(?P<path>.*)$', return_static, name='static'),
 ]
