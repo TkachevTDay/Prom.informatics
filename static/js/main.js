@@ -267,7 +267,6 @@ var app = new Vue({
                 'currentAddMark': this.currentAddMark.trim(),
                 'currentAddYear': this.currentAddYear.trim(),
                 'currentAddImages': this.currentProjectImages,
-                'currentAddPathLink': this.currentAddPathLink,
             }
             xhr.send(JSON.stringify(data))
              xhr.onreadystatechange = function() {

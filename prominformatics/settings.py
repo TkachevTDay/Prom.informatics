@@ -28,7 +28,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
-
+CSRF_TRUSTED_ORIGINS = ["http://0.0.0.0:1337"]
 # Application definition
 
 INSTALLED_APPS = [
