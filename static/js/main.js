@@ -18,12 +18,21 @@ var app = new Vue({
                 '5': '#9575CD',
                 '5+': '#7E57C2',
             },
+            buttonColors: {
+                'red': '#E53935',
+                'green': '#7E57C2',
+            },
+
+            is_administrator: true,
+
             personalAccessToken: '',
             userId: 0,
             dialog: false,
             dialogAdd: false,
             dialogReg: false,
+            dialogModera: false,
             userProjects: [{"name": "avtor", "description": "eto proect","load_date": "2019","department": "Online", "author": "matvey","mark":"5","tech":"Django"},{"name": "avtor2","load_date": "2019","department": "Online", "description": "eto proect2", "author": "matvey2","mark":"4","load_date": "2022","tech":"Django"}],
+            moderateProjects: [{"name": "avtor3", "description": "eto proect","load_date": "2019","department": "Online", "author": "matvey","mark":"5","tech":"Django"},{"name": "avtor4","load_date": "2019","department": "Online", "description": "eto proect2", "author": "matvey2","mark":"4","load_date": "2022","tech":"Django"}],
             selectedItem: 1,
             carousel: 0,
             selectedMark: '',
@@ -175,6 +184,54 @@ var app = new Vue({
             }
 
         },
+        acceptProject(): function(item){
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", `${this.baseUrl}`, true);
+            let CSRF_token = document.querySelector('[name=csrfmiddlewaretoken]').value
+            xhr.setRequestHeader("X-CSRFToken", CSRF_token);
+            let data = {
+                'operation': 'AcceptProject',
+                'currentAddName': this.currentAddName.trim(),
+                'currentAddDescription': this.currentAddDescription.trim(),
+                'currentAddAuthor': this.currentAddAuthor.trim(),
+                'currentAddTech': this.currentAddTech.trim(),
+                'currentAddDepartment': this.currentAddDepartment.trim(),
+                'currentAddMark': this.currentAddMark.trim(),
+                'currentAddYear': this.currentAddYear.trim(),
+                'currentAddImages': this.currentProjectImages,
+            }
+            xhr.send(JSON.stringify(data))
+             xhr.onreadystatechange = function() {
+              if (xhr.readyState == 4) {
+                console.log('POST-request with add config has been successfully sent')
+              }
+            };
+        },
+        disableProject(): function(item){
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", `${this.baseUrl}`, true);
+            let CSRF_token = document.querySelector('[name=csrfmiddlewaretoken]').value
+            xhr.setRequestHeader("X-CSRFToken", CSRF_token);
+            let data = {
+                'operation': 'DisableProject',
+                'currentAddName': this.currentAddName.trim(),
+                'currentAddDescription': this.currentAddDescription.trim(),
+                'currentAddAuthor': this.currentAddAuthor.trim(),
+                'currentAddTech': this.currentAddTech.trim(),
+                'currentAddDepartment': this.currentAddDepartment.trim(),
+                'currentAddMark': this.currentAddMark.trim(),
+                'currentAddYear': this.currentAddYear.trim(),
+                'currentAddImages': this.currentProjectImages,
+            }
+            xhr.send(JSON.stringify(data))
+             xhr.onreadystatechange = function() {
+              if (xhr.readyState == 4) {
+                console.log('POST-request with add config has been successfully sent')
+              }
+
+        },
         carouselNext: function(){
             if (this.recentProjects.length - 1 == this.carouselIterator){
                 this.carouselIterator = 0
@@ -257,6 +314,7 @@ var app = new Vue({
             let CSRF_token = document.querySelector('[name=csrfmiddlewaretoken]').value
             xhr.setRequestHeader("X-CSRFToken", CSRF_token);
             let data = {
+                'operation': "sendProjectOnModerate".trim(),
                 'currentAddName': this.currentAddName.trim(),
                 'currentAddDescription': this.currentAddDescription.trim(),
                 'currentAddAuthor': this.currentAddAuthor.trim(),

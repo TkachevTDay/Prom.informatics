@@ -21,7 +21,35 @@
                     <div class="d-flex justify-end">
                         <v-menu
                         >
-                            <template v-slot:activator="{ on, attrs }">
+                            <template v-slot:activator="{ on, attrs }" v-if="is_administrator==true">
+                                <v-btn v-bind="attrs" v-on="on" plain color="white">
+                                    Открыть панель модерации
+                                </v-btn>
+                            </template>
+                            <form method="post">
+                                {% csrf_token %}
+                                <v-list>
+                                    <v-list-item
+                                            v-for="(item, i) in moderateProjects"
+                                            :key="i"
+                                            @click="updateCurrentAddData(i); isCardModeratable = true"
+                                            @click.stop="showDialog"
+                                    >
+                                        <v-row align="center" justify="center">
+                                            <div style='display: inline-block'>
+                                                <h4 class="font-weight-thin mr-2">[[ item.name ]]</h4>
+                                            </div>
+                                            <div style='display: inline-block'>
+                                                <h4 class="font-weight-thin">[[ item.load_date ]]</h4>
+                                            </div>
+                                        </v-row>
+                                    </v-list-item>
+                                </v-list>
+                            </form>
+                        </v-menu>
+                        <v-menu
+                        >
+                            <template v-slot:activator="{ on, attrs }" v-if="is_administrator==false">
                                 <v-btn v-bind="attrs" v-on="on" plain color="white">
                                     Загрузить проект
                                 </v-btn>

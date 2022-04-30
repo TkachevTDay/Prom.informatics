@@ -51,23 +51,41 @@ def index_page(request):
 
     if request.method == 'POST':
         body = request.body.decode('utf-8')
-        name = json.loads(body)["currentAddName"]
-        author = json.loads(body)["currentAddAuthor"]
-        description = json.loads(body)['currentAddDescription']
-        #todo: make tech stack
-        department = json.loads(body)['currentAddDepartment']
-        mark = json.loads(body)['currentAddMark']
-        year = json.loads(body)['currentAddYear']
-        images = json.loads(body)['currentAddImages']
-        item = Project(name = name, author = author, description = description, mark = mark, year = year, department = department, images = images, icon=images[0] if images else '')
-        item.save()
-        send_mail(
-            'Новый проект выслан на модерацию.',
-            f'Новый проект с именем { name}, автор { author } ожидает Вашей модерации.',
-            'prominfnotification@yandex.ru',
-            ['matgost@yandex.ru'],
-            fail_silently=False,
-        )
+        operation = json.loads(body)["operation"]
+        if operation == 'AcceptProject':
+            name = json.loads(body)["currentAddName"]
+            author = json.loads(body)["currentAddAuthor"]
+            description = json.loads(body)['currentAddDescription']
+            tech_stack = json.loads(body)['currentAddTech']
+            #todo: make tech stack
+            department = json.loads(body)['currentAddDepartment']
+            mark = json.loads(body)['currentAddMark']
+            year = json.loads(body)['currentAddYear']
+            images = json.loads(body)['currentAddImages']
+            item = Project(name = name, author = author, description = description, mark = mark, year = year, department = department, images = images, icon=images[0] if images else '')
+            item.save()
+        elif operation == 'sendProjectOnModerate':
+            name = json.loads(body)["currentAddName"]
+            author = json.loads(body)["currentAddAuthor"]
+            description = json.loads(body)['currentAddDescription']
+            tech_stack = json.loads(body)['currentAddTech']
+            #todo: make tech stack
+            department = json.loads(body)['currentAddDepartment']
+            mark = json.loads(body)['currentAddMark']
+            year = json.loads(body)['currentAddYear']
+            images = json.loads(body)['currentAddImages']
+            #todo: Create other table for projects on moderate
+            item = Project(name = name, author = author, description = description, mark = mark, year = year, department = department, images = images, icon=images[0] if images else '')
+            item.save()
+            send_mail(
+                'Новый проект выслан на модерацию.',
+                f'Новый проект с именем { name}, автор { author } ожидает Вашей модерации.',
+                'prominfnotification@yandex.ru',
+                ['matgost@yandex.ru'],
+                fail_silently=False,
+            )
+        elif operation == 'DisableProject':
+            pass
     return render(request, 'index.html', {})
 
 
