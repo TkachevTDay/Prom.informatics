@@ -28,16 +28,31 @@ services:
     restart: always
 
   web:
+    container_name: prominformatics_web
     build: .
     ports:
-      - "8080:8080"
+      - 8080:8080
     image: prominformatics
     volumes:
       - .:/prominf
       - /var/run/docker.sock:/var/run/docker.sock
+      - staticfiles:/prominf/staticfiles/
     command: ./script.sh
     restart: always
     depends_on:
       - db
     links:
       - db:db
+
+  nginx:
+    container_name: prominformatics_nginx
+    build: ./nginx
+    ports:
+      - 1337:80
+    depends_on:
+      - web
+    volumes:
+
+      - staticfiles:/prominf/staticfiles/
+volumes:
+  staticfiles:
