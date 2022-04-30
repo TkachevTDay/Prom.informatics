@@ -30,8 +30,8 @@ services:
   web:
     container_name: prominformatics_web
     build: .
-    ports:
-      - 8080:8080
+    expose:
+      - 8080
     image: prominformatics
     volumes:
       - .:/prominf
@@ -52,7 +52,6 @@ services:
     depends_on:
       - web
     volumes:
-
       - staticfiles:/prominf/staticfiles/
 volumes:
   staticfiles:

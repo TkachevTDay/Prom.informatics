@@ -53,7 +53,7 @@ var app = new Vue({
             authorItems: [],
             yearItems: [],
             recentProjects: [],
-            baseUrl: 'http://0.0.0.0:8080/',
+            baseUrl: 'http://0.0.0.0:1337/',
             carouselIterator: 0,
             images: [],
             filterShow: false,
