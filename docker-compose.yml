@@ -37,6 +37,7 @@ services:
       - .:/prominf
       - /var/run/docker.sock:/var/run/docker.sock
       - staticfiles:/prominf/staticfiles/
+      - media_volume:/prominf/mediafiles/
     command: ./script.sh
     restart: always
     depends_on:
@@ -53,5 +54,7 @@ services:
       - web
     volumes:
       - staticfiles:/prominf/staticfiles/
+      - media_volume:/prominf/mediafiles/
 volumes:
   staticfiles:
+  media_volume:
