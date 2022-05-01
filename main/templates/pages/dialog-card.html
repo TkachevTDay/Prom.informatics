@@ -64,7 +64,7 @@
                                   v-model="currentAddImg"
                                   color="grey"
                     ></v-text-field>
-                    <v-btn v-if="isCardModeratable==true" @click="uploadImg" color="grey"> Загрузить картинку </v-btn>
+                    <v-btn  :disabled="!checkURL" v-if="isCardModeratable==true" @click="uploadImg" color="grey"> Загрузить картинку </v-btn>
                 </v-col>
                 <v-col class="d-flex justify-end align-right">
                     <v-carousel v-model="carousel" hide-delimiters height="400px" style="margin-bottom: -10px">
