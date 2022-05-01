@@ -176,58 +176,73 @@
             <br>
             <br>
             <br>
-                <v-card class="mx-auto" max-width="70%">
-                    <v-card class="mx-auto" v-for="(item, i) in items" :key="i" @click.stop="showDialog" @click="updateCurrentData(item); isCardModeratable=false">
-                        <v-container fill-height fluid>
-                            <v-row>
-                                <v-col cols="5">
-                                    <v-container fill-height fluid>
-                                        <v-row>
-                                            <v-col cols="4">
-                                                <v-img  :src="item.icon"></v-img>
-                                            </v-col>
-                                            <v-col cols="8">
-                                                <h1 class="text-h3 font-weight-thin">[[item.name]]</h1>
-                                                <h3 class="text-h5 font-weight-thin">todo: tags should be here</h3>
-                                            </v-col>
-                                        </v-row>
-                                    </v-container>
-                                </v-col>
-                                    <v-col cols="2">
-                                        <v-container fill-height fluid>
-                                            <v-card style="width:fit-content; height: fit-content;" :color=markColors[item.mark]>
-                                                    <v-card-title justify="center" align="center" class="text-h4 font-weight white--text">[[item.mark]]</v-card-title>
-                                            </v-card>
-                                        </v-container>
-                                    </v-col>
-                                <v-col>
-                                </v-col>
-                            </v-row>
-                        </v-container>
-                    </v-card>
-                     <v-btn elevation="2" @click="update">Показать ещё</v-btn>
+            <v-card class="mx-auto" max-width="70%">
+                <v-card class="mx-auto" v-for="(item, i) in items" :key="i" @click.stop="showDialog"
+                        @click="updateCurrentData(item); isCardModeratable=false">
+                    <v-container fill-height fluid>
+                        <v-row>
+                            <v-col cols="5">
+                                <v-container fill-height fluid>
+                                    <v-row>
+                                        <v-col cols="4">
+                                            <v-img :src="item.icon"></v-img>
+                                        </v-col>
+                                        <v-col cols="8">
+                                            <h1 class="text-h3 font-weight-thin">[[item.name]]</h1>
+                                            <h3 class="text-h5 font-weight-thin">todo: tags should be here</h3>
+                                        </v-col>
+                                    </v-row>
+                                </v-container>
+                            </v-col>
+                            <v-col cols="2">
+                                <v-container fill-height fluid>
+                                    <v-card style="width:fit-content; height: fit-content;"
+                                            :color=markColors[item.mark]>
+                                        <v-card-title justify="center" align="center"
+                                                      class="text-h4 font-weight white--text">[[item.mark]]
+                                        </v-card-title>
+                                    </v-card>
+                                </v-container>
+                            </v-col>
+                            <v-col cols="2">
+                                <v-container fill-height fluid>
+                                    <v-img :src="departmentIcons[item.department]" class="font-weight"></v-img>
+                                </v-container>
+                            </v-col>
+                            <v-col cols="26">
+                                <h4 style="margin-top: 25%;" justify="center" align="center" class="text-h4 font-weight-thin">[[item.department]]</h4>
+                            </v-col>
+                        </v-row>
+                    </v-container>
                 </v-card>
+                <v-btn elevation="2" @click="update">Показать ещё</v-btn>
+            </v-card>
 
             <br>
             <br>
             <br>
             <template>
-  <v-footer
-    dark
-    padless
-  >
-    <v-card
-      flat
-      tile
-      class="grey lighten-5 white--text text-center"
-    >
-      <v-card-text class="black--text pt-0">
-        Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo interdum. Praesent ut risus eget metus luctus accumsan id ultrices nunc. Sed at orci sed massa consectetur dignissim a sit amet dui. Duis commodo vitae velit et faucibus. Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel diam elementum tempor vel ut orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-      </v-card-text>
+                <v-footer
+                        dark
+                        padless
+                >
+                    <v-card
+                            flat
+                            tile
+                            class="grey lighten-5 white--text text-center"
+                    >
+                        <v-card-text class="black--text pt-0">
+                            Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo
+                            interdum. Praesent ut risus eget metus luctus accumsan id ultrices nunc. Sed at orci sed
+                            massa consectetur dignissim a sit amet dui. Duis commodo vitae velit et faucibus. Morbi
+                            vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui
+                            sollicitudin. Vestibulum eu ipsum vel diam elementum tempor vel ut orci. Orci varius natoque
+                            penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                        </v-card-text>
 
-    </v-card>
-  </v-footer>
-</template>
+                    </v-card>
+                </v-footer>
+            </template>
         </v-main>
 
     </v-app>
