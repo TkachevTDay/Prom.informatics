@@ -23,7 +23,7 @@ var app = new Vue({
                 'green': '#7E57C2',
             },
 
-            is_administrator: true,
+            is_administrator: false,
 
             personalAccessToken: '',
             userId: 0,
@@ -184,7 +184,7 @@ var app = new Vue({
             }
 
         },
-        acceptProject(): function(item){
+        acceptProject: function(item){
 
             let xhr = new XMLHttpRequest();
             xhr.open("POST", `${this.baseUrl}`, true);
@@ -208,7 +208,7 @@ var app = new Vue({
               }
             };
         },
-        disableProject(): function(item){
+        disableProject: function(item){
 
             let xhr = new XMLHttpRequest();
             xhr.open("POST", `${this.baseUrl}`, true);
@@ -230,7 +230,7 @@ var app = new Vue({
               if (xhr.readyState == 4) {
                 console.log('POST-request with add config has been successfully sent')
               }
-
+             }
         },
         carouselNext: function(){
             if (this.recentProjects.length - 1 == this.carouselIterator){
