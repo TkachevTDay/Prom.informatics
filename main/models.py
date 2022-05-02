@@ -13,6 +13,7 @@ class Project(models.Model):
     author = models.TextField(max_length=255)
     department = models.TextField(max_length=255)
     mark = models.TextField(max_length=10)
+    status = models.TextField(max_length=255, default='OnModerate')
     icon = models.TextField(max_length=255, default='https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Circle-icons-computer.svg/2048px-Circle-icons-computer.svg.png')
     images = models.JSONField(default=list)
 
