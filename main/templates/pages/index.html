@@ -205,12 +205,11 @@
                                 </v-container>
                             </v-col>
                             <v-col cols="2">
-                                <v-container fill-height fluid>
-                                    <v-img :src="departmentIcons[item.department]" class="font-weight"></v-img>
+                                <v-container justify="center" align="center" style="margin-left: -80%;">
+                                    <v-img :src="departmentIcons[item.department]" class="font-weight">
+                                    </v-img>
+                                    <h5 class="text-left text-h5 font-weight-thin"> [[item.department]] </h5>
                                 </v-container>
-                            </v-col>
-                            <v-col cols="26">
-                                <h4 style="margin-top: 25%;" justify="center" align="center" class="text-h4 font-weight-thin">[[item.department]]</h4>
                             </v-col>
                         </v-row>
                     </v-container>
