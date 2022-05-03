@@ -26,7 +26,7 @@ var app = new Vue({
                 'Мытищи': 'https://gitlab.informatics.ru/uploads/-/system/group/avatar/1840/mytischi.png',
                 'Королёв': 'https://gitlab.informatics.ru/uploads/-/system/group/avatar/1842/korolev.png?width=64',
                 'Пушкино': 'https://gitlab.informatics.ru/uploads/-/system/group/avatar/1841/pushkino.png',
-                'Щёлково': 'https://ia.wampi.ru/2022/05/03/LOGO-SELKOVO.png',
+                'Щёлково': 'https://ie.wampi.ru/2022/05/03/LOGO-SELKOVO.png',
                 'Проспект Мира': 'https://gitlab.informatics.ru/uploads/-/system/group/avatar/1836/pm.png',
                 'Онлайн': 'https://gitlab.informatics.ru/uploads/-/system/group/avatar/1844/online.png',
                 'Виртуальный класс': 'https://gitlab.informatics.ru/uploads/-/system/group/avatar/1843/vk.png',
