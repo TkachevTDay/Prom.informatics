@@ -120,21 +120,20 @@
                               item-value="value"
                               label="Отделение:"
                               v-model="currentAddDepartment"
-                              :rules="rules.value"
-                              required
                     ></v-select>
                 </v-col>
                 <v-col>
                     <h4 class="font-weight-light">Группа:</h4>
                     <h5 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentAuthor]]</h5>
-                    <v-text-field v-if="isCardModeratable==true"
-                                  name="currentAddAuthor"
-                                  label="Группа:"
-                                  v-model="currentAddAuthor"
-                                  color="grey"
-                                  :rules="rules.value"
-                                  required
-                    ></v-text-field>
+                    <v-select v-if="isCardModeratable==true"
+                              color="grey"
+                              name="currentAddAuthor"
+                              :items="groups"
+                              item-text="text"
+                              item-value="value"
+                              label="Группа:"
+                              v-model="currentAddAuthor"
+                    ></v-select>
                 </v-col>
                 <v-col>
                     <h4 class="font-weight-light">Оценка:</h4>

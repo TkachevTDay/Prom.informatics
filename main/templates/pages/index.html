@@ -205,10 +205,17 @@
                                 </v-container>
                             </v-col>
                             <v-col cols="2">
-                                <v-container justify="center" align="center" style="margin-left: -80%;">
+                                <v-container justify="center" align="center" style="margin-left: -75%;">
                                     <v-img :src="departmentIcons[item.department]" class="font-weight">
                                     </v-img>
                                     <h5 class="text-center text-h5 font-weight-thin"> [[item.department]] </h5>
+                                </v-container>
+                            </v-col>
+                            <v-col cols="2">
+                                <v-container justify="center" align="center" style="margin-left: -40%;">
+                                    <v-img :src="groupsIcons[item.author]" class="font-weight">
+                                    </v-img>
+                                    <h5 class="text-center text-h5 font-weight-thin"> [[item.author]] </h5>
                                 </v-container>
                             </v-col>
                         </v-row>

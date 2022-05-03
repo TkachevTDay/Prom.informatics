@@ -18,6 +18,14 @@ var app = new Vue({
                 '5': '#9575CD',
                 '5+': '#7E57C2',
             },
+            groupsIcons: {
+                's101': 'https://ia.wampi.ru/2022/05/03/photo_2022-05-03_08-18-45.jpg',
+                's102': 'https://ie.wampi.ru/2022/05/03/photo_2022-05-03_08-19-48.jpg',
+                's103': 'https://ia.wampi.ru/2022/05/03/photo_2022-05-03_08-19-55.jpg',
+                's104': 'https://ie.wampi.ru/2022/05/03/photo_2022-05-03_08-20-03.jpg',
+                's105': 'https://ia.wampi.ru/2022/05/03/photo_2022-05-03_08-20-10.jpg',
+                's106': 'https://ie.wampi.ru/2022/05/03/photo_2022-05-03_08-20-17.jpg',
+            },
             departmentIcons: {
                 'Физтехпарк': 'https://gitlab.informatics.ru/uploads/-/system/group/avatar/1839/Untitled-1.png',
                 'Профсоюзная': 'https://gitlab.informatics.ru/uploads/-/system/group/avatar/1837/pf.png',
@@ -36,7 +44,7 @@ var app = new Vue({
             dialog: false,
             dialogAdd: false,
             dialogReg: false,
-            userProjects: [{"name": "avtor", "description": "eto proect","load_date": "2019","department": null, "author": "matvey","mark":"5","tech":"Django"},{"name": "avtor2","load_date": "2019","department": null, "description": "eto proect2", "author": "matvey2","mark":"4","load_date": "2022","tech":"Django"}],
+            userProjects: [{"name": "avtor", "description": "eto proect","load_date": "2019","department": null, "author": null,"mark":"5","tech":"Django"},{"name": "avtor2","load_date": "2019","department": null, "description": "eto proect2", "author": null,"mark":"4","load_date": "2022","tech":"Django"}],
             selectedItem: 1,
             carousel: 0,
             selectedMark: '',
@@ -60,7 +68,9 @@ var app = new Vue({
             currentAddMark: '',
             currentAddYear: '',
             currentAddPathLink: '',
+            groups: ['s101', 's102', 's103', 's104', 's105', 's106'],
             departments: ['Физтехпарк', 'Профсоюзная', 'Проспект Мира', 'ВШЭ', 'Яндекс', 'Мытищи', 'Королёв', 'Пушкино', 'Щёлково', 'Онлайн', 'Виртуальный класс'],
+
             items: [],
             markItems: [],
             departmentItems: [],
