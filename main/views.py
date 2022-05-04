@@ -22,6 +22,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         author_filter = self.request.query_params.get('author')
         year_filter = self.request.query_params.get('year')
         mark_filter = self.request.query_params.get('mark')
+        status = self.request.query_params.get('status')
         print(mark_filter)
         projects_by_filter = Project.objects.all()
         if name_filter:
@@ -34,6 +35,8 @@ class ProjectViewSet(viewsets.ModelViewSet):
             projects_by_filter = projects_by_filter.filter(year=year_filter)
         if mark_filter:
             projects_by_filter = projects_by_filter.filter(mark = mark_filter)
+        if status:
+            projects_by_filter = projects_by_filter.filter(status = status)
         if start is None:
             start = 0
         if number is None:
@@ -48,7 +51,6 @@ class RecentProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
 
 def index_page(request):
-
     if request.method == 'POST':
         body = request.body.decode('utf-8')
         operation = json.loads(body)["operation"]
@@ -62,7 +64,8 @@ def index_page(request):
             mark = json.loads(body)['currentAddMark']
             year = json.loads(body)['currentAddYear']
             images = json.loads(body)['currentAddImages']
-            item = Project(name = name, author = author, description = description, mark = mark, year = year, department = department, images = images, icon=images[0] if images else '')
+            status = 'Published'
+            item = Project(name = name, author = author, description = description, mark = mark, year = year, department = department, status = status, images = images, icon=images[0] if images else '')
             item.save()
         elif operation == 'sendProjectOnModerate':
             name = json.loads(body)["currentAddName"]
@@ -74,7 +77,6 @@ def index_page(request):
             mark = json.loads(body)['currentAddMark']
             year = json.loads(body)['currentAddYear']
             images = json.loads(body)['currentAddImages']
-            #todo: Create other table for projects on moderate
             item = Project(name = name, author = author, description = description, mark = mark, year = year, department = department, images = images, icon=images[0] if images else '')
             item.save()
             send_mail(

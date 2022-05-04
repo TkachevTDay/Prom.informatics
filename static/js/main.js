@@ -23,7 +23,7 @@ var app = new Vue({
                 'green': '#7E57C2',
             },
 
-            is_administrator: false,
+            is_administrator: true,
 
             personalAccessToken: '',
             userId: 0,
@@ -31,7 +31,7 @@ var app = new Vue({
             dialogAdd: false,
             dialogReg: false,
             dialogModera: false,
-            userProjects: [{"name": "avtor", "description": "eto proect","load_date": "2019","department": "Online", "author": "matvey","mark":"5","tech":"Django"},{"name": "avtor2","load_date": "2019","department": "Online", "description": "eto proect2", "author": "matvey2","mark":"4","load_date": "2022","tech":"Django"}],
+            userProjects: [{"name": "avtor", "description": "eto proect","load_date": "2019","department": "Online", "author": "matvey","mark":"5","status":"5","tech":"Django"},{"name": "avtor2","load_date": "2019","department": "Online", "description": "eto proect2", "author": "matvey2","mark":"4","load_date": "2022","tech":"Django"}],
             moderateProjects: [{"name": "avtor3", "description": "eto proect","load_date": "2019","department": "Online", "author": "matvey","mark":"5","tech":"Django"},{"name": "avtor4","load_date": "2019","department": "Online", "description": "eto proect2", "author": "matvey2","mark":"4","load_date": "2022","tech":"Django"}],
             selectedItem: 1,
             carousel: 0,
@@ -172,19 +172,79 @@ var app = new Vue({
             }
 
         },
-        updateCurrentAddData: function(index = null){
+        updateCurrentAddData: function(index = null, moderate = false){
             if (index != null) {
-                this.currentAddName=this.userProjects[index].name
-                this.currentAddDescription=this.userProjects[index].description
-                this.currentAddAuthor=this.userProjects[index].author
-                this.currentAddDepartment=this.userProjects[index].department
-                this.currentAddMark=this.userProjects[index].mark
-                this.currentAddYear=this.userProjects[index].year
-                this.currentAddTech=this.userProjects[index].tech
+                if (moderate){
+                    this.currentAddName=this.moderateProjects[index].name
+                    this.currentAddDescription=this.moderateProjects[index].description
+                    this.currentAddAuthor=this.moderateProjects[index].author
+                    this.currentAddDepartment=this.moderateProjects[index].department
+                    this.currentAddMark=this.moderateProjects[index].mark
+                    this.currentAddYear=this.moderateProjects[index].load_date
+                    this.currentAddTech=this.moderateProjects[index].tech
+                }else{
+                    this.currentAddName=this.userProjects[index].name
+                    this.currentAddDescription=this.userProjects[index].description
+                    this.currentAddAuthor=this.userProjects[index].author
+                    this.currentAddDepartment=this.userProjects[index].department
+                    this.currentAddMark=this.userProjects[index].mark
+                    this.currentAddYear=this.userProjects[index].load_date
+                    this.currentAddTech=this.userProjects[index].tech
+                }
             }
 
         },
-        acceptProject: function(item){
+        carouselNext: function(){
+            if (this.recentProjects.length - 1 == this.carouselIterator){
+                this.carouselIterator = 0
+            }
+            else{
+                this.carouselIterator += 1
+
+        }
+        this.updateCurrentData();
+        },
+        carouselPrev: function(){
+            if (this.carouselIterator == 0){
+                this.carouselIterator = this.recentProjects.length - 1
+
+            }
+            else {
+                this.carouselIterator -= 1
+            }
+            this.updateCurrentData();
+        },
+        get_on_moderate_projects: function (){
+            let xhr = new XMLHttpRequest();
+            let c = `${this.baseUrl}api/projects/?start=${this.items.length}&number=5&year=${encodeURIComponent(this.selectedYear)}&department=${encodeURIComponent(this.selectedDepartment)}&mark=${encodeURIComponent(this.selectedMark)}&author=${encodeURIComponent(this.selectedAuthor)}&name=${encodeURIComponent(this.searchText)}&status=${encodeURIComponent("OnModerate")}&format=json`
+            xhr.open("GET", c, true);
+            xhr.send();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        let response=xhr.response;
+                        let a = JSON.parse(response);
+                        app.moderateProjects = app.moderateProjects.concat(a);
+                    }
+                }
+            };
+        },
+        update: function (){
+            let xhr = new XMLHttpRequest();
+            let c = `${this.baseUrl}api/projects/?start=${this.items.length}&number=5&year=${encodeURIComponent(this.selectedYear)}&department=${encodeURIComponent(this.selectedDepartment)}&mark=${encodeURIComponent(this.selectedMark)}&author=${encodeURIComponent(this.selectedAuthor)}&name=${encodeURIComponent(this.searchText)}&status=${encodeURIComponent("Published")}&format=json`
+            xhr.open("GET", c, true);
+            xhr.send();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        let response=xhr.response;
+                        let a = JSON.parse(response);
+                        app.items = app.items.concat(a);
+                    }
+                }
+            };
+        },
+                acceptProject: function(item){
 
             let xhr = new XMLHttpRequest();
             xhr.open("POST", `${this.baseUrl}`, true);
@@ -207,6 +267,7 @@ var app = new Vue({
                 console.log('POST-request with add config has been successfully sent')
               }
             };
+            this.update();
         },
         disableProject: function(item){
 
@@ -231,42 +292,9 @@ var app = new Vue({
                 console.log('POST-request with add config has been successfully sent')
               }
              }
+            this.update();
         },
-        carouselNext: function(){
-            if (this.recentProjects.length - 1 == this.carouselIterator){
-                this.carouselIterator = 0
-            }
-            else{
-                this.carouselIterator += 1
 
-        }
-        this.updateCurrentData();
-        },
-        carouselPrev: function(){
-            if (this.carouselIterator == 0){
-                this.carouselIterator = this.recentProjects.length - 1
-
-            }
-            else {
-                this.carouselIterator -= 1
-            }
-            this.updateCurrentData();
-        },
-        update: function (){
-            let xhr = new XMLHttpRequest();
-            let c = `${this.baseUrl}api/projects/?start=${this.items.length}&number=5&year=${encodeURIComponent(this.selectedYear)}&department=${encodeURIComponent(this.selectedDepartment)}&mark=${encodeURIComponent(this.selectedMark)}&author=${encodeURIComponent(this.selectedAuthor)}&name=${encodeURIComponent(this.searchText)}&format=json`
-            xhr.open("GET", c, true);
-            xhr.send();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4) {
-                    if (xhr.status == 200) {
-                        let response=xhr.response;
-                        let a = JSON.parse(response);
-                        app.items = app.items.concat(a);
-                    }
-                }
-            };
-        },
         setModeratableState(state){
             this.isCardModeratable = state
         },
@@ -335,6 +363,7 @@ var app = new Vue({
     },
   mounted(){
     this.update();
+    this.get_on_moderate_projects();
     this.getFilterParams();
     this.getRecentProjects();
   },
