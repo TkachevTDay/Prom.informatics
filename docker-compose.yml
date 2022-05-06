@@ -36,6 +36,7 @@ services:
     volumes:
       - .:/prominf
       - /var/run/docker.sock:/var/run/docker.sock
+      - containers_config_volume:/prominf/socketfiles/
       - staticfiles:/prominf/staticfiles/
       - media_volume:/prominf/mediafiles/
     command: ./script.sh
@@ -55,6 +56,10 @@ services:
     volumes:
       - staticfiles:/prominf/staticfiles/
       - media_volume:/prominf/mediafiles/
+      - containers_config_volume:/containers_d/
+      - containers_run:/runcontainersconf/
 volumes:
   staticfiles:
   media_volume:
+  containers_config_volume:
+  containers_run:
