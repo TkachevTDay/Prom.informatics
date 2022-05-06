@@ -4,11 +4,8 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from .models import Project
 from django.core.mail import send_mail
-from .additional import color_mark_define
-
-# Create your views here.
 from .serializers import ProjectSerializer
-
+from .additional import container_run
 
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
@@ -50,24 +47,35 @@ def index_page(request):
 
     if request.method == 'POST':
         body = request.body.decode('utf-8')
-        print(body)
-        name = json.loads(body)["currentAddName"]
-        author = json.loads(body)["currentAddAuthor"]
-        description = json.loads(body)['currentAddDescription']
-        #todo: make tech stack
-        department = json.loads(body)['currentAddDepartment']
-        mark = json.loads(body)['currentAddMark']
-        year = json.loads(body)['currentAddYear']
-        images = json.loads(body)['currentAddImages']
-        item = Project(name = name, author = author, description = description, mark = mark, year = year, department = department, images = images, icon=images[0] if images else '')
-        item.save()
-        send_mail(
-            'Новый проект выслан на модерацию.',
-            f'Новый проект с именем { name}, автор { author } ожидает Вашей модерации.',
-            'prominfnotification@yandex.ru',
-            ['matgost@yandex.ru'],
-            fail_silently=False,
-        )
+        if json.loads(body)["requestType"] == 'elementAdd':
+            name = json.loads(body)["currentAddName"]
+            author = json.loads(body)["currentAddAuthor"]
+            description = json.loads(body)['currentAddDescription']
+            #todo: make tech stack
+            department = json.loads(body)['currentAddDepartment']
+            mark = json.loads(body)['currentAddMark']
+            year = json.loads(body)['currentAddYear']
+            images = json.loads(body)['currentAddImages']
+            item = Project(name = name, author = author, description = description, mark = mark, year = year,
+                           department = department, images = images, icon=images[0] if images else '')
+            item.save()
+            send_mail(
+                'Новый проект выслан на модерацию.',
+                f'Новый проект с именем { name }, автор { author } ожидает Вашей модерации.',
+                'prominfnotification@yandex.ru',
+                ['matgost@yandex.ru'],
+                fail_silently=False,
+            )
+        if json.loads(body)["requestType"] == 'elementRun':
+
+            current_element_id = json.loads(body)["elementId"]
+            current_element = Project.objects.all().filter(id=current_element_id)[0]
+            print(current_element.status)
+            if current_element.status== 'approved, with docker':
+                container_run(container_name=current_element.name, image_name=current_element.docker_image_name, ports='8000')
+            else:
+                print("There's no way to start this project with docker")
+
     return render(request, 'index.html', {})
 
 

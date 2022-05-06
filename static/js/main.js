@@ -53,7 +53,7 @@ var app = new Vue({
             authorItems: [],
             yearItems: [],
             recentProjects: [],
-            baseUrl: 'http://0.0.0.0:1337/',
+            baseUrl: 'http://localhost:1337/',
             carouselIterator: 0,
             images: [],
             filterShow: false,
@@ -148,6 +148,7 @@ var app = new Vue({
         },
         updateCurrentData: function(item = null){
             if (item == null) {
+                this.currentId=this.recentProjects[this.carouselIterator].id
                 this.currentName=this.recentProjects[this.carouselIterator].name
                 this.currentDescription=this.recentProjects[this.carouselIterator].description
                 this.currentAuthor=this.recentProjects[this.carouselIterator].author
@@ -157,6 +158,7 @@ var app = new Vue({
                 this.currentProjectImages=this.recentProjects[this.carouselIterator].images
                 this.currentProjectAvatar=this.recentProjects[this.carouselIterator].icon
             } else {
+                this.currentId=item.id
                 this.currentName=item.name
                 this.currentDescription=item.description
                 this.currentAuthor=item.author
@@ -263,6 +265,7 @@ var app = new Vue({
             let CSRF_token = document.querySelector('[name=csrfmiddlewaretoken]').value
             xhr.setRequestHeader("X-CSRFToken", CSRF_token);
             let data = {
+                'requestType': 'elementAdd',
                 'currentAddName': this.currentAddName.trim(),
                 'currentAddDescription': this.currentAddDescription.trim(),
                 'currentAddAuthor': this.currentAddAuthor.trim(),
@@ -279,6 +282,22 @@ var app = new Vue({
               }
             };
 
+        },
+        sendProjectRunConfig: function(id){
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", `${this.baseUrl}`, true);
+            let CSRF_token = document.querySelector('[name=csrfmiddlewaretoken]').value
+            xhr.setRequestHeader("X-CSRFToken", CSRF_token);
+            let data = {
+                'requestType': 'elementRun',
+                'elementId': id,
+            }
+            xhr.send(JSON.stringify(data))
+             xhr.onreadystatechange = function() {
+              if (xhr.readyState == 4) {
+                console.log('POST-request with run config has been successfully sent')
+              }
+            };
         },
     },
   mounted(){

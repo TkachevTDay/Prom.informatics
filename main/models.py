@@ -15,7 +15,7 @@ class Project(models.Model):
     mark = models.TextField(max_length=10)
     icon = models.TextField(max_length=255, default='https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Circle-icons-computer.svg/2048px-Circle-icons-computer.svg.png')
     images = models.JSONField(default=list)
+    status = models.TextField(max_length=255, default='on moderate')
+    docker_image_name = models.TextField(max_length=255, default='')
 
-class DockerISO(models.Model):
-    project_id = models.ForeignKey(to=Project, on_delete=models.CASCADE)
-    link_to_iso = models.TextField(max_length=255)
+

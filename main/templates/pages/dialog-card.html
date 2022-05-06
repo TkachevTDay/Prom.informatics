@@ -26,11 +26,14 @@
                     </form>
                 </v-row>
                 <v-col class="d-flex justify-end" v-if="isCardModeratable==false">
-                    <v-btn class="mr-2" big>
-                        <v-icon dark>
-                            mdi-play
-                        </v-icon>
-                    </v-btn>
+                    <v-form method="post">
+                        {% csrf_token %}
+                        <v-btn class="mr-2" big @click="sendProjectRunConfig(currentId)">
+                            <v-icon dark>
+                                mdi-play
+                            </v-icon>
+                        </v-btn>
+                    </v-form>
                     <v-btn big>
                         <img src="https://fonts.gstatic.com/s/i/materialicons/code/v11/24px.svg"/>
                     </v-btn>
