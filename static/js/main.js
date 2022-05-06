@@ -41,6 +41,7 @@ var app = new Vue({
             searchText: '',
             selectedAuthor: '',
             isCardModeratable: false,
+            isAdminCard: false,
             currentName: '',
             currentDescription: '',
             currentAuthor: '',
@@ -173,6 +174,7 @@ var app = new Vue({
 
         },
         updateCurrentAddData: function(index = null, moderate = false){
+            this.isAdminCard = moderate
             if (index != null) {
                 if (moderate){
                     this.currentAddName=this.moderateProjects[index].name
@@ -216,7 +218,7 @@ var app = new Vue({
         },
         get_on_moderate_projects: function (){
             let xhr = new XMLHttpRequest();
-            let c = `${this.baseUrl}api/projects/?start=${this.items.length}&number=5&year=${encodeURIComponent(this.selectedYear)}&department=${encodeURIComponent(this.selectedDepartment)}&mark=${encodeURIComponent(this.selectedMark)}&author=${encodeURIComponent(this.selectedAuthor)}&name=${encodeURIComponent(this.searchText)}&status=${encodeURIComponent("OnModerate")}&format=json`
+            let c = `${this.baseUrl}api/projects/?start=0&number=5000&year=&department=&mark=&author=&name=&status=${encodeURIComponent("OnModerate")}&format=json`;
             xhr.open("GET", c, true);
             xhr.send();
             xhr.onreadystatechange = function() {
@@ -224,7 +226,7 @@ var app = new Vue({
                     if (xhr.status == 200) {
                         let response=xhr.response;
                         let a = JSON.parse(response);
-                        app.moderateProjects = app.moderateProjects.concat(a);
+                        app.moderateProjects = a;
                     }
                 }
             };
@@ -243,6 +245,7 @@ var app = new Vue({
                     }
                 }
             };
+            this.get_on_moderate_projects();
         },
                 acceptProject: function(item){
 
@@ -358,12 +361,11 @@ var app = new Vue({
                 console.log('POST-request with add config has been successfully sent')
               }
             };
-
+            this.update();
         },
     },
   mounted(){
     this.update();
-    this.get_on_moderate_projects();
     this.getFilterParams();
     this.getRecentProjects();
   },

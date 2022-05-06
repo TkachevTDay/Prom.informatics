@@ -9,10 +9,9 @@ from .additional import color_mark_define
 # Create your views here.
 from .serializers import ProjectSerializer
 
-
 class ProjectViewSet(viewsets.ModelViewSet):
-    queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+    queryset = Project.objects.all()
 
     def get_queryset(self):
         start = self.request.query_params.get('start')
@@ -23,7 +22,6 @@ class ProjectViewSet(viewsets.ModelViewSet):
         year_filter = self.request.query_params.get('year')
         mark_filter = self.request.query_params.get('mark')
         status = self.request.query_params.get('status')
-        print(mark_filter)
         projects_by_filter = Project.objects.all()
         if name_filter:
             projects_by_filter = projects_by_filter.filter(name=name_filter)
@@ -41,6 +39,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
             start = 0
         if number is None:
             number = len(projects_by_filter)
+
         queryset = projects_by_filter[int(start):int(start) + int(number)]
         return queryset
 
@@ -55,6 +54,7 @@ def index_page(request):
         body = request.body.decode('utf-8')
         operation = json.loads(body)["operation"]
         if operation == 'AcceptProject':
+            print("accept")
             name = json.loads(body)["currentAddName"]
             author = json.loads(body)["currentAddAuthor"]
             description = json.loads(body)['currentAddDescription']
@@ -68,6 +68,7 @@ def index_page(request):
             item = Project(name = name, author = author, description = description, mark = mark, year = year, department = department, status = status, images = images, icon=images[0] if images else '')
             item.save()
         elif operation == 'sendProjectOnModerate':
+            print("send")
             name = json.loads(body)["currentAddName"]
             author = json.loads(body)["currentAddAuthor"]
             description = json.loads(body)['currentAddDescription']

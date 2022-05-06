@@ -22,9 +22,9 @@
                 <v-row class="my-0 mr-0 ml-10" v-if="isCardModeratable==true">
                     <form method="post">
                         {% csrf_token %}
-                        <v-btn v-if="is_administrator==false" @click='sendProjectOnModerate()' :disabled="!formIsValid" @click.stop="showDialog">Отправить</v-btn>
-                        <v-btn v-if="is_administrator==true" :color=markColors['green'] @click='acceptProject()' :disabled="!formIsValid" @click.stop="showDialog">Опубликовать</v-btn>
-                        <v-btn v-if="is_administrator==true" :color=markColors['red'] @click='disableProject()' :disabled="!formIsValid" @click.stop="showDialog">Отклонить</v-btn>
+                        <v-btn v-if="isAdminCard==false" @click='sendProjectOnModerate()' :disabled="!formIsValid" @click.stop="showDialog">Отправить</v-btn>
+                        <v-btn v-if="isAdminCard==true" :color=markColors['green'] @click='acceptProject()' :disabled="!formIsValid" @click.stop="showDialog">Опубликовать</v-btn>
+                        <v-btn v-if="isAdminCard==true" :color=markColors['red'] @click='disableProject()' :disabled="!formIsValid" @click.stop="showDialog">Отклонить</v-btn>
                     </form>
                 </v-row>
                 <v-col class="d-flex justify-end" v-if="isCardModeratable==false">
