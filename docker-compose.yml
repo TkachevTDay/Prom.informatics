@@ -58,8 +58,16 @@ services:
       - media_volume:/prominf/mediafiles/
       - containers_config_volume:/containers_d/
       - containers_run:/runcontainersconf/
+
+
+  redis:
+    image: redis:alpine
+    expose:
+    - 6379
+
 volumes:
   staticfiles:
   media_volume:
   containers_config_volume:
   containers_run:
+  redis:

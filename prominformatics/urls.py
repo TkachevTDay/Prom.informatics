@@ -22,13 +22,16 @@ from rest_framework import routers, serializers, viewsets
 from main.models import Project
 from main.views import ProjectViewSet
 from django.contrib.staticfiles.views import serve
-def return_static(request, path, insecure=True, **kwargs):
-  return serve(request, path, insecure, **kwargs)
+import redis
 
 
 router = routers.DefaultRouter()
 router.register(r'projects', ProjectViewSet)
 router.register(r'recent_projects', main.views.RecentProjectViewSet)
+
+r = redis.StrictRedis(host='redis', port=6379, db=0)
+r.set('avialable_ports', "8000 8001 8002 8003 8004")
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),

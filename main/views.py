@@ -5,8 +5,8 @@ from rest_framework import viewsets
 from .models import Project
 from django.core.mail import send_mail
 from .serializers import ProjectSerializer
-from .additional import container_run
-
+from .additional import container_run, pop_avialable_port, check_existing_containers
+import redis
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
@@ -71,8 +71,16 @@ def index_page(request):
             current_element_id = json.loads(body)["elementId"]
             current_element = Project.objects.all().filter(id=current_element_id)[0]
             print(current_element.status)
-            if current_element.status== 'approved, with docker':
-                container_run(container_name=current_element.name, image_name=current_element.docker_image_name, ports='8000')
+            if current_element.status == 'approved, with docker':
+                ports_get_request = pop_avialable_port()
+                if ports_get_request != 'No free ports':
+                    if not check_existing_containers(current_element.name):
+                        container_run(container_name=current_element.name, image_name=current_element.docker_image_name,
+                                      ports=ports_get_request)
+                    else:
+                        print('Container with this name already exists')
+                else:
+                    print('All ports are busy')
             else:
                 print("There's no way to start this project with docker")
 
