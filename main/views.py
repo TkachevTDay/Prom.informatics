@@ -75,8 +75,7 @@ def index_page(request):
                 ports_get_request = pop_avialable_port()
                 if ports_get_request != 'No free ports':
                     if not check_existing_containers(current_element.name):
-                        container_run(container_name=current_element.name, image_name=current_element.docker_image_name,
-                                      ports=ports_get_request)
+                        container_run(container_name=current_element.name, image_name=current_element.docker_image_name,ports=ports_get_request, volumes={f'prominformatics_run_config_{ports_get_request[-1]}':{'bind': '/run/', 'mode': 'rw'}})
                     else:
                         print('Container with this name already exists')
                 else:

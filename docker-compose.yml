@@ -57,8 +57,11 @@ services:
       - staticfiles:/prominf/staticfiles/
       - media_volume:/prominf/mediafiles/
       - containers_config_volume:/containers_d/
-      - containers_run:/runcontainersconf/
-
+      - run_config_0:/etc/cont_0/run_config
+      - run_config_1:/etc/cont_1/run_config
+      - run_config_2:/etc/cont_2/run_config
+      - run_config_3:/etc/cont_3/run_config
+      - run_config_4:/etc/cont_4/run_config
 
   redis:
     image: redis:alpine
@@ -71,3 +74,8 @@ volumes:
   containers_config_volume:
   containers_run:
   redis:
+  run_config_0:
+  run_config_1:
+  run_config_2:
+  run_config_3:
+  run_config_4:

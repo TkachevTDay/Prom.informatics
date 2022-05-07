@@ -4,9 +4,9 @@ import redis
     Additional calc function's
 """
 
-def container_run(container_name, image_name, ports):
+def container_run(container_name, image_name, ports, volumes):
     client = docker.from_env()
-    container = client.containers.run(container_name, detach=True, ports={str(ports): str(ports)}, name=image_name)
+    container = client.containers.run(container_name, detach=True, ports={str(ports): str(ports)}, name=image_name, volumes=volumes)
     print(container.id)
 
 def pop_avialable_port():
