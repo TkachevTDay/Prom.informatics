@@ -36,9 +36,9 @@ services:
     volumes:
       - .:/prominf
       - /var/run/docker.sock:/var/run/docker.sock
-      - containers_config_volume:/prominf/socketfiles/
       - staticfiles:/prominf/staticfiles/
       - media_volume:/prominf/mediafiles/
+      - socket_files:/prominf/socketfiles/
     command: ./script.sh
     restart: always
     depends_on:
@@ -56,7 +56,6 @@ services:
     volumes:
       - staticfiles:/prominf/staticfiles/
       - media_volume:/prominf/mediafiles/
-      - containers_config_volume:/containers_d/
       - run_config_0:/etc/cont_0/run_config
       - run_config_1:/etc/cont_1/run_config
       - run_config_2:/etc/cont_2/run_config
@@ -71,8 +70,7 @@ services:
 volumes:
   staticfiles:
   media_volume:
-  containers_config_volume:
-  containers_run:
+  socket_files:
   redis:
   run_config_0:
   run_config_1:

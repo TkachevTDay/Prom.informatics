@@ -5,7 +5,7 @@ from rest_framework import viewsets
 from .models import Project
 from django.core.mail import send_mail
 from .serializers import ProjectSerializer
-from .additional import container_run, pop_avialable_port, check_existing_containers
+from .additional import container_run, pop_avialable_port, check_existing_containers, create_socket_files
 import redis
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
@@ -75,7 +75,9 @@ def index_page(request):
                 ports_get_request = pop_avialable_port()
                 if ports_get_request != 'No free ports':
                     if not check_existing_containers(current_element.name):
-                        container_run(container_name=current_element.name, image_name=current_element.docker_image_name,ports=ports_get_request, volumes={f'prominformatics_run_config_{ports_get_request[-1]}':{'bind': '/run/', 'mode': 'rw'}})
+
+                        container_run(container_name=current_element.name, image_name=current_element.docker_image_name,ports=ports_get_request, volumes={f'prominformatics_run_config_{ports_get_request[-1]}':{'bind': '/run/', 'mode': 'rw'}, 'prominformatics_socket_files':{'bind':'/etc/systemd/system', 'mode':'ro'}})
+                        create_socket_files(current_element.name)
                     else:
                         print('Container with this name already exists')
                 else:
