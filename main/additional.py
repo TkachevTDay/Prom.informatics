@@ -1,13 +1,14 @@
 import docker
 import redis
 import os
+import subprocess
 """
     Additional calc function's
 """
 
 def container_run(container_name, image_name, ports, volumes):
     client = docker.from_env()
-    container = client.containers.run(container_name, detach=True, ports={str(ports): str(ports)}, name=image_name, volumes=volumes)
+    container = client.containers.run(image_name, detach=True, ports={str(ports): str(ports)}, name=container_name, volumes=volumes)
     print(container.id)
 
 def pop_avialable_port():
@@ -33,8 +34,17 @@ def get_asgi_address(container_name):
 def create_socket_files(element_name):
     os.mkdir(f'/prominf/socketfiles/{element_name}/')
     socket_file = '[Unit]\nDescription=gunicorn socket\n\n[Socket]\nListenStream=/run/gunicorn.sock\n\n[Install]\nWantedBy=sockets.target\n'
-    service_file = f'[Unit]\nDescription=gunicorn daemon\nRequires=gunicorn.socket\nAfter=network.target\n\n[Service]\nUser=root\nGroup=www-data\nWorkingDirectory={get_work_dir(element_name)}\nExecStart=/usr/local/bin/gunicorn --access-logfile --k uvicorn.workers.UvicornWorker --workers 3 --bind unix:/run/gunicorn.sock {get_asgi_address(element_name)}\n\n[Install]\nWantedBy=multi-user.target'
+    service_file = f'[Unit]\nDescription=gunicorn daemon\nRequires=gunicorn.socket\nAfter=network.target\n\n[Service]\nUser=root\nGroup=www-data\nWorkingDirectory={get_work_dir(element_name)}\nExecStart=/usr/local/bin/gunicorn --access-logfile - -k uvicorn.workers.UvicornWorker --workers 3 --bind unix:/run/gunicorn.sock {get_asgi_address(element_name)}\n\n[Install]\nWantedBy=multi-user.target'
     with open(f'/prominf/socketfiles/{element_name}/gunicorn.socket', 'w') as file:
         file.write(socket_file)
     with open(f'/prominf/socketfiles/{element_name}/gunicorn.service', 'w') as file:
         file.write(service_file)
+
+def uvicorn_start(element_name):
+    exec_file = f'#!/bin/bash\ndocker exec -i {element_name} ' \
+                f'cp /container_copy_files/{element_name}/{{gunicorn.service,gunicorn.socket}} /etc/systemd/system/\ndocker exec -i {element_name} systemctl start gunicorn\n' \
+                f'docker exec -i {element_name} systemctl enable gunicorn\ndocker exec -i {element_name} systemctl status gunicorn;'
+    with open(f'/prominf/socketfiles/{element_name}/uvicorn_start.sh', 'w') as file:
+        file.write(exec_file)
+    os.chmod(f'/prominf/socketfiles/{element_name}/uvicorn_start.sh', 777)
+    exit_code = subprocess.call(f'/prominf/socketfiles/{element_name}/uvicorn_start.sh')
