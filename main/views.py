@@ -73,24 +73,24 @@ def index_page(request):
             print(current_element.status)
             cont_inf={}
             if current_element.status == 'approved, with docker':
-                ports_get_request = pop_avialable_port()
-                cont_inf['id']=ports_get_request[-1]
-                if ports_get_request != 'No free ports':
                     if not check_existing_containers(current_element.name.lower()):
-
-                        container_run(container_name=current_element.name.lower(), image_name=current_element.docker_image_name,
-                                      ports=ports_get_request,
-                                      volumes={f'prominformatics_run_config_{ports_get_request[-1]}':{'bind': '/run/', 'mode': 'rw'},
-                                               'prominformatics_socket_files':{'bind':'/container_copy_files/', 'mode':'ro'}})
-                        create_socket_files(current_element.name.lower())
-                        uvicorn_start(current_element.name.lower())
+                        ports_get_request = pop_avialable_port()
+                        cont_inf['id'] = ports_get_request[-1]
+                        if ports_get_request != 'No free ports':
+                            container_run(container_name=current_element.name.lower(), image_name=current_element.docker_image_name,
+                                          ports=ports_get_request,
+                                          volumes={f'prominformatics_run_config_{ports_get_request[-1]}':{'bind': '/run/', 'mode': 'rw'},
+                                                   'prominformatics_socket_files':{'bind':'/container_copy_files/', 'mode':'ro'}})
+                            create_socket_files(current_element.name.lower())
+                            uvicorn_start(current_element.name.lower())
+                            return JsonResponse({'cont': cont_inf, 'status': 'ok'})
+                        else:
+                            return JsonResponse({'status': 'All ports are busy'})
                     else:
-                        print('Container with this name already exists')
-                else:
-                    print('All ports are busy')
+                        return JsonResponse({'status': 'Container with this name already exists'})
             else:
-                print("There's no way to start this project with docker")
-            return JsonResponse({'cont':cont_inf})
+                return JsonResponse({'status': "There's no way to start this project with docker"})
+
 
     return render(request, 'index.html', {})
 

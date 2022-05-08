@@ -298,7 +298,12 @@ var app = new Vue({
                   console.log('POST-request with run config has been successfully sent')
                   let response=xhr.response;
                   let a = JSON.parse(response);
-                  window.location.href = `http://cont${a.cont.id}.localhost:1337`;
+                  if (a.status == 'ok'){
+                    window.location.href = `http://cont${a.cont.id}.localhost:1337`;
+                  }
+                  else{
+                    alert(a.status)
+                  }
               }
             };
         },
