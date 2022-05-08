@@ -71,8 +71,10 @@ def index_page(request):
             current_element_id = json.loads(body)["elementId"]
             current_element = Project.objects.all().filter(id=current_element_id)[0]
             print(current_element.status)
+            cont_inf={}
             if current_element.status == 'approved, with docker':
                 ports_get_request = pop_avialable_port()
+                cont_inf['id']=ports_get_request[-1]
                 if ports_get_request != 'No free ports':
                     if not check_existing_containers(current_element.name.lower()):
 
@@ -88,6 +90,7 @@ def index_page(request):
                     print('All ports are busy')
             else:
                 print("There's no way to start this project with docker")
+            return JsonResponse({'cont':cont_inf})
 
     return render(request, 'index.html', {})
 

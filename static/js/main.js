@@ -295,7 +295,10 @@ var app = new Vue({
             xhr.send(JSON.stringify(data))
              xhr.onreadystatechange = function() {
               if (xhr.readyState == 4) {
-                console.log('POST-request with run config has been successfully sent')
+                  console.log('POST-request with run config has been successfully sent')
+                  let response=xhr.response;
+                  let a = JSON.parse(response);
+                  window.location.href = `http://cont${a.cont.id}.localhost:1337`;
               }
             };
         },

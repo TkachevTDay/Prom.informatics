@@ -32,7 +32,8 @@ def get_asgi_address(container_name):
     return client.inspect_container(container_name)['Args'][1].split()[1]
 
 def create_socket_files(element_name):
-    os.mkdir(f'/prominf/socketfiles/{element_name}/')
+    if not os.path.exists(f'/prominf/socketfiles/{element_name}/'):
+        os.makedirs(f'/prominf/socketfiles/{element_name}/')
     socket_file = '[Unit]\nDescription=gunicorn socket\n\n[Socket]\nListenStream=/run/gunicorn.sock\n\n[Install]\nWantedBy=sockets.target\n'
     service_file = f'[Unit]\nDescription=gunicorn daemon\nRequires=gunicorn.socket\nAfter=network.target\n\n[Service]\nUser=root\nGroup=www-data\nWorkingDirectory={get_work_dir(element_name)}\nExecStart=/usr/local/bin/gunicorn --access-logfile - -k uvicorn.workers.UvicornWorker --workers 3 --bind unix:/run/gunicorn.sock {get_asgi_address(element_name)}\n\n[Install]\nWantedBy=multi-user.target'
     with open(f'/prominf/socketfiles/{element_name}/gunicorn.socket', 'w') as file:
