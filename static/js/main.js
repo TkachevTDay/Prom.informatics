@@ -273,7 +273,7 @@ var app = new Vue({
                 console.log('POST-request with add config has been successfully sent')
               }
             };
-            this.update();
+            setTimeout(() => {this.update();}, 1000);
         },
         disableProject: function(item){
             let xhr = new XMLHttpRequest();
@@ -289,8 +289,8 @@ var app = new Vue({
               if (xhr.readyState == 4) {
                 console.log('POST-request with add config has been successfully sent')
               }
-             }
-            this.update();
+             };
+            setTimeout(() => {this.update();}, 1000);
         },
 
         setModeratableState(state){
@@ -356,7 +356,7 @@ var app = new Vue({
                 console.log('POST-request with add config has been successfully sent')
               }
             };
-            this.update();
+            setTimeout(() => {this.update();}, 1000);
         },
     },
   mounted(){
