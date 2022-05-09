@@ -9,6 +9,7 @@ from .additional import color_mark_define
 # Create your views here.
 from .serializers import ProjectSerializer
 
+
 class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()
@@ -32,9 +33,9 @@ class ProjectViewSet(viewsets.ModelViewSet):
         if year_filter:
             projects_by_filter = projects_by_filter.filter(year=year_filter)
         if mark_filter:
-            projects_by_filter = projects_by_filter.filter(mark = mark_filter)
+            projects_by_filter = projects_by_filter.filter(mark=mark_filter)
         if status:
-            projects_by_filter = projects_by_filter.filter(status = status)
+            projects_by_filter = projects_by_filter.filter(status=status)
         if start is None:
             start = 0
         if number is None:
@@ -49,23 +50,32 @@ class RecentProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.order_by("-upload_date")[:recent_projects_amount]
     serializer_class = ProjectSerializer
 
+
+def delete_project_from_database(id):
+    del_proj = Project.objects.get(id=id)
+    del_proj.delete()
+
+
 def index_page(request):
     if request.method == 'POST':
         body = request.body.decode('utf-8')
         operation = json.loads(body)["operation"]
         if operation == 'AcceptProject':
             print("accept")
+            id = json.loads(body)["id"]
+            delete_project_from_database(id)
             name = json.loads(body)["currentAddName"]
             author = json.loads(body)["currentAddAuthor"]
             description = json.loads(body)['currentAddDescription']
             tech_stack = json.loads(body)['currentAddTech']
-            #todo: make tech stack
+            # todo: make tech stack
             department = json.loads(body)['currentAddDepartment']
             mark = json.loads(body)['currentAddMark']
             year = json.loads(body)['currentAddYear']
             images = json.loads(body)['currentAddImages']
             status = 'Published'
-            item = Project(name = name, author = author, description = description, mark = mark, year = year, department = department, status = status, images = images, icon=images[0] if images else '')
+            item = Project(name=name, author=author, description=description, mark=mark, year=year,
+                           department=department, status=status, images=images, icon=images[0] if images else '')
             item.save()
         elif operation == 'sendProjectOnModerate':
             print("send")
@@ -73,22 +83,24 @@ def index_page(request):
             author = json.loads(body)["currentAddAuthor"]
             description = json.loads(body)['currentAddDescription']
             tech_stack = json.loads(body)['currentAddTech']
-            #todo: make tech stack
+            # todo: make tech stack
             department = json.loads(body)['currentAddDepartment']
             mark = json.loads(body)['currentAddMark']
             year = json.loads(body)['currentAddYear']
             images = json.loads(body)['currentAddImages']
-            item = Project(name = name, author = author, description = description, mark = mark, year = year, department = department, images = images, icon=images[0] if images else '')
+            item = Project(name=name, author=author, description=description, mark=mark, year=year,
+                           department=department, images=images, icon=images[0] if images else '')
             item.save()
             send_mail(
                 'Новый проект выслан на модерацию.',
-                f'Новый проект с именем { name}, автор { author } ожидает Вашей модерации.',
+                f'Новый проект с именем {name}, автор {author} ожидает Вашей модерации.',
                 'prominfnotification@yandex.ru',
                 ['matgost@yandex.ru'],
                 fail_silently=False,
             )
         elif operation == 'DisableProject':
-            pass
+            id = json.loads(body)["id"]
+            delete_project_from_database(id)
     return render(request, 'index.html', {})
 
 

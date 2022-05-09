@@ -48,6 +48,7 @@ var app = new Vue({
             currentDepartment: '',
             currentMark: '',
             currentYear: '',
+            currentAddID: -1,
             currentAddName: '',
             currentAddDescription: '',
             currentAddAuthor: '',
@@ -80,7 +81,7 @@ var app = new Vue({
               this.currentAddAuthor &&
               this.currentAddDepartment &&
               this.currentAddDescription &&
-              this.currentAddMark && this.currentAddName && this.currentAddName && this.currentAddTech && this.currentAddYear
+              this.currentAddMark && this.currentAddName && this.currentAddTech && this.currentAddYear
             )
           },
         columns() {
@@ -177,6 +178,7 @@ var app = new Vue({
             this.isAdminCard = moderate
             if (index != null) {
                 if (moderate){
+                    this.currentAddID=this.moderateProjects[index].id
                     this.currentAddName=this.moderateProjects[index].name
                     this.currentAddDescription=this.moderateProjects[index].description
                     this.currentAddAuthor=this.moderateProjects[index].author
@@ -185,7 +187,7 @@ var app = new Vue({
                     this.currentAddYear=this.moderateProjects[index].load_date
                     this.currentAddTech=this.moderateProjects[index].tech
                 }else{
-                    this.currentAddName=this.userProjects[index].name
+                    this.currentAddID=this.userProjects[index].id
                     this.currentAddDescription=this.userProjects[index].description
                     this.currentAddAuthor=this.userProjects[index].author
                     this.currentAddDepartment=this.userProjects[index].department
@@ -255,6 +257,7 @@ var app = new Vue({
             xhr.setRequestHeader("X-CSRFToken", CSRF_token);
             let data = {
                 'operation': 'AcceptProject',
+                'id': this.currentAddID,
                 'currentAddName': this.currentAddName.trim(),
                 'currentAddDescription': this.currentAddDescription.trim(),
                 'currentAddAuthor': this.currentAddAuthor.trim(),
@@ -273,21 +276,13 @@ var app = new Vue({
             this.update();
         },
         disableProject: function(item){
-
             let xhr = new XMLHttpRequest();
             xhr.open("POST", `${this.baseUrl}`, true);
             let CSRF_token = document.querySelector('[name=csrfmiddlewaretoken]').value
             xhr.setRequestHeader("X-CSRFToken", CSRF_token);
             let data = {
                 'operation': 'DisableProject',
-                'currentAddName': this.currentAddName.trim(),
-                'currentAddDescription': this.currentAddDescription.trim(),
-                'currentAddAuthor': this.currentAddAuthor.trim(),
-                'currentAddTech': this.currentAddTech.trim(),
-                'currentAddDepartment': this.currentAddDepartment.trim(),
-                'currentAddMark': this.currentAddMark.trim(),
-                'currentAddYear': this.currentAddYear.trim(),
-                'currentAddImages': this.currentProjectImages,
+                'id': this.currentAddID,
             }
             xhr.send(JSON.stringify(data))
              xhr.onreadystatechange = function() {
