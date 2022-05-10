@@ -19,6 +19,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         author_filter = self.request.query_params.get('author')
         year_filter = self.request.query_params.get('year')
         mark_filter = self.request.query_params.get('mark')
+        status = self.request.query_params.get('status')
         projects_by_filter = Project.objects.all()
         if name_filter:
             projects_by_filter = projects_by_filter.filter(name=name_filter)
@@ -30,6 +31,8 @@ class ProjectViewSet(viewsets.ModelViewSet):
             projects_by_filter = projects_by_filter.filter(year=year_filter)
         if mark_filter:
             projects_by_filter = projects_by_filter.filter(mark = mark_filter)
+        if status:
+            projects_by_filter = projects_by_filter.filter(status= status)
         if start is None:
             start = 0
         if number is None:
@@ -40,7 +43,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
 class RecentProjectViewSet(viewsets.ModelViewSet):
     recent_projects_amount = 5
-    queryset = Project.objects.order_by("-upload_date")[:recent_projects_amount]
+    queryset = Project.objects.all().filter(status='approved').order_by("-upload_date")[:recent_projects_amount]
     serializer_class = ProjectSerializer
 
 def index_page(request):
@@ -70,9 +73,9 @@ def index_page(request):
 
             current_element_id = json.loads(body)["elementId"]
             current_element = Project.objects.all().filter(id=current_element_id)[0]
-            print(current_element.status)
+            print(current_element.docker_status)
             cont_inf={}
-            if current_element.status == 'approved, with docker':
+            if current_element.docker_status == 'approved':
                     if not check_existing_containers(current_element.name.lower()):
                         ports_get_request = pop_avialable_port()
                         cont_inf['id'] = ports_get_request[-1]
@@ -90,7 +93,10 @@ def index_page(request):
                         return JsonResponse({'status': 'Container with this name already exists'})
             else:
                 return JsonResponse({'status': "There's no way to start this project with docker"})
-
+        if json.loads(body)["requestType"] == 'elementChangeStatus':
+            element = Project.objects.get(id=json.loads(body)["elementId"])
+            element.status = json.loads(body)["elementNewStatus"]
+            element.save(update_fields=['status'])
 
     return render(request, 'index.html', {})
 
@@ -100,12 +106,13 @@ def send_filter_params(request):
     years = [ye['year'] for ye in list(Project.objects.all().values('year').distinct())]
     authors = [aut['author'] for aut in list(Project.objects.all().values('author').distinct())]
     marks = [mar['mark'] for mar in list(Project.objects.all().values('mark').distinct())]
-
+    projects_amount = len(Project.objects.all())
     return JsonResponse(
         {
             'departments': departments,
             'years': years,
             'authors': authors,
             'marks': marks,
+            'db_len': projects_amount,
         }
     )

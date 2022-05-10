@@ -18,11 +18,13 @@ var app = new Vue({
                 '5': '#9575CD',
                 '5+': '#7E57C2',
             },
+            isAdministrator: true,
             personalAccessToken: '',
             userId: 0,
             dialog: false,
             dialogAdd: false,
             dialogReg: false,
+            dialogAdm: false,
             userProjects: [{"name": "avtor", "description": "eto proect","load_date": "2019","department": "Online", "author": "matvey","mark":"5","tech":"Django"},{"name": "avtor2","load_date": "2019","department": "Online", "description": "eto proect2", "author": "matvey2","mark":"4","load_date": "2022","tech":"Django"}],
             selectedItem: 1,
             carousel: 0,
@@ -60,6 +62,8 @@ var app = new Vue({
             currentProjectImages: [],
             currentAddImgs: [],
             currentProjectAvatar: '',
+            moderateProjects: [],
+            changedStatus: '',
             err: false,
             rules: {
               value: [val => (val || '').length > 0 || 'Это поле необходимо заполнить!']
@@ -205,7 +209,7 @@ var app = new Vue({
         },
         update: function (){
             let xhr = new XMLHttpRequest();
-            let c = `${this.baseUrl}api/projects/?start=${this.items.length}&number=5&year=${encodeURIComponent(this.selectedYear)}&department=${encodeURIComponent(this.selectedDepartment)}&mark=${encodeURIComponent(this.selectedMark)}&author=${encodeURIComponent(this.selectedAuthor)}&name=${encodeURIComponent(this.searchText)}&format=json`
+            let c = `${this.baseUrl}api/projects/?start=${this.items.length}&number=5&year=${encodeURIComponent(this.selectedYear)}&department=${encodeURIComponent(this.selectedDepartment)}&mark=${encodeURIComponent(this.selectedMark)}&author=${encodeURIComponent(this.selectedAuthor)}&name=${encodeURIComponent(this.searchText)}&status=approved&format=json`
             xhr.open("GET", c, true);
             xhr.send();
             xhr.onreadystatechange = function() {
@@ -217,6 +221,22 @@ var app = new Vue({
                     }
                 }
             };
+        },
+        updateAdminList: function(){
+            let xhr = new XMLHttpRequest();
+            let c = `${this.baseUrl}api/projects/?start=${this.moderateProjects.length}&number=3&status=${encodeURIComponent('on moderate')}&format=json`
+            xhr.open("GET", c, true);
+            xhr.send();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        let response=xhr.response;
+                        let a = JSON.parse(response);
+                        app.moderateProjects = app.moderateProjects.concat(a);
+                    }
+                }
+            };
+
         },
         setModeratableState(state){
             this.isCardModeratable = state
@@ -258,7 +278,6 @@ var app = new Vue({
                 }
             };
         },
-
         sendProjectOnModerate: function(item){
             let xhr = new XMLHttpRequest();
             xhr.open("POST", `${this.baseUrl}`, true);
@@ -306,6 +325,25 @@ var app = new Vue({
                   }
               }
             };
+        },
+        changeProjectStatus: function(id){
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", `${this.baseUrl}`, true);
+            let CSRF_token = document.querySelector('[name=csrfmiddlewaretoken]').value
+            xhr.setRequestHeader("X-CSRFToken", CSRF_token);
+            let data = {
+                'requestType': 'elementChangeStatus',
+                'elementId': id,
+                'elementNewStatus': this.changedStatus,
+            }
+            xhr.send(JSON.stringify(data))
+             xhr.onreadystatechange = function() {
+              if (xhr.readyState == 4) {
+                console.log('POST-request with change status config has been successfully sent')
+              }
+            };
+
+
         },
     },
   mounted(){

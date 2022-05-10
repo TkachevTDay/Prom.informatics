@@ -25,6 +25,13 @@
                         <v-btn @click='sendProjectOnModerate()' :disabled="!formIsValid" @click.stop="showDialog">Отправить</v-btn>
                     </form>
                 </v-row>
+                <v-row class="my-0 mr-0 ml-10" v-if="dialogAdm==true">
+                    <form method="post">
+                        {% csrf_token %}
+                        <v-btn @click='changedStatus = "approved"; changeProjectStatus(currentId); moderateProjects=[]; updateAdminList();' @click.stop="showDialog">Подтвердить</v-btn>
+                        <v-btn @click='changedStatus = "declined"; changeProjectStatus(currentId); moderateProjects=[]; updateAdminList();' @click.stop="showDialog">Отклонить</v-btn>
+                    </form>
+                </v-row>
                 <v-col class="d-flex justify-end" v-if="isCardModeratable==false">
                     <v-form method="post">
                         {% csrf_token %}

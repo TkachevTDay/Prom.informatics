@@ -1,0 +1,27 @@
+<v-dialog
+        v-model="dialogAdm"
+        max-width="1000"
+        height="75%"
+        style="height: 100px"
+        :retain-focus="false"
+>
+    <v-list>
+        <v-list-item
+                v-for="(item, i) in moderateProjects"
+                :key="i"
+                @click="updateCurrentData(item); isCardModeratable = false"
+                @click.stop="showDialog"
+        >
+            <v-row align="center" justify="center">
+                <div style='display: inline-block'>
+                    <h4 class="font-weight-thin mr-2">[[ item.name ]]</h4>
+                </div>
+                <div style='display: inline-block'>
+                    <h4 class="font-weight-thin">[[ item.load_date ]]</h4>
+                </div>
+            </v-row>
+        </v-list-item>
+    </v-list>
+     <v-btn v-if="moderateProjects.length >= 3" elevation="2" @click="updateAdminList">Показать ещё</v-btn>
+
+</v-dialog>

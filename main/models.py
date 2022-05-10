@@ -16,6 +16,7 @@ class Project(models.Model):
     icon = models.TextField(max_length=255, default='https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Circle-icons-computer.svg/2048px-Circle-icons-computer.svg.png')
     images = models.JSONField(default=list)
     status = models.TextField(max_length=255, default='on moderate')
+    docker_status = models.TextField(max_length=255, default='declined')
     docker_image_name = models.TextField(max_length=255, default='')
 
 
