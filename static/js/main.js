@@ -64,7 +64,9 @@ var app = new Vue({
             currentProjectAvatar: '',
             moderateProjects: [],
             changedStatus: '',
+            userInf: '',
             err: false,
+            currentCSRF: '',
             rules: {
               value: [val => (val || '').length > 0 || 'Это поле необходимо заполнить!']
             },
@@ -96,45 +98,63 @@ var app = new Vue({
         }
     },
     methods: {
-
-        getId: function(){
-            let xhr = new XMLHttpRequest();
-            let c = `https://gitlab.informatics.ru/api/v4/personal_access_tokens`
-            xhr.open("GET", c, true);
-            xhr.setRequestHeader('PRIVATE-TOKEN', `${this.personalAccessToken}`)
-            xhr.send();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4) {
-                    if (xhr.status == 200) {
-                        let response=xhr.response;
-                        let a = JSON.parse(response);
-                        app.userId = a[0].user_id;
+        makeRequest: async function(url, method, params = {}, headers = {}, data = {}){
+            return new Promise(function (resolve, reject)
+                {
+                    let xhr = new XMLHttpRequest();
+                    let path = url;
+                    if (params != {}){
+                        path += `?${new URLSearchParams(params).toString()}`;
+                    }
+                    xhr.open(method, path, true);
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState == 4) {
+                            if (xhr.status == 200) {
+                                resolve(JSON.parse(xhr.response));
+                            }
+                            else{
+                                reject({status: this.status,
+                                        statusText: xhr.statusText})
+                            }
+                        }
+                    };
+                    if (headers != {}){
+                        for (let [key, value] of Object.entries(headers)){
+                                xhr.setRequestHeader(key, value);
+                            }
+                    }
+                    if (method == 'POST'){
+                        xhr.send(JSON.stringify(data));
+                    }
+                    else {
+                        xhr.send();
                     }
                 }
-            };
+            )
+        },
+        getCSRFToken: function(){
+            return(document.querySelector('[name=csrfmiddlewaretoken]').value);
+        },
+        getUserProjects: async function(){
+            app.userProjects = await this.makeRequest(`https://gitlab.informatics.ru/api/v4/users/${app.userId}/projects`, "GET", {}, {'PRIVATE-TOKEN': this.personalAccessToken}, {});
+        },
+        getUserInfo: async function(){
+            app.userInf = await this.makeRequest(`https://gitlab.informatics.ru/api/v4/users/${app.userId}/`, "GET", {}, {'PRIVATE-TOKEN': this.personalAccessToken}, {});
+        },
+        sendInf: async function(){
+            alert(await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()}, {'requestType': 'userAuth', 'username': this.userInf.username, 'private_token': sha256(this.personalAccessToken)})).status;
+        },
+        getId: async function(){
+            app.userId = (await this.makeRequest(`https://gitlab.informatics.ru/api/v4/personal_access_tokens`, "GET", {}, {'PRIVATE-TOKEN': this.personalAccessToken}, {}))[0].user_id;
+        },
 
+        registry: async function(){
+            await this.getId();
+            await this.getUserInfo();
+            await this.getUserProjects();
+            await this.sendInf();
         },
-        getUserProjects: function(){
-            let xhr = new XMLHttpRequest();
-            let c = `https://gitlab.informatics.ru/api/v4/users/${app.userId}/projects`
-            xhr.open("GET", c, true);
-            xhr.setRequestHeader('PRIVATE-TOKEN', `${this.personalAccessToken}`)
-            xhr.send();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4) {
-                    if (xhr.status == 200) {
-                        let response=xhr.response;
-                        let a = JSON.parse(response);
-                        app.userProjects = a;
-                        alert(app.userProjects);
-                    }
-                }
-            };
-        },
-        registry: function(){
-            this.getId();
-            this.getUserProjects();
-        },
+
         showDialog: function(){
         this.currentProjectImages=[];
             this.dialog = !this.dialog;
@@ -207,36 +227,12 @@ var app = new Vue({
             }
             this.updateCurrentData();
         },
-        update: function (){
-            let xhr = new XMLHttpRequest();
-            let c = `${this.baseUrl}api/projects/?start=${this.items.length}&number=5&year=${encodeURIComponent(this.selectedYear)}&department=${encodeURIComponent(this.selectedDepartment)}&mark=${encodeURIComponent(this.selectedMark)}&author=${encodeURIComponent(this.selectedAuthor)}&name=${encodeURIComponent(this.searchText)}&status=approved&format=json`
-            xhr.open("GET", c, true);
-            xhr.send();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4) {
-                    if (xhr.status == 200) {
-                        let response=xhr.response;
-                        let a = JSON.parse(response);
-                        app.items = app.items.concat(a);
-                    }
-                }
-            };
+        update: async function (){
+            let a = await this.makeRequest(`${this.baseUrl}api/projects/`, "GET", {'start': this.items.length, 'number': 5, 'year': this.selectedYear,'department': this.selectedDepartment, 'mark': this.selectedMark, 'author': this.selectedAuthor,'name': this.searchText, 'status': 'approved'}, {}, {})
+            app.items = app.items.concat(a);
         },
-        updateAdminList: function(){
-            let xhr = new XMLHttpRequest();
-            let c = `${this.baseUrl}api/projects/?start=${this.moderateProjects.length}&number=3&status=${encodeURIComponent('on moderate')}&format=json`
-            xhr.open("GET", c, true);
-            xhr.send();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4) {
-                    if (xhr.status == 200) {
-                        let response=xhr.response;
-                        let a = JSON.parse(response);
-                        app.moderateProjects = app.moderateProjects.concat(a);
-                    }
-                }
-            };
-
+        updateAdminList: async function(){
+            app.moderateProjects = this.moderateProjects.concat(await app.makeRequest(`${this.baseUrl}api/projects/`, "GET", {'start': this.moderateProjects.length, 'number': 3, 'status': 'on moderate'}, {}, {}));
         },
         setModeratableState(state){
             this.isCardModeratable = state
@@ -246,44 +242,21 @@ var app = new Vue({
             this.items = [];
             this.update();
         },
-        getFilterParams: function(){
-            let xhr = new XMLHttpRequest();
-            xhr.open("GET", `${this.baseUrl}api/filter_params`, true);
-            xhr.send();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4) {
-                    if (xhr.status == 200) {
-                        let response=xhr.response;
-                        let a = JSON.parse(response);
-                        app.yearItems = a.years;
-                        app.departmentItems = a.departments;
-                        app.authorItems = a.authors;
-                        app.markItems = a.marks;
-                    }
-                }
-            };
+        getFilterParams: async function(){
+            let a = await this.makeRequest(`${this.baseUrl}api/filter_params/`, "GET", {}, {}, {})
+            app.yearItems = a.years;
+            app.departmentItems = a.departments;
+            app.authorItems = a.authors;
+            app.markItems = a.marks;
         },
-        getRecentProjects: function(){
-            let xhr = new XMLHttpRequest()
-            xhr.open("GET", `${this.baseUrl}api/recent_projects`, true);
-            xhr.send();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4) {
-                    if (xhr.status == 200) {
-                        let response=xhr.response;
-                        let a = JSON.parse(response);
-                        app.recentProjects = a
-                        app.updateCurrentData()
-                    }
-                }
-            };
+        getRecentProjects: async function(){
+            let a = await this.makeRequest(`${this.baseUrl}api/recent_projects/`, "GET", {}, {}, {});
+            app.recentProjects = a;
+            await app.updateCurrentData();
         },
-        sendProjectOnModerate: function(item){
-            let xhr = new XMLHttpRequest();
-            xhr.open("POST", `${this.baseUrl}`, true);
-            let CSRF_token = document.querySelector('[name=csrfmiddlewaretoken]').value
-            xhr.setRequestHeader("X-CSRFToken", CSRF_token);
-            let data = {
+        sendProjectOnModerate: async function(item){
+            await this.makeRequest(`${this.baseUrl}`,
+            "POST", {}, {'X-CSRFToken': app.getCSRFToken()}, {
                 'requestType': 'elementAdd',
                 'currentAddName': this.currentAddName.trim(),
                 'currentAddDescription': this.currentAddDescription.trim(),
@@ -293,57 +266,28 @@ var app = new Vue({
                 'currentAddMark': this.currentAddMark.trim(),
                 'currentAddYear': this.currentAddYear.trim(),
                 'currentAddImages': this.currentProjectImages,
-            }
-            xhr.send(JSON.stringify(data))
-             xhr.onreadystatechange = function() {
-              if (xhr.readyState == 4) {
-                console.log('POST-request with add config has been successfully sent')
-              }
-            };
-
+            })
         },
-        sendProjectRunConfig: function(id){
-            let xhr = new XMLHttpRequest();
-            xhr.open("POST", `${this.baseUrl}`, true);
-            let CSRF_token = document.querySelector('[name=csrfmiddlewaretoken]').value
-            xhr.setRequestHeader("X-CSRFToken", CSRF_token);
-            let data = {
+        sendProjectRunConfig: async function(id){
+            let a = await this.makeRequest(`${this.baseUrl}`,
+            "POST", {}, {'X-CSRFToken': app.getCSRFToken()}, {
                 'requestType': 'elementRun',
                 'elementId': id,
-            }
-            xhr.send(JSON.stringify(data))
-             xhr.onreadystatechange = function() {
-              if (xhr.readyState == 4) {
-                  console.log('POST-request with run config has been successfully sent')
-                  let response=xhr.response;
-                  let a = JSON.parse(response);
-                  if (a.status == 'ok'){
+            });
+            if (a.status == 'ok'){
                     window.location.href = `http://cont${a.cont.id}.localhost:1337`;
                   }
-                  else{
-                    alert(a.status)
-                  }
-              }
-            };
+            else{
+                alert(a.status)
+            }
         },
-        changeProjectStatus: function(id){
-            let xhr = new XMLHttpRequest();
-            xhr.open("POST", `${this.baseUrl}`, true);
-            let CSRF_token = document.querySelector('[name=csrfmiddlewaretoken]').value
-            xhr.setRequestHeader("X-CSRFToken", CSRF_token);
-            let data = {
+        changeProjectStatus: async function(id){
+            let a = await this.makeRequest(`${this.baseUrl}`,
+            "POST", {}, {'X-CSRFToken': app.getCSRFToken()}, {
                 'requestType': 'elementChangeStatus',
                 'elementId': id,
                 'elementNewStatus': this.changedStatus,
-            }
-            xhr.send(JSON.stringify(data))
-             xhr.onreadystatechange = function() {
-              if (xhr.readyState == 4) {
-                console.log('POST-request with change status config has been successfully sent')
-              }
-            };
-
-
+            });
         },
     },
   mounted(){

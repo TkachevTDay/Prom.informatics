@@ -48,11 +48,12 @@
                                 </v-list>
                             </form>
                         </v-menu>
-
-                        <v-btn plain color="white" @click="dialogReg=true">
-                            Зарегистрироваться/Войти
-                        </v-btn>
-
+                        <form method="post">
+                            {% csrf_token %}
+                            <v-btn plain color="white" @click="dialogReg=true">
+                                Зарегистрироваться/Войти
+                            </v-btn>
+                        </form>
                         <v-btn v-if="isAdministrator==true"plain color="white" @click="dialogAdm=true; updateAdminList()">
                             Открыть панель администратора
                         </v-btn>
@@ -125,7 +126,6 @@
                         v-if="filterShow"
                         class="grey lighten-5 px-3 pt-3 pb-3 rounded-lg"
                         style="width: 1000px; margin-top: 50px">
-                    {% csrf_token %}
                     <v-row class="my-0 mx-3">
                         <v-text-field
                                 name="name"
@@ -240,6 +240,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js" integrity="sha512-szJ5FSo9hEmXXe7b5AUVtn/WnL8a5VofnFeYC2i2z03uS2LhAch7ewNLbl5flsEmTTimMN0enBZg/3sQ+YOSzQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="/static/js/main.js"></script>
 
 </body>

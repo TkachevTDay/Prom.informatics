@@ -7,6 +7,9 @@ from django.core.mail import send_mail
 from .serializers import ProjectSerializer
 from .additional import container_run, pop_avialable_port, check_existing_containers, create_socket_files, uvicorn_start
 import redis
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
+
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
@@ -97,7 +100,18 @@ def index_page(request):
             element = Project.objects.get(id=json.loads(body)["elementId"])
             element.status = json.loads(body)["elementNewStatus"]
             element.save(update_fields=['status'])
+        if json.loads(body)["requestType"] == 'userAuth':
+            username = json.loads(body)["username"]
+            password = json.loads(body)["private_token"]
 
+            if User.objects.filter(username=username):
+                user = User(username=username, password=password)
+                login(request, user)
+                return JsonResponse({'status': 'successfully logged'})
+            else:
+                reg_user = User(username=username, password=password)
+                reg_user.save()
+                return JsonResponse({'status': 'successfully registered'})
     return render(request, 'index.html', {})
 
 
