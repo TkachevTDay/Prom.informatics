@@ -31,8 +31,8 @@ var app = new Vue({
             dialogAdd: false,
             dialogReg: false,
             dialogModera: false,
-            userProjects: [{"name": "avtor", "description": "eto proect","load_date": "2019","department": "Online", "author": "matvey","mark":"5","status":"5","tech":"Django"},{"name": "avtor2","load_date": "2019","department": "Online", "description": "eto proect2", "author": "matvey2","mark":"4","load_date": "2022","tech":"Django"}],
-            moderateProjects: [{"name": "avtor3", "description": "eto proect","load_date": "2019","department": "Online", "author": "matvey","mark":"5","tech":"Django"},{"name": "avtor4","load_date": "2019","department": "Online", "description": "eto proect2", "author": "matvey2","mark":"4","load_date": "2022","tech":"Django"}],
+            userProjects: [{"name": "avtor", "description": "eto proect","year": "2019","department": "Online", "author": "matvey","mark":"5","status":"5","tech":"Django"},{"name": "avtor2","year": "2019","department": "Online", "description": "eto proect2", "author": "matvey2","mark":"4","year": "2022","tech":"Django"}],
+            moderateProjects: [],
             selectedItem: 1,
             carousel: 0,
             selectedMark: '',
@@ -184,7 +184,7 @@ var app = new Vue({
                     this.currentAddAuthor=this.moderateProjects[index].author
                     this.currentAddDepartment=this.moderateProjects[index].department
                     this.currentAddMark=this.moderateProjects[index].mark
-                    this.currentAddYear=this.moderateProjects[index].load_date
+                    this.currentAddYear=this.moderateProjects[index].year
                     this.currentAddTech=this.moderateProjects[index].tech
                 }else{
                     this.currentAddID=this.userProjects[index].id
@@ -192,7 +192,7 @@ var app = new Vue({
                     this.currentAddAuthor=this.userProjects[index].author
                     this.currentAddDepartment=this.userProjects[index].department
                     this.currentAddMark=this.userProjects[index].mark
-                    this.currentAddYear=this.userProjects[index].load_date
+                    this.currentAddYear=this.userProjects[index].year
                     this.currentAddTech=this.userProjects[index].tech
                 }
             }
