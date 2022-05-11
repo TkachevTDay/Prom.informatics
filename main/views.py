@@ -103,15 +103,15 @@ def index_page(request):
         if json.loads(body)["requestType"] == 'userAuth':
             username = json.loads(body)["username"]
             password = json.loads(body)["private_token"]
-
+            print(username)
+            print(password)
             if User.objects.filter(username=username):
-                user = User(username=username, password=password)
+                user = User.objects.get(username=username)
+                print(user)
                 login(request, user)
-                return JsonResponse({'status': 'successfully logged'})
             else:
-                reg_user = User(username=username, password=password)
+                reg_user = User.objects.create_user(username=username, password=password)
                 reg_user.save()
-                return JsonResponse({'status': 'successfully registered'})
     return render(request, 'index.html', {})
 
 

@@ -133,7 +133,7 @@ var app = new Vue({
             )
         },
         getCSRFToken: function(){
-            return(document.querySelector('[name=csrfmiddlewaretoken]').value);
+            return Cookies.get('csrftoken');
         },
         getUserProjects: async function(){
             app.userProjects = await this.makeRequest(`https://gitlab.informatics.ru/api/v4/users/${app.userId}/projects`, "GET", {}, {'PRIVATE-TOKEN': this.personalAccessToken}, {});
