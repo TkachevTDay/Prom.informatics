@@ -16,8 +16,8 @@
         <v-main>
             <template>
                 {% include 'dialog-card.html' %}
-                {% include 'dialog-reg.html' %}
                 {% include 'dialog-adm.html' %}
+                {% include 'dialog-login.html' %}
                 <v-parallax dark src="https://informatics.ru/img/intro/intro-inter-progressive.jpg" height="900">
                     <div class="d-flex justify-end">
                         <v-menu
@@ -50,7 +50,7 @@
                         </v-menu>
                         <form method="post">
                             {% csrf_token %}
-                            <v-btn plain color="white" @click="dialogReg=true">
+                            <v-btn plain color="white" @click="dialogLog=true">
                                 Зарегистрироваться/Войти
                             </v-btn>
                         </form>
