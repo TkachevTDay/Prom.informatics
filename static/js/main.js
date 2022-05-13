@@ -75,6 +75,8 @@ var app = new Vue({
             secondNameReg: '',
             emailReg: '',
             passwordReg: '',
+            registryResponse: '',
+            authResponse: '',
             rules: {
               value: [val => (val || '').length > 0 || 'Это поле необходимо заполнить!'],
                emailRules: [
@@ -173,11 +175,33 @@ var app = new Vue({
             app.userId = (await this.makeRequest(`https://gitlab.informatics.ru/api/v4/personal_access_tokens`, "GET", {}, {'PRIVATE-TOKEN': this.personalAccessToken}, {}))[0].user_id;
         },
 
-        registry: async function(){
+        registryTmp: async function(){
             await this.getId();
             await this.getUserInfo();
             await this.getUserProjects();
             await this.sendInf();
+        },
+        auth: async function(){
+            this.authResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
+             {'requestType': 'userAuth', 'username': this.authorizeLogin, 'password': sha256(this.authorizePass)}));
+             alert(this.authResponse.responseStatus)
+             this.authorizeLogin = '';
+             this.authorizePass = '';
+        },
+        registry: async function(){
+            this.registryResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
+             {'requestType': 'userRegistry', 'username': this.userNameReg, 'email': this.emailReg, 'firstname':this.firstNameReg,
+              'secondname':this.secondNameReg, 'password': sha256(this.passwordReg)}));
+            alert(this.registryResponse.responseStatus);
+            this.dialogReg = false;
+            this.userNameReg = '';
+            this.emailReg = '';
+            this.firstNameReg = '';
+            this.secondNameReg= '';
+            this.passwordReg = '';
+
+
+
         },
         showDialog: function(){
         this.currentProjectImages=[];

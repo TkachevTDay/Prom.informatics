@@ -102,16 +102,31 @@ def index_page(request):
             element.save(update_fields=['status'])
         if json.loads(body)["requestType"] == 'userAuth':
             username = json.loads(body)["username"]
-            password = json.loads(body)["private_token"]
+            password = json.loads(body)["password"]
+            user = authenticate(username=username, password=password)
             print(username)
             print(password)
-            if User.objects.filter(username=username):
+            if user is not None:
                 user = User.objects.get(username=username)
                 print(user)
                 login(request, user)
+                return JsonResponse({'responseStatus': 'Successfully authenticated'})
             else:
-                reg_user = User.objects.create_user(username=username, password=password)
-                reg_user.save()
+                return JsonResponse({'responseStatus': 'Authentication failed (Incorrect input values)'})
+        if json.loads(body)["requestType"] == 'userRegistry':
+            if User.objects.filter(username=json.loads(body)["username"]):
+                return JsonResponse({'responseStatus':'User with similar name already exists'})
+            if User.objects.filter(email=json.loads(body)["email"]):
+                return JsonResponse({'responseStatus':'User with similar E-mail already exists'})
+            reg_user = User.objects.create_user(username=json.loads(body)["username"],
+                                                password=json.loads(body)["password"], email=json.loads(body)["email"])
+            if json.loads(body)["firstname"]:
+                reg_user.firstname = json.loads(body)["firstname"]
+            if json.loads(body)["secondname"]:
+                reg_user.firstname = json.loads(body)["secondname"]
+            reg_user.save()
+            return JsonResponse({'responseStatus': 'Successfully saved'})
+
     return render(request, 'index.html', {})
 
 

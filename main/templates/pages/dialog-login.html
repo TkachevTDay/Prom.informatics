@@ -12,8 +12,6 @@
                             filled
                             rounded
                             dense
-                            :rules="rules.value"
-                            required
                     ></v-text-field>
                         </v-col>
                 </v-row>
@@ -26,14 +24,12 @@
                             label="Пароль"
                             v-model="authorizePass"
                             color="grey"
-                            :rules="rules.value"
-                            required
                             type="password"
                     ></v-text-field>
                     </v-col>
                 </v-row>
                     <v-row cols="2" justify="center">
-                        <v-btn color="primary" :disabled="!loginFormIsValid">
+                        <v-btn color="primary" :disabled="!loginFormIsValid" @click="auth()">
                             Войти
                         </v-btn>
                     </v-row>
