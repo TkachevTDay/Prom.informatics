@@ -54,7 +54,7 @@
                             <v-btn plain color="white" @click="dialogLog=true" v-show="!isAuthorized">
                                 Зарегистрироваться/Войти
                             </v-btn>
-                            <v-btn plain color="white" @click="dialogLog=true" v-show="isAuthorized">
+                            <v-btn plain color="white" @click="unauth()" v-show="isAuthorized">
                                 Выйти
                             </v-btn>
                         </form>
@@ -186,7 +186,7 @@
             <br>
             <br>
                 <v-card class="mx-auto" max-width="70%">
-                    <v-card class="mx-auto" v-for="(item, i) in items" :key="i" @click.stop="showDialog" @click="updateCurrentData(item); isCardModeratable=false">
+                    <v-card class="mx-auto rounded-0" v-for="(item, i) in items" :key="i" @click.stop="showDialog" @click="updateCurrentData(item); isCardModeratable=false">
                         <v-container fill-height fluid>
                             <v-row>
                                 <v-col cols="5">

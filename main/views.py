@@ -8,7 +8,7 @@ from .serializers import ProjectSerializer
 from .additional import container_run, pop_avialable_port, check_existing_containers, create_socket_files, uvicorn_start
 import redis
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
@@ -131,7 +131,9 @@ def index_page(request):
                 return JsonResponse({'authStatus': 1})
             else:
                 return JsonResponse({'authStatus': 0})
-
+        if json.loads(body)["requestType"] == 'userUnAuth':
+            logout(request)
+            return JsonResponse({'responseStatus': 'Successfull unauth'})
     return render(request, 'index.html', {})
 
 

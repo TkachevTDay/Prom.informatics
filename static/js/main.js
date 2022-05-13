@@ -207,7 +207,12 @@ var app = new Vue({
             this.secondNameReg= '';
             this.passwordReg = '';
         },
-
+        unauth: async function(){
+             let unauthResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
+             {'requestType': 'userUnAuth'}));
+             alert(unauthResponse.responseStatus)
+             this.isAuthorized = false
+        },
 
         showDialog: function(){
         this.currentProjectImages=[];
