@@ -29,6 +29,7 @@ var app = new Vue({
             dialogReg: false,
             dialogAdm: false,
             dialogLog: false,
+            dialogGitlabAuth: false,
             userProjects: [{"name": "avtor", "description": "eto proect","load_date": "2019","department": "Online", "author": "matvey","mark":"5","tech":"Django"},{"name": "avtor2","load_date": "2019","department": "Online", "description": "eto proect2", "author": "matvey2","mark":"4","load_date": "2022","tech":"Django"}],
             selectedItem: 1,
             carousel: 0,
@@ -80,6 +81,7 @@ var app = new Vue({
             authResponse: '',
             profileMenu: '',
             gitlabAuthResponse: '',
+            dialogAuthInstruction: false,
             rules: {
               value: [val => (val || '').length > 0 || 'Это поле необходимо заполнить!'],
                emailRules: [
@@ -200,7 +202,6 @@ var app = new Vue({
              {'requestType': 'userAuth', 'username': this.authorizeLogin, 'password': sha256(this.authorizePass)}));
              alert(this.authResponse.responseStatus)
              await this.authCheck();
-
              this.authorizePass = '';
              if (this.authResponse.responseStatus == 'Successfully authenticated'){
                 this.authorizeLogin = '';
