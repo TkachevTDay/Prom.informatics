@@ -70,8 +70,16 @@ var app = new Vue({
             userInf: '',
             err: false,
             currentCSRF: '',
+            userNameReg: '',
+            firstNameReg: '',
+            secondNameReg: '',
+            emailReg: '',
+            passwordReg: '',
             rules: {
-              value: [val => (val || '').length > 0 || 'Это поле необходимо заполнить!']
+              value: [val => (val || '').length > 0 || 'Это поле необходимо заполнить!'],
+               emailRules: [
+                            v => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Введите корректный e-mail'
+                            ]
             },
         };
     },
@@ -87,6 +95,20 @@ var app = new Vue({
               this.currentAddMark && this.currentAddName && this.currentAddName && this.currentAddTech && this.currentAddYear
             )
           },
+        loginFormIsValid () {
+            return (
+                this.authorizeLogin && this.authorizePass
+            )
+        },
+        registrationFormIsValid () {
+            return(
+                this.userNameReg &&
+                this.emailReg &&
+                this.passwordReg
+            )
+
+        },
+
         columns() {
             if (this.$vuetify.breakpoint.xl) {
                 return 4;
@@ -157,7 +179,6 @@ var app = new Vue({
             await this.getUserProjects();
             await this.sendInf();
         },
-
         showDialog: function(){
         this.currentProjectImages=[];
             this.dialog = !this.dialog;

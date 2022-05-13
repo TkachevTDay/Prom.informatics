@@ -1,27 +1,75 @@
-<v-dialog v-model="" :retain-focus="false" max-width="600px">
-    <v-card width="600px" height="800px" color="white">
+<v-dialog v-model="dialogReg" :retain-focus="false" max-width="600px">
+    <v-card width="600px" height="500px" color="white">
         <v-container>
-            <v-row cols="2">
-                    <v-card color="#FAFAFA" class="rounded-0" fluid>
-                        <h2 style="margin: 50px" class="text-h2 font-weight-thin">Гайд по регистрации</h2>
-                    </v-card>
+            <v-row cols="2" justify="center">
+                <v-col cols="10" style="padding-top: 25px; padding-bottom: 0px;">
+                <v-text-field
+                            filled
+                            rounded
+                            dense
+                            label="Имя пользователя"
+                            v-model="userNameReg"
+                            color="grey"
+                            :rules="rules.value"
+                            required
+                    ></v-text-field>
+                </v-col>
             </v-row>
-            <v-row cols="8">
-                <h4 style="margin: 50px" class="text-h4 font-weight-thin">Здесь должен быть гайд</h4>
+            <v-row cols="2" justify="center">
+                <v-col cols="10" style="padding-top: 0px; padding-bottom: 0px;">
+               <v-text-field
+                            filled
+                            rounded
+                            dense
+                            label="Почтовый адрес"
+                            v-model="emailReg"
+                            color="grey"
+                            :rules="rules.emailRules"
+                            required
+                    ></v-text-field>
+                </v-col>
             </v-row>
-            <v-row cols="2" align="end">
-                <v-text-field         style="margin: 100px"
-                                      label="Персональный токен доступа"
-                                      v-model="personalAccessToken"
-                                      color="grey">
-                </v-text-field>
+            <v-row cols="2" justify="center">
+                <v-col cols="10" style="padding-top: 0px; padding-bottom: 0px;">
+                <v-text-field
+                            filled
+                            rounded
+                            dense
+                            label="Ваше имя"
+                            v-model="firstNameReg"
+                            color="grey"
+                    ></v-text-field>
+                </v-col>
             </v-row>
-            <v-row cols="1" justify="center" >
-
-                    <v-btn @click="registry">
-                        Отправить
-                        [[userId]]
-                    </v-btn>
+            <v-row cols="2" justify="center" style="padding-top: 0px; padding-bottom: 0px;">
+                <v-col cols="10">
+                    <v-text-field
+                            filled
+                            rounded
+                            dense
+                            label="Ваша фамилия"
+                            v-model="secondNameReg"
+                            color="grey"
+                    ></v-text-field>
+                </v-col>
+            </v-row>
+            <v-row cols="2" justify="center" >
+                <v-col cols="10" style="padding-top: 0px; padding-bottom: 0px;">
+                    <v-text-field
+                            filled
+                            rounded
+                            dense
+                            label="Пароль"
+                            v-model="passwordReg"
+                            color="grey"
+                            :rules="rules.value"
+                            required
+                            type="password"
+                    ></v-text-field>
+                </v-col>
+            </v-row>
+            <v-row cols="2" justify="center" >
+                <v-btn color="primary" :disabled="!registrationFormIsValid">Зарегистрироваться</v-btn>
             </v-row>
         </v-container>
     </v-card>
