@@ -194,6 +194,7 @@ var app = new Vue({
              await this.authCheck();
              this.authorizeLogin = '';
              this.authorizePass = '';
+             this.dialogLog = false;
         },
         registry: async function(){
             this.registryResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
