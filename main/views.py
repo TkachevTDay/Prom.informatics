@@ -126,6 +126,11 @@ def index_page(request):
                 reg_user.firstname = json.loads(body)["secondname"]
             reg_user.save()
             return JsonResponse({'responseStatus': 'Successfully saved'})
+        if json.loads(body)["requestType"] == 'authCheck':
+            if request.user.is_authenticated:
+                return JsonResponse({'authStatus': 1})
+            else:
+                return JsonResponse({'authStatus': 0})
 
     return render(request, 'index.html', {})
 

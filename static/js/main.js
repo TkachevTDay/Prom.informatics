@@ -18,7 +18,8 @@ var app = new Vue({
                 '5': '#9575CD',
                 '5+': '#7E57C2',
             },
-            isAdministrator: true,
+            isAdministrator: 0,
+            isAuthorized: 0,
             personalAccessToken: '',
             userId: 0,
             authorizeLogin: '',
@@ -181,10 +182,16 @@ var app = new Vue({
             await this.getUserProjects();
             await this.sendInf();
         },
+        authCheck: async function(){
+            let authCheckResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
+                {'requestType': 'authCheck'}));
+                this.isAuthorized = authCheckResponse.authStatus
+        },
         auth: async function(){
             this.authResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
              {'requestType': 'userAuth', 'username': this.authorizeLogin, 'password': sha256(this.authorizePass)}));
              alert(this.authResponse.responseStatus)
+             await this.authCheck();
              this.authorizeLogin = '';
              this.authorizePass = '';
         },
@@ -199,10 +206,9 @@ var app = new Vue({
             this.firstNameReg = '';
             this.secondNameReg= '';
             this.passwordReg = '';
-
-
-
         },
+
+
         showDialog: function(){
         this.currentProjectImages=[];
             this.dialog = !this.dialog;
@@ -301,6 +307,7 @@ var app = new Vue({
             let a = await this.makeRequest(`${this.baseUrl}api/recent_projects/`, "GET", {}, {}, {});
             app.recentProjects = a;
             await app.updateCurrentData();
+            await this.authCheck();
         },
         sendProjectOnModerate: async function(item){
             await this.makeRequest(`${this.baseUrl}`,
@@ -342,5 +349,6 @@ var app = new Vue({
     this.update();
     this.getFilterParams();
     this.getRecentProjects();
+
   },
 })

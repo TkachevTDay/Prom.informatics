@@ -24,7 +24,7 @@
                         <v-menu
                         >
                             <template v-slot:activator="{ on, attrs }">
-                                <v-btn v-bind="attrs" v-on="on" plain color="white">
+                                <v-btn plain color="white" v-show="isAuthorized">
                                     Загрузить проект
                                 </v-btn>
                             </template>
@@ -51,8 +51,11 @@
                         </v-menu>
                         <form method="post">
                             {% csrf_token %}
-                            <v-btn plain color="white" @click="dialogLog=true">
+                            <v-btn plain color="white" @click="dialogLog=true" v-show="!isAuthorized">
                                 Зарегистрироваться/Войти
+                            </v-btn>
+                            <v-btn plain color="white" @click="dialogLog=true" v-show="isAuthorized">
+                                Выйти
                             </v-btn>
                         </form>
                         <v-btn v-if="isAdministrator==true"plain color="white" @click="dialogAdm=true; updateAdminList()">
