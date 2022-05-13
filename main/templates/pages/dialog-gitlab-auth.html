@@ -1,0 +1,40 @@
+<v-dialog v-model="dialogGitlabAuth" :retain-focus="false" width="500px">
+    <div class="d-flex justify-center">
+            <v-card width="500px" class="rounded-xl">
+                <v-container>
+                    <v-row cols="8" justify="center">
+                        <v-col cols="8" style="padding-bottom: 0px; padding-top: 25px">
+                            <v-text-field
+
+                                label="Персональный токен доступа"
+                                v-model="personalAccessToken"
+                                color="grey"
+                                filled
+                                rounded
+                                dense
+                        ></v-text-field>
+                            </v-col>
+                    </v-row>
+
+                    <v-row cols="2" justify="center">
+                        <v-btn color="primary"  @click="gitlabAuth()" :disabled="!gitlabAuthFormIsValid">
+                            Привязать учётную запись
+                        </v-btn>
+                    </v-row>
+                <v-row cols="2" justify="center">
+                    <v-col cols="9">
+                        <div @click.stop="" style="margin-left: 10px">
+                            Как получить персональный токен доступа?
+                                <a
+                                href="#"
+                                @click.prevent="dialogLog = false; dialogReg = true;"
+                                >Подробная инструкция</a>
+                        </div>
+                    </v-col>
+
+                </v-row>
+            </v-container>
+            </v-card>
+
+    </div>
+</v-dialog>

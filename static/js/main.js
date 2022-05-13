@@ -79,6 +79,7 @@ var app = new Vue({
             registryResponse: '',
             authResponse: '',
             profileMenu: '',
+            gitlabAuthResponse: '',
             rules: {
               value: [val => (val || '').length > 0 || 'Это поле необходимо заполнить!'],
                emailRules: [
@@ -100,6 +101,10 @@ var app = new Vue({
               this.currentAddMark && this.currentAddName && this.currentAddName && this.currentAddTech && this.currentAddYear
             )
           },
+        gitlabAuthFormIsValid() {
+            return(this.personalAccessToken)
+        },
+
         loginFormIsValid () {
             return (
                 this.authorizeLogin && this.authorizePass
@@ -190,7 +195,8 @@ var app = new Vue({
                 this.isAuthorized = authCheckResponse.authStatus
         },
         auth: async function(){
-            this.authResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
+
+             this.authResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
              {'requestType': 'userAuth', 'username': this.authorizeLogin, 'password': sha256(this.authorizePass)}));
              alert(this.authResponse.responseStatus)
              await this.authCheck();
@@ -213,6 +219,12 @@ var app = new Vue({
             this.secondNameReg= '';
             this.passwordReg = '';
         },
+        gitlabAuth: async function(){
+            this.gitlabAuthResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
+             {'requestType': 'gitlabAuth', 'personalAccessToken': this.personalAccessToken}));
+            alert(this.gitlabAuthResponse.responseStatus)
+        },
+
         unauth: async function(){
              let unauthResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
              {'requestType': 'userUnAuth'}));

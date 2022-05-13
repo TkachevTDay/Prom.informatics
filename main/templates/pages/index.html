@@ -19,6 +19,7 @@
                 {% include 'dialog-adm.html' %}
                 {% include 'dialog-login.html' %}
                 {% include 'dialog-reg.html' %}
+                {% include 'dialog-gitlab-auth.html' %}
                 <v-parallax dark src="https://informatics.ru/img/intro/intro-inter-progressive.jpg" height="900">
                     <div class="d-flex justify-end">
                         <v-menu v-model="profileMenu" open-on-hover>
@@ -30,7 +31,7 @@
                             <v-card width="300px" height="200px">
                                 <v-container fill-height fluid>
                                     <v-row align="center" justify="center">
-                                        <v-btn color="primary" style="display: table-cell;">
+                                        <v-btn color="primary" style="display: table-cell;" @click="dialogGitlabAuth=true">
                                             Привязать аккаунт к gitlab
                                         </v-btn>
                                     </v-row>

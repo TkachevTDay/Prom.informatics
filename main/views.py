@@ -2,7 +2,7 @@ import json
 from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework import viewsets
-from .models import Project
+from .models import Project, Student
 from django.core.mail import send_mail
 from .serializers import ProjectSerializer
 from .additional import container_run, pop_avialable_port, check_existing_containers, create_socket_files, uvicorn_start
@@ -134,6 +134,14 @@ def index_page(request):
         if json.loads(body)["requestType"] == 'userUnAuth':
             logout(request)
             return JsonResponse({'responseStatus': 'Successfull unauth'})
+        if json.loads(body)["requestType"] == "gitlabAuth":
+            element = Student.objects.get(user_id=request.user.id)
+            if element.personal_access_token == 'no active gitlab connections':
+                element.personal_access_token = json.loads(body)["personalAccessToken"]
+                element.save(update_fields=['personal_access_token'])
+                return JsonResponse({'responseStatus' : 'Successfully gitlab authorize'})
+            else:
+                return JsonResponse({'responseStatus': 'Unsuccessfully gitlab authorize'})
     return render(request, 'index.html', {})
 
 

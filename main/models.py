@@ -1,6 +1,13 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.postgres.fields import ArrayField
+from django.contrib.auth.models import User
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+class Student(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    personal_access_token = models.CharField(max_length=255, default='no active gitlab connections')
+
 
 # Create your models here.
 class Project(models.Model):
@@ -19,4 +26,9 @@ class Project(models.Model):
     docker_status = models.TextField(max_length=255, default='declined')
     docker_image_name = models.TextField(max_length=255, default='')
 
-
+@receiver(post_save, sender = User)
+def user_is_created(sender, instance, created, **kwargs):
+    if created:
+        Student.objects.create(user= instance)
+    else:
+        instance.student.save()
