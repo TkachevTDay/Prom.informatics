@@ -2,32 +2,34 @@
     <div class="d-flex justify-center">
             <v-card width="500px" class="rounded-xl">
                 <v-container>
-                <v-row cols="2" justify="center">
-                    <v-col cols="8" style="padding-bottom: 0px; padding-top: 25px">
-                        <v-text-field
+                    <v-row cols="2" justify="center">
+                        <v-col cols="8" style="padding-bottom: 0px; padding-top: 25px">
+                            <v-text-field
 
-                            label="Логин"
-                            v-model="authorizeLogin"
-                            color="grey"
-                            filled
-                            rounded
-                            dense
-                    ></v-text-field>
-                        </v-col>
-                </v-row>
-                <v-row cols="2" justify="center">
-                    <v-col cols="8" style="padding-top: 0px; padding-bottom: 0px;">
-                        <v-text-field
+                                label="Логин"
+                                v-model="authorizeLogin"
+                                color="grey"
                                 filled
                                 rounded
                                 dense
-                            label="Пароль"
-                            v-model="authorizePass"
-                            color="grey"
-                            type="password"
-                    ></v-text-field>
-                    </v-col>
-                </v-row>
+                        ></v-text-field>
+                            </v-col>
+                    </v-row>
+                    <v-row cols="2" justify="center">
+                        <v-col cols="8" style="padding-top: 0px; padding-bottom: 0px;">
+                            <v-text-field
+                                filled
+                                rounded
+                                dense
+                                label="Пароль"
+                                v-model="authorizePass"
+                                color="grey"
+                                type="password"
+                                :rules="rules.authorizeHint"
+                                required
+                        ></v-text-field>
+                        </v-col>
+                    </v-row>
                     <v-row cols="2" justify="center">
                         <v-btn color="primary" :disabled="!loginFormIsValid" @click="auth()">
                             Войти
@@ -36,11 +38,11 @@
                 <v-row cols="2" justify="center">
                     <v-col cols="9">
                         <div @click.stop="" style="margin-left: 10px">
-                          У меня нет аккаунта.
-                          <a
-                            href="#"
-                            @click.prevent="dialogLog = false; dialogReg = true;"
-                          >Зарегистрироваться</a>
+                            У меня нет аккаунта.
+                                <a
+                                href="#"
+                                @click.prevent="dialogLog = false; dialogReg = true;"
+                                >Зарегистрироваться</a>
                         </div>
                     </v-col>
 

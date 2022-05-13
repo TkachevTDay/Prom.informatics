@@ -21,6 +21,22 @@
                 {% include 'dialog-reg.html' %}
                 <v-parallax dark src="https://informatics.ru/img/intro/intro-inter-progressive.jpg" height="900">
                     <div class="d-flex justify-end">
+                        <v-menu v-model="profileMenu" open-on-hover>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn v-show="isAuthorized" plain color="white" v-bind="attrs" v-on="on">
+                                    Профиль
+                                </v-btn>
+                            </template>
+                            <v-card width="300px" height="200px">
+                                <v-container fill-height fluid>
+                                    <v-row align="center" justify="center">
+                                        <v-btn color="primary" style="display: table-cell;">
+                                            Привязать аккаунт к gitlab
+                                        </v-btn>
+                                    </v-row>
+                                </v-container>
+                            </v-card>
+                        </v-menu>
                         <v-menu
                         >
                             <template v-slot:activator="{ on, attrs }">

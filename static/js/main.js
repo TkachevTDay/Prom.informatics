@@ -78,11 +78,13 @@ var app = new Vue({
             passwordReg: '',
             registryResponse: '',
             authResponse: '',
+            profileMenu: '',
             rules: {
               value: [val => (val || '').length > 0 || 'Это поле необходимо заполнить!'],
                emailRules: [
                             v => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Введите корректный e-mail'
-                            ]
+                            ],
+               authorizeHint: [v => this.authResponse.responseStatus == 'Successfully authenticated' || 'Проверьте правильность заполненных данных']
             },
         };
     },
@@ -192,9 +194,12 @@ var app = new Vue({
              {'requestType': 'userAuth', 'username': this.authorizeLogin, 'password': sha256(this.authorizePass)}));
              alert(this.authResponse.responseStatus)
              await this.authCheck();
-             this.authorizeLogin = '';
+
              this.authorizePass = '';
-             this.dialogLog = false;
+             if (this.authResponse.responseStatus == 'Successfully authenticated'){
+                this.authorizeLogin = '';
+                this.dialogLog = false;
+             }
         },
         registry: async function(){
             this.registryResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
