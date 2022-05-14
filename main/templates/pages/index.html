@@ -39,10 +39,9 @@
                                 </v-container>
                             </v-card>
                         </v-menu>
-                        <v-menu
-                        >
+                        <v-menu v-model="addMenu">
                             <template v-slot:activator="{ on, attrs }">
-                                <v-btn plain color="white" v-show="isAuthorized">
+                                <v-btn plain color="white" v-show="isAuthorized" v-bind="attrs" v-on="on">
                                     Загрузить проект
                                 </v-btn>
                             </template>
