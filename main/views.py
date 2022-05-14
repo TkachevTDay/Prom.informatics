@@ -9,7 +9,7 @@ from .additional import container_run, pop_avialable_port, check_existing_contai
 import redis
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-
+from django.core import serializers
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
@@ -110,7 +110,7 @@ def index_page(request):
                 user = User.objects.get(username=username)
                 print(user)
                 login(request, user)
-                return JsonResponse({'responseStatus': 'Successfully authenticated'})
+                return JsonResponse({'responseStatus': 'Successfully authenticated', 'currentUser': serializers.serialize('json', [user, ])})
             else:
                 return JsonResponse({'responseStatus': 'Authentication failed (Incorrect input values)'})
         if json.loads(body)["requestType"] == 'userRegistry':

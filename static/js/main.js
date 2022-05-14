@@ -82,12 +82,13 @@ var app = new Vue({
             profileMenu: '',
             gitlabAuthResponse: '',
             dialogAuthInstruction: false,
+            currentUser: '',
             rules: {
               value: [val => (val || '').length > 0 || 'Это поле необходимо заполнить!'],
                emailRules: [
                             v => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Введите корректный e-mail'
                             ],
-               authorizeHint: [v => this.authResponse.responseStatus == 'Successfully authenticated' || 'Проверьте правильность заполненных данных']
+               authorizeHint: [v => (this.authResponse.responseStatus != 'Authentication failed (Incorrect input values)') || 'Проверьте правильность заполненных данных']
             },
         };
     },
@@ -179,7 +180,7 @@ var app = new Vue({
             app.userInf = await this.makeRequest(`https://gitlab.informatics.ru/api/v4/users/${app.userId}/`, "GET", {}, {'PRIVATE-TOKEN': this.personalAccessToken}, {});
         },
         sendInf: async function(){
-            alert(await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()}, {'requestType': 'userAuth', 'username': this.userInf.username, 'private_token': sha256(this.personalAccessToken)})).status;
+            console.log(await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()}, {'requestType': 'userAuth', 'username': this.userInf.username, 'private_token': sha256(this.personalAccessToken)})).status;
         },
         getId: async function(){
             app.userId = (await this.makeRequest(`https://gitlab.informatics.ru/api/v4/personal_access_tokens`, "GET", {}, {'PRIVATE-TOKEN': this.personalAccessToken}, {}))[0].user_id;
@@ -197,22 +198,24 @@ var app = new Vue({
                 this.isAuthorized = authCheckResponse.authStatus
         },
         auth: async function(){
-
              this.authResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
              {'requestType': 'userAuth', 'username': this.authorizeLogin, 'password': sha256(this.authorizePass)}));
-             alert(this.authResponse.responseStatus)
+             console.log(this.authResponse.responseStatus)
              await this.authCheck();
              this.authorizePass = '';
              if (this.authResponse.responseStatus == 'Successfully authenticated'){
                 this.authorizeLogin = '';
+                this.currentUser= (JSON.parse(this.authResponse.currentUser))[0];
+                console.log(this.currentUser.fields.password);
                 this.dialogLog = false;
              }
+
         },
         registry: async function(){
             this.registryResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
              {'requestType': 'userRegistry', 'username': this.userNameReg, 'email': this.emailReg, 'firstname':this.firstNameReg,
               'secondname':this.secondNameReg, 'password': sha256(this.passwordReg)}));
-            alert(this.registryResponse.responseStatus);
+            console.log(this.registryResponse.responseStatus);
             this.dialogReg = false;
             this.userNameReg = '';
             this.emailReg = '';
@@ -223,13 +226,13 @@ var app = new Vue({
         gitlabAuth: async function(){
             this.gitlabAuthResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
              {'requestType': 'gitlabAuth', 'personalAccessToken': this.personalAccessToken}));
-            alert(this.gitlabAuthResponse.responseStatus)
+            console.log(this.gitlabAuthResponse.responseStatus)
         },
 
         unauth: async function(){
              let unauthResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
              {'requestType': 'userUnAuth'}));
-             alert(unauthResponse.responseStatus)
+             console.log(unauthResponse.responseStatus)
              this.isAuthorized = false
         },
 
@@ -357,7 +360,7 @@ var app = new Vue({
                     window.location.href = `http://cont${a.cont.id}.localhost:1337`;
                   }
             else{
-                alert(a.status)
+                console.log(a.status)
             }
         },
         changeProjectStatus: async function(id){

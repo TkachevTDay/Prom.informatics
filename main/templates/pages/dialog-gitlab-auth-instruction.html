@@ -4,8 +4,16 @@
                 <v-container>
 
                     <v-row cols="2" justify="center">
-                        <v-col cols="10" style="padding-top: 0px; padding-bottom: 0px;">
-                            <h3>Для того, чтобы привязать учётную запись к гитлабу ШП, необходимо:</h3>
+                        <v-col cols="10" style="padding-bottom: 0px;">
+                            <h3 class="font-weight-light">Для того, чтобы привязать учётную запись к гитлабу ШП, необходимо:</h3>
+                            <br>
+                            <h3 class="font-weight-light">1. Зайти в Профиль => Настройки => Токены доступа </h3>
+                            <br>
+                            <h3 class="font-weight-light">2. Выбрать read_api, read_user, read_repository в scopes списке.</h3>
+                            <br>
+                            <h3 class="font-weight-light">3. Скопировать созданный токен из поля "Your new личный токен доступа ".</h3>
+                            <br>
+                            <v-img src="/static/img/authInstruction.png"></v-img>
                         </v-col>
                     </v-row>
 
