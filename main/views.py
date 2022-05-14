@@ -5,7 +5,7 @@ from rest_framework import viewsets
 from .models import Project, Student
 from django.core.mail import send_mail
 from .serializers import ProjectSerializer
-from .additional import container_run, pop_avialable_port, check_existing_containers, create_socket_files, uvicorn_start
+from .additional import container_run, pop_avialable_port, check_existing_containers, create_socket_files, uvicorn_start, project_clone, lead_to_useful_view
 import redis
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -53,6 +53,9 @@ def index_page(request):
 
     if request.method == 'POST':
         body = request.body.decode('utf-8')
+        """
+            Добавление проекта
+        """
         if json.loads(body)["requestType"] == 'elementAdd':
             name = json.loads(body)["currentAddName"]
             author = json.loads(body)["currentAddAuthor"]
@@ -62,8 +65,9 @@ def index_page(request):
             mark = json.loads(body)['currentAddMark']
             year = json.loads(body)['currentAddYear']
             images = json.loads(body)['currentAddImages']
+            path_link = json.loads(body)['currentAddPathLink']
             item = Project(name = name, author = author, description = description, mark = mark, year = year,
-                           department = department, images = images, icon=images[0] if images else '')
+                           department = department, images = images, icon=images[0] if images else '', path_link=path_link)
             item.save()
             send_mail(
                 'Новый проект выслан на модерацию.',
@@ -72,6 +76,9 @@ def index_page(request):
                 ['matgost@yandex.ru'],
                 fail_silently=False,
             )
+        """
+            Запуск проекта
+        """
         if json.loads(body)["requestType"] == 'elementRun':
 
             current_element_id = json.loads(body)["elementId"]
@@ -79,11 +86,11 @@ def index_page(request):
             print(current_element.docker_status)
             cont_inf={}
             if current_element.docker_status == 'approved':
-                    if not check_existing_containers(current_element.name.lower()):
+                    if not check_existing_containers(lead_to_useful_view(current_element.path_link)):
                         ports_get_request = pop_avialable_port()
                         cont_inf['id'] = ports_get_request[-1]
                         if ports_get_request != 'No free ports':
-                            container_run(container_name=current_element.name.lower(), image_name=current_element.docker_image_name,
+                            container_run(container_name=lead_to_useful_view(current_element.path_link), image_name=current_element.docker_image_name,
                                           ports=ports_get_request,
                                           volumes={f'prominformatics_run_config_{ports_get_request[-1]}':{'bind': '/run/', 'mode': 'rw'},
                                                    'prominformatics_socket_files':{'bind':'/container_copy_files/', 'mode':'ro'}})
@@ -96,10 +103,18 @@ def index_page(request):
                         return JsonResponse({'status': 'Container with this name already exists'})
             else:
                 return JsonResponse({'status': "There's no way to start this project with docker"})
+        """
+            Изменение статуса проекта (модерация)
+        """
         if json.loads(body)["requestType"] == 'elementChangeStatus':
             element = Project.objects.get(id=json.loads(body)["elementId"])
             element.status = json.loads(body)["elementNewStatus"]
+            project_clone(element, json.loads(body)["personalAccessToken"])
             element.save(update_fields=['status'])
+            return JsonResponse({'responseStatus':'success'})
+        """
+            Аутентификация пользователя
+        """
         if json.loads(body)["requestType"] == 'userAuth':
             username = json.loads(body)["username"]
             password = json.loads(body)["password"]
@@ -110,9 +125,12 @@ def index_page(request):
                 user = User.objects.get(username=username)
                 print(user)
                 login(request, user)
-                return JsonResponse({'responseStatus': 'Successfully authenticated', 'currentUser': serializers.serialize('json', [user, ])})
+                return JsonResponse({'responseStatus': 'Successfully authenticated'})
             else:
                 return JsonResponse({'responseStatus': 'Authentication failed (Incorrect input values)'})
+        """
+            Регистрация
+        """
         if json.loads(body)["requestType"] == 'userRegistry':
             if User.objects.filter(username=json.loads(body)["username"]):
                 return JsonResponse({'responseStatus':'User with similar name already exists'})
@@ -126,14 +144,33 @@ def index_page(request):
                 reg_user.firstname = json.loads(body)["secondname"]
             reg_user.save()
             return JsonResponse({'responseStatus': 'Successfully saved'})
+        """
+            Проверка статуса пользователя
+        """
         if json.loads(body)["requestType"] == 'authCheck':
+            response = {}
             if request.user.is_authenticated:
-                return JsonResponse({'authStatus': 1})
+                response['authStatus'] = 1
+                response['currentUser'] = serializers.serialize('json', [request.user, ])
+                if Student.objects.get(user_id=request.user.id).personal_access_token != 'no active gitlab connections':
+                    response['gitlabStatus'] = 1
+                    print(Student.objects.get(user_id=request.user.id))
+                    response['privateAccessToken'] = Student.objects.get(user_id=request.user.id).personal_access_token
+                    return JsonResponse(response)
+                else:
+                    response['gitlabStatus'] = 0
+                    return JsonResponse(response)
             else:
-                return JsonResponse({'authStatus': 0})
+                response['authStatus'] = 0
+        """
+            Выход из учётной записи
+        """
         if json.loads(body)["requestType"] == 'userUnAuth':
             logout(request)
             return JsonResponse({'responseStatus': 'Successfull unauth'})
+        """
+            Аутентификация через гитлаб
+        """
         if json.loads(body)["requestType"] == "gitlabAuth":
             element = Student.objects.get(user_id=request.user.id)
             if element.personal_access_token == 'no active gitlab connections':

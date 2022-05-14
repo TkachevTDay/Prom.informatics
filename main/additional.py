@@ -12,6 +12,9 @@ def container_run(container_name, image_name, ports, volumes):
     print(container.id)
 
 def pop_avialable_port():
+    """
+        Достать первый порт в списке (с последующим удалением) + проверка свободных портов
+    """
     r = redis.StrictRedis(host='redis', port=6379, db=0)
     avialable_ports = r.get('avialable_ports').decode('UTF-8').split()
     if len(avialable_ports) == 0:
@@ -42,6 +45,9 @@ def create_socket_files(element_name):
         file.write(service_file)
 
 def uvicorn_start(element_name):
+    """
+        Копирование сокет файлов в директорию и их запуск посредством systemctl
+    """
     exec_file = f'#!/bin/bash\ndocker exec -i {element_name} ' \
                 f'cp /container_copy_files/{element_name}/{{gunicorn.service,gunicorn.socket}} /etc/systemd/system/\ndocker exec -i {element_name} systemctl start gunicorn\n' \
                 f'docker exec -i {element_name} systemctl enable gunicorn\ndocker exec -i {element_name} systemctl status gunicorn;'
@@ -49,3 +55,18 @@ def uvicorn_start(element_name):
         file.write(exec_file)
     os.chmod(f'/prominf/socketfiles/{element_name}/uvicorn_start.sh', 777)
     exit_code = subprocess.call(f'/prominf/socketfiles/{element_name}/uvicorn_start.sh')
+
+def lead_to_useful_view(element):
+    return element.split('/')[-1][0:-4]
+
+def project_clone(element, personal_access_token):
+    print()
+    print(element)
+    if not os.path.exists(f'/prominf/mediafiles/{element.path_link.split("/")[-1][0:-4]}/'):
+        os.makedirs(f'/prominf/mediafiles/{element.path_link.split("/")[-1][0:-4]}/')
+    os.chmod(f'/prominf/clone.sh', 777)
+
+    clone_file=f'#!/bin/bash\ngit clone https://oauth2:{personal_access_token}@{"/".join(element.path_link.split("/")[2:])} /prominf/mediafiles/{element.path_link.split("/")[-1][0:-4]}'
+    with open(f'/prominf/clone.sh', 'w') as file:
+        file.write(clone_file)
+    exit_code = subprocess.call(f'/prominf/clone.sh')

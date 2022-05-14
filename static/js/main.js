@@ -21,6 +21,7 @@ var app = new Vue({
             isAdministrator: true,
             isAuthorized: 0,
             personalAccessToken: '',
+            personalAccessTokenInput: '',
             userId: 0,
             authorizeLogin: '',
             authorizePass: '',
@@ -31,7 +32,7 @@ var app = new Vue({
             dialogLog: false,
             addMenu: false,
             dialogGitlabAuth: false,
-            userProjects: [{"name": "avtor", "description": "eto proect","load_date": "2019","department": "Online", "author": "matvey","mark":"5","tech":"Django"},{"name": "avtor2","load_date": "2019","department": "Online", "description": "eto proect2", "author": "matvey2","mark":"4","load_date": "2022","tech":"Django"}],
+            userProjects: [],
             selectedItem: 1,
             carousel: 0,
             selectedMark: '',
@@ -84,6 +85,7 @@ var app = new Vue({
             gitlabAuthResponse: '',
             dialogAuthInstruction: false,
             currentUser: '',
+            currentUserGroup: '',
             rules: {
               value: [val => (val || '').length > 0 || 'Это поле необходимо заполнить!'],
                emailRules: [
@@ -174,8 +176,18 @@ var app = new Vue({
         getCSRFToken: function(){
             return Cookies.get('csrftoken');
         },
+        getUserGroup: async function(){
+            let visibleGroups = await this.makeRequest(`https://gitlab.informatics.ru/api/v4/groups`, "GET", {}, {'PRIVATE-TOKEN': this.personalAccessToken}, {});
+            app.currentUserGroup = visibleGroups.filter(d => d.visibility==='internal')
+            console.log(app.currentUserGroup)
+        },
+
         getUserProjects: async function(){
-            app.userProjects = await this.makeRequest(`https://gitlab.informatics.ru/api/v4/users/${app.userId}/projects`, "GET", {}, {'PRIVATE-TOKEN': this.personalAccessToken}, {});
+            if (this.userProjects.length == 0){
+                for (i of app.currentUserGroup){
+                    app.userProjects = (await this.makeRequest(`https://gitlab.informatics.ru/api/v4/groups/${i.id}/projects`, "GET", {}, {'PRIVATE-TOKEN': this.personalAccessToken}, {}));
+                }
+            }
         },
         getUserInfo: async function(){
             app.userInf = await this.makeRequest(`https://gitlab.informatics.ru/api/v4/users/${app.userId}/`, "GET", {}, {'PRIVATE-TOKEN': this.personalAccessToken}, {});
@@ -184,19 +196,26 @@ var app = new Vue({
             console.log(await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()}, {'requestType': 'userAuth', 'username': this.userInf.username, 'private_token': sha256(this.personalAccessToken)})).status;
         },
         getId: async function(){
+            console.log(this.personalAccessToken)
             app.userId = (await this.makeRequest(`https://gitlab.informatics.ru/api/v4/personal_access_tokens`, "GET", {}, {'PRIVATE-TOKEN': this.personalAccessToken}, {}))[0].user_id;
         },
 
-        registryTmp: async function(){
+        projectsLoad: async function(){
             await this.getId();
-            await this.getUserInfo();
+            await this.getUserGroup();
             await this.getUserProjects();
-            await this.sendInf();
         },
         authCheck: async function(){
             let authCheckResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
                 {'requestType': 'authCheck'}));
-                this.isAuthorized = authCheckResponse.authStatus
+            this.isAuthorized = authCheckResponse.authStatus
+            this.isGitlabConnected = authCheckResponse.gitlabStatus
+            if(this.isAuthorized == 1){
+                this.currentUser= (JSON.parse(authCheckResponse.currentUser))[0];
+                if(this.isGitlabConnected == 1){
+                    this.personalAccessToken = authCheckResponse.privateAccessToken
+                }
+            }
         },
         auth: async function(){
              this.authResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
@@ -206,8 +225,6 @@ var app = new Vue({
              this.authorizePass = '';
              if (this.authResponse.responseStatus == 'Successfully authenticated'){
                 this.authorizeLogin = '';
-                this.currentUser= (JSON.parse(this.authResponse.currentUser))[0];
-                console.log(this.currentUser.fields.password);
                 this.dialogLog = false;
              }
 
@@ -226,8 +243,11 @@ var app = new Vue({
         },
         gitlabAuth: async function(){
             this.gitlabAuthResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
-             {'requestType': 'gitlabAuth', 'personalAccessToken': this.personalAccessToken}));
+             {'requestType': 'gitlabAuth', 'personalAccessToken': this.personalAccessTokenInput}));
             console.log(this.gitlabAuthResponse.responseStatus)
+            this.authCheck();
+            this.personalAccessTokenInput = ''
+            this.dialogGitlabAuth = false
         },
 
         unauth: async function(){
@@ -349,6 +369,7 @@ var app = new Vue({
                 'currentAddMark': this.currentAddMark.trim(),
                 'currentAddYear': this.currentAddYear.trim(),
                 'currentAddImages': this.currentProjectImages,
+                'currentAddPathLink': this.currentAddPathLink,
             })
         },
         sendProjectRunConfig: async function(id){
@@ -368,15 +389,16 @@ var app = new Vue({
             let a = await this.makeRequest(`${this.baseUrl}`,
             "POST", {}, {'X-CSRFToken': app.getCSRFToken()}, {
                 'requestType': 'elementChangeStatus',
+                'personalAccessToken': this.personalAccessToken,
                 'elementId': id,
                 'elementNewStatus': this.changedStatus,
             });
+            await this.updateAdminList();
         },
     },
   mounted(){
     this.update();
     this.getFilterParams();
     this.getRecentProjects();
-
   },
 })

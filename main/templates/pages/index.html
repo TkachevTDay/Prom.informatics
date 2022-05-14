@@ -41,7 +41,7 @@
                         </v-menu>
                         <v-menu v-model="addMenu">
                             <template v-slot:activator="{ on, attrs }">
-                                <v-btn plain color="white" v-show="isAuthorized" v-bind="attrs" v-on="on">
+                                <v-btn plain color="white" v-show="isAuthorized" v-bind="attrs" v-on="on" @click="projectsLoad()">
                                     Загрузить проект
                                 </v-btn>
                             </template>
