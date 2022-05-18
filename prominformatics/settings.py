@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
 from pathlib import Path
-
+from celery.schedules import crontab
+import django
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'main',
     'rest_framework',
     'django_extensions',
+    'django_celery_beat',
 ]
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -151,3 +153,7 @@ EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'prominfnotification@yandex.ru'
 EMAIL_HOST_PASSWORD = 'lqjlshpukutlkxgd'
+
+
+CELERY_TIMEZONE = 'UTC'
+CELERY_BROKER_URL = "redis://redis:6379/"

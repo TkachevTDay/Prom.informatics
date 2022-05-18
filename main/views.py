@@ -5,11 +5,13 @@ from rest_framework import viewsets
 from .models import Project, Student
 from django.core.mail import send_mail
 from .serializers import ProjectSerializer
-from .additional import container_run, pop_avialable_port, check_existing_containers, create_socket_files, uvicorn_start, project_clone, lead_to_useful_view
+from .additional import container_run, pop_avialable_port, check_existing_containers, create_socket_files, uvicorn_start, project_clone, lead_to_useful_view, add_container_connection
 import redis
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.core import serializers
+
+
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
@@ -94,8 +96,10 @@ def index_page(request):
                                           ports=ports_get_request,
                                           volumes={f'prominformatics_run_config_{ports_get_request[-1]}':{'bind': '/run/', 'mode': 'rw'},
                                                    'prominformatics_socket_files':{'bind':'/container_copy_files/', 'mode':'ro'}})
-                            create_socket_files(current_element.name.lower())
-                            uvicorn_start(current_element.name.lower())
+
+                            create_socket_files(lead_to_useful_view(current_element.path_link))
+                            uvicorn_start(lead_to_useful_view(current_element.path_link))
+                            add_container_connection(lead_to_useful_view(current_element.path_link), current_element.docker_image_name)
                             return JsonResponse({'cont': cont_inf, 'status': 'ok'})
                         else:
                             return JsonResponse({'status': 'All ports are busy'})
@@ -148,6 +152,7 @@ def index_page(request):
             Проверка статуса пользователя
         """
         if json.loads(body)["requestType"] == 'authCheck':
+
             response = {}
             if request.user.is_authenticated:
                 response['authStatus'] = 1

@@ -1,6 +1,23 @@
 version: "3"
 
 services:
+  celery:
+    image: celery:latest
+    container_name: celery
+    command: celery -A prominformatics worker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    build:
+      context: ./
+    depends_on:
+      - celery-beat
+  celery-beat:
+    container_name: celery-beat
+    command: celery -A prominformatics beat -l info
+    build: .
+    depends_on:
+      web:
+        condition: service_healthy
   db:
     restart: always
     container_name: db
@@ -26,8 +43,18 @@ services:
       PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
       PGADMIN_DEFAULT_PASSWORD: root
     restart: always
+  redis:
+    container_name: redis
+    image: redis:alpine
+    expose:
+      - 6379
 
   web:
+    healthcheck:
+      test: curl -sS http://localhost:1337 || echo 1
+      interval: 15s
+      timeout: 10s
+      retries: 5
     container_name: prominformatics_web
     build: .
     expose:
@@ -62,10 +89,6 @@ services:
       - run_config_3:/etc/cont_3/run_config
       - run_config_4:/etc/cont_4/run_config
 
-  redis:
-    image: redis:alpine
-    expose:
-    - 6379
 
 volumes:
   staticfiles:
