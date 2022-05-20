@@ -79,3 +79,9 @@ def project_clone(element, personal_access_token):
     with open(f'/prominf/clone.sh', 'w') as file:
         file.write(clone_file)
     exit_code = subprocess.call(f'/prominf/clone.sh')
+
+def element_build(element):
+    image_name=element.path_link.split("/")[-1][0:-4]
+    client = docker.from_env()
+    client.images.build(path= f'/prominf/mediafiles/{element.path_link.split("/")[-1][0:-4]}', tag=image_name)
+    return image_name

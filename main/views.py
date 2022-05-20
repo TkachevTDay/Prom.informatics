@@ -5,7 +5,8 @@ from rest_framework import viewsets
 from .models import Project, Student
 from django.core.mail import send_mail
 from .serializers import ProjectSerializer
-from .additional import container_run, pop_avialable_port, check_existing_containers, create_socket_files, uvicorn_start, project_clone, lead_to_useful_view, add_container_connection
+from .additional import container_run, pop_avialable_port, check_existing_containers, create_socket_files, \
+    uvicorn_start, project_clone, lead_to_useful_view, add_container_connection, element_build
 import redis
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -115,11 +116,21 @@ def index_page(request):
         """
             Изменение статуса проекта (модерация)
         """
+        #todo: Выяснить почему на модерации нет картинки
         if json.loads(body)["requestType"] == 'elementChangeStatus':
             element = Project.objects.get(id=json.loads(body)["elementId"])
             element.status = json.loads(body)["elementNewStatus"]
-            project_clone(element, json.loads(body)["personalAccessToken"])
-            element.save(update_fields=['status'])
+            element.docker_status = json.loads(body)["elementNewDockerStatus"]
+            element.save(update_fields=['status', 'docker_status'])
+            if element.tech_stack == 'Django-project':
+                project_clone(element, json.loads(body)["personalAccessToken"])
+                if element.docker_status == 'approved':
+                    element.docker_image_name = element_build(element)
+                    element.save(update_fields=['docker_image_name'])
+                    return JsonResponse({'responseStatus': 'Successful build'})
+            else:
+                return JsonResponse({'responseStatus': 'Not avialiable (not Django project)'})
+
             return JsonResponse({'responseStatus':'success'})
         """
             Аутентификация пользователя

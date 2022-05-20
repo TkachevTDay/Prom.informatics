@@ -73,6 +73,7 @@ var app = new Vue({
             currentProjectAvatar: '',
             moderateProjects: [],
             changedStatus: '',
+            changedDockerStatus: 'declined',
             userInf: '',
             err: false,
             currentCSRF: '',
@@ -202,7 +203,6 @@ var app = new Vue({
             console.log(this.personalAccessToken)
             app.userId = (await this.makeRequest(`https://gitlab.informatics.ru/api/v4/personal_access_tokens`, "GET", {}, {'PRIVATE-TOKEN': this.personalAccessToken}, {}))[0].user_id;
         },
-
         projectsLoad: async function(){
             await this.getId();
             await this.getUserGroup();
@@ -343,7 +343,6 @@ var app = new Vue({
         setModeratableState(state){
             this.isCardModeratable = state
         },
-
         filter: function() {
             this.items = [];
             this.update();
@@ -361,6 +360,7 @@ var app = new Vue({
             await app.updateCurrentData();
             await this.authCheck();
         },
+        // Отправка проекта
         sendProjectOnModerate: async function(item){
             await this.makeRequest(`${this.baseUrl}`,
             "POST", {}, {'X-CSRFToken': app.getCSRFToken()}, {
@@ -377,6 +377,7 @@ var app = new Vue({
                 'currentTechStack':this.currentAddTechStack,
             })
         },
+        // Отправка данных о запуске проекта
         sendProjectRunConfig: async function(id){
             let a = await this.makeRequest(`${this.baseUrl}`,
             "POST", {}, {'X-CSRFToken': app.getCSRFToken()}, {
@@ -390,14 +391,17 @@ var app = new Vue({
                 console.log(a.status)
             }
         },
-        changeProjectStatus: async function(id){
+        // Модерация
+        changeProjectStatus: async function(){
             let a = await this.makeRequest(`${this.baseUrl}`,
             "POST", {}, {'X-CSRFToken': app.getCSRFToken()}, {
                 'requestType': 'elementChangeStatus',
                 'personalAccessToken': this.personalAccessToken,
-                'elementId': id,
+                'elementId': this.currentId,
                 'elementNewStatus': this.changedStatus,
+                'elementNewDockerStatus': this.changedDockerStatus,
             });
+            this.changedDockerStatus = 'declined'
             await this.updateAdminList();
             await this.update();
             await this.getRecentProjects();
