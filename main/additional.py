@@ -25,11 +25,22 @@ def pop_avialable_port():
         Достать первый порт в списке (с последующим удалением) + проверка свободных портов
     """
     r = redis.StrictRedis(host='redis', port=6379, db=0)
-    avialable_ports = r.get('avialable_ports').decode('UTF-8').split()
-    if len(avialable_ports) == 0:
+    avialable_ports = json.loads(r.get('avialable_ports').decode('UTF-8'))
+    if len(avialable_ports['ports']) == 0:
         return 'No free ports'
-    r.set('avialable_ports', ' '.join(avialable_ports[1:]))
-    return avialable_ports[0]
+    return_value = avialable_ports['ports'].pop(0)
+    r.set('avialable_ports', json.dumps(avialable_ports))
+    return str(return_value)
+
+def push_port(port):
+    r = redis.StrictRedis(host='redis', port=6379, db=0)
+    avialable_ports = json.loads(r.get('avialable_ports').decode('UTF-8'))
+    print(port)
+    print(avialable_ports['ports'])
+    avialable_ports['ports'].insert(0, port)
+    print(avialable_ports)
+    print(json.dumps(avialable_ports))
+    r.set('avialable_ports', json.dumps(avialable_ports))
 
 def check_existing_containers(container_name):
     client = docker.from_env()

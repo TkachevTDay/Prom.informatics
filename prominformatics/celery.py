@@ -7,6 +7,7 @@ from datetime import datetime
 import json
 from django_celery_beat.models import PeriodicTask, IntervalSchedule
 from django.utils import timezone
+from main import additional
 django.setup()
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "prominformatics.settings")
 
@@ -31,11 +32,15 @@ def kill_switch():
         tmp_date = clientAPI.inspect_container(i)['Created']
         if (int(str(datetime.now() - datetime.strptime(
                 '-'.join(tmp_date.split('T')[0].split(':')[0].split('-')) + ' ' + ':'.join(
-                        tmp_date.split('T')[1].split(':'))[:8], '%Y-%m-%d %H:%M:%S')).split(':')[1])) >= 5:
-
+                        tmp_date.split('T')[1].split(':'))[:8], '%Y-%m-%d %H:%M:%S')).split(':')[1])) >= 1:
+            port = list(clientAPI.inspect_container(i)['NetworkSettings']['Ports'].keys())[0].split('/')[0]
+            print(list(clientAPI.inspect_container(i)['NetworkSettings']['Ports'].keys())[0].split('/')[0])
             client.containers.get(i).remove(force=True)
             del active_containers[i]
+            additional.push_port(
+                port=port)
     r.set('active_containers', json.dumps(active_containers))
+
     print('task completed')
 if __name__ == '__main__':
     kill_switch()
