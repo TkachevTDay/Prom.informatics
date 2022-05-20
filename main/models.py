@@ -27,6 +27,7 @@ class Project(models.Model):
     status = models.TextField(max_length=255, default='on moderate')
     docker_status = models.TextField(max_length=255, default='declined')
     docker_image_name = models.TextField(max_length=255, default='')
+    tech_stack = models.TextField(max_length=700, default='')
 
 @receiver(post_save, sender = User)
 def user_is_created(sender, instance, created, **kwargs):

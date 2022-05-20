@@ -59,14 +59,14 @@
                                   required
                     ></v-text-field>
                     <h3 class="font-weight-light">Технологический стек</h3>
-                    <v-text-field v-if="isCardModeratable==true"
-                                  name="currentAddTech"
-                                  :rules="rules.value"
+                    <p v-if="isCardModeratable==false" class="font-weight-thin">[[ currentTechStack ]]</p>
+                    <v-select v-if="isCardModeratable==true"
+                                  name="techStack"
+                                  :items="techStack"
                                   label="Технологический стек"
-                                  v-model="currentAddTech"
+                                  v-model="currentAddTechStack"
                                   color="grey"
-                                  required
-                    ></v-text-field>
+                    ></v-select>
                     <h3 v-if="isCardModeratable==true" class="font-weight-light"> Ссылка на картинку </h3>
                     <v-text-field v-if="isCardModeratable==true"
                                   name="currentAddImg"

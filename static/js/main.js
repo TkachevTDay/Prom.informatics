@@ -67,6 +67,8 @@ var app = new Vue({
             images: [],
             filterShow: false,
             currentProjectImages: [],
+            currentTechStack: '',
+            currentAddTechStack: '',
             currentAddImgs: [],
             currentProjectAvatar: '',
             moderateProjects: [],
@@ -86,6 +88,7 @@ var app = new Vue({
             dialogAuthInstruction: false,
             currentUser: '',
             currentUserGroup: '',
+            techStack: ['Django-project', 'Pygame-project', 'Other'],
             rules: {
               value: [val => (val || '').length > 0 || 'Это поле необходимо заполнить!'],
                emailRules: [
@@ -104,7 +107,7 @@ var app = new Vue({
               this.currentAddAuthor &&
               this.currentAddDepartment &&
               this.currentAddDescription &&
-              this.currentAddMark && this.currentAddName && this.currentAddName && this.currentAddTech && this.currentAddYear
+              this.currentAddMark && this.currentAddName && this.currentAddName && this.currentAddTechStack && this.currentAddYear
             )
           },
         gitlabAuthFormIsValid() {
@@ -283,6 +286,7 @@ var app = new Vue({
                 this.currentYear=this.recentProjects[this.carouselIterator].year
                 this.currentProjectImages=this.recentProjects[this.carouselIterator].images
                 this.currentProjectAvatar=this.recentProjects[this.carouselIterator].icon
+                this.currentTechStack=this.recentProjects[this.carouselIterator].tech_stack
             } else {
                 this.currentId=item.id
                 this.currentName=item.name
@@ -293,6 +297,7 @@ var app = new Vue({
                 this.currentYear=item.year
                 this.currentProjectImages=item.images
                 this.currentProjectAvatar=item.icon
+                this.currentTechStack=item.tech_stack
             }
 
         },
@@ -304,7 +309,7 @@ var app = new Vue({
                 this.currentAddDepartment=this.userProjects[index].department
                 this.currentAddMark=this.userProjects[index].mark
                 this.currentAddYear=this.userProjects[index].year
-                this.currentAddTech=this.userProjects[index].tech
+                this.currentAddTechStack=this.userProjects[index].tech_stack
                 this.currentAddPathLink=this.userProjects[index].http_url_to_repo
             }
 
@@ -322,7 +327,6 @@ var app = new Vue({
         carouselPrev: function(){
             if (this.carouselIterator == 0){
                 this.carouselIterator = this.recentProjects.length - 1
-
             }
             else {
                 this.carouselIterator -= 1
@@ -370,6 +374,7 @@ var app = new Vue({
                 'currentAddYear': this.currentAddYear.trim(),
                 'currentAddImages': this.currentProjectImages,
                 'currentAddPathLink': this.currentAddPathLink,
+                'currentTechStack':this.currentAddTechStack,
             })
         },
         sendProjectRunConfig: async function(id){
@@ -394,6 +399,8 @@ var app = new Vue({
                 'elementNewStatus': this.changedStatus,
             });
             await this.updateAdminList();
+            await this.update();
+            await this.getRecentProjects();
         },
     },
   mounted(){

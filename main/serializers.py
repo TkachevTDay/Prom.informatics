@@ -8,4 +8,4 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
         model = Project
         fields = ['url', 'id', 'name', 'description', 'path_link', 'upload_date', 'last_open_date', 'author',
                   'department',
-                  'mark', 'year', 'icon', 'images']
+                  'mark', 'year', 'icon', 'images', 'tech_stack']
