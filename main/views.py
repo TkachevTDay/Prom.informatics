@@ -6,7 +6,7 @@ from .models import Project, Student
 from django.core.mail import send_mail
 from .serializers import ProjectSerializer
 from .additional import container_run, pop_avialable_port, check_existing_containers, create_socket_files, \
-    uvicorn_start, project_clone, lead_to_useful_view, add_container_connection, element_build
+    uvicorn_start, project_clone, lead_to_useful_view, add_container_connection, element_build, get_port_by_name
 import redis
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -105,12 +105,13 @@ def index_page(request):
 
                             create_socket_files(lead_to_useful_view(current_element.path_link))
                             uvicorn_start(lead_to_useful_view(current_element.path_link))
-                            add_container_connection(lead_to_useful_view(current_element.path_link), current_element.docker_image_name)
+                            add_container_connection(lead_to_useful_view(current_element.path_link), ports_get_request)
                             return JsonResponse({'cont': cont_inf, 'status': 'ok'})
                         else:
                             return JsonResponse({'status': 'All ports are busy'})
                     else:
-                        return JsonResponse({'status': 'Container with this name already exists'})
+                        cont_inf['id'] = get_port_by_name(lead_to_useful_view(current_element.path_link))[-1]
+                        return JsonResponse({'cont': cont_inf, 'status': 'Container with this name already exists'})
             else:
                 return JsonResponse({'status': "There's no way to start this project with docker"})
         """

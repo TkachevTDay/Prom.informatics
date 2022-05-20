@@ -6,13 +6,17 @@ import json
 """
     Additional calc function's
 """
-def add_container_connection(container_name, image_name):
+def add_container_connection(container_name, port):
     r = redis.StrictRedis(host='redis', port=6379, db=0)
     active_containers = json.loads(r.get('active_containers').decode('UTF-8'))
-    active_containers[container_name] = image_name
+    active_containers[container_name] = port
     r.set('active_containers', json.dumps(active_containers))
     print(active_containers)
 
+def get_port_by_name(container_name):
+    r = redis.StrictRedis(host='redis', port=6379, db=0)
+    active_containers = json.loads(r.get('active_containers').decode('UTF-8'))
+    return active_containers[container_name]
 
 def container_run(container_name, image_name, ports, volumes):
     client = docker.from_env()

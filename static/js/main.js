@@ -384,7 +384,7 @@ var app = new Vue({
                 'requestType': 'elementRun',
                 'elementId': id,
             });
-            if (a.status == 'ok'){
+            if (a.status == 'ok' || a.status == 'Container with this name already exists'){
                     window.location.href = `http://cont${a.cont.id}.localhost:1337`;
                   }
             else{
