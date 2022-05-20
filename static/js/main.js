@@ -350,10 +350,10 @@ var app = new Vue({
         },
         getFilterParams: async function(){
             let a = await this.makeRequest(`${this.baseUrl}api/filter_params/`, "GET", {}, {}, {})
-            app.yearItems = a.years;
-            app.departmentItems = a.departments;
-            app.authorItems = a.authors;
-            app.markItems = a.marks;
+            app.yearItems = ['',].concat(a.years);
+            app.departmentItems = ['',].concat(a.departments);
+            app.authorItems = ['',].concat(a.authors);
+            app.markItems = ['',].concat(a.marks);
         },
         getRecentProjects: async function(){
             let a = await this.makeRequest(`${this.baseUrl}api/recent_projects/`, "GET", {}, {}, {});
