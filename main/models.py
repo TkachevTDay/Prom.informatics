@@ -35,6 +35,7 @@ class Notifications(models.Model):
     user_receiver = models.ForeignKey(Student, on_delete=models.CASCADE, default='', related_name='user_receiver')
     message = models.TextField(max_length=700, default='')
     send_time = models.DateTimeField(auto_now_add=True)
+    read = models.TextField(max_length=100, default='unread')
 
 @receiver(post_save, sender = User)
 def user_is_created(sender, instance, created, **kwargs):

@@ -206,6 +206,26 @@ def index_page(request):
                 return JsonResponse({'responseStatus' : 'Successfully gitlab authorize'})
             else:
                 return JsonResponse({'responseStatus': 'Unsuccessfully gitlab authorize'})
+        """
+            Проверка уведомлений
+        """
+        if json.loads(body)["requestType"] == "elementCheckNotifications":
+            if request.user.is_authenticated:
+                element = Student.objects.get(user_id=request.user.id)
+                notifications = Notifications.objects.filter(user_receiver=element)
+                length = len(Notifications.objects.filter(user_receiver=element, read="unread"))
+                return JsonResponse({'responseStatus': serializers.serialize('json', notifications), 'len': length })
+            else:
+                return JsonResponse({'responseStatus': 'userNotAuth'})
+        """
+            Пометить как прочитанные
+        """
+        if json.loads(body)["requestType"] == "elementMakeRead":
+            for i in list(json.loads(body)["notifications"]):
+                element = Notifications.objects.get(id=i['pk'])
+                element.read = "read"
+                element.save(update_fields=['read'])
+            return JsonResponse({'responseStatus': 'success'})
     return render(request, 'index.html', {})
 
 

@@ -18,6 +18,8 @@ var app = new Vue({
                 '5': '#9575CD',
                 '5+': '#7E57C2',
             },
+            notificationsAmount: 0,
+            notificationsList: [],
             isAdministrator: true,
             isAuthorized: 0,
             personalAccessToken: '',
@@ -231,6 +233,7 @@ var app = new Vue({
                 this.authorizeLogin = '';
                 this.dialogLog = false;
              }
+             this.notificationsCheck();
 
         },
         registry: async function(){
@@ -360,6 +363,7 @@ var app = new Vue({
             app.recentProjects = a;
             await app.updateCurrentData();
             await this.authCheck();
+            await this.notificationsCheck();
         },
         // Отправка проекта
         sendProjectOnModerate: async function(item){
@@ -410,6 +414,22 @@ var app = new Vue({
             await this.update();
             await this.getRecentProjects();
         },
+        notificationsCheck: async function(){
+            let a = await this.makeRequest(`${this.baseUrl}`,
+            "POST", {}, {'X-CSRFToken': Cookies.get('csrftoken')}, {
+                'requestType': 'elementCheckNotifications',
+            });
+            this.notificationsList = (JSON.parse(a.responseStatus))
+            this.notificationsAmount = a.len
+        },
+        makeRead: async function(){
+            let a = await this.makeRequest(`${this.baseUrl}`,
+            "POST", {}, {'X-CSRFToken': Cookies.get('csrftoken')}, {
+                'requestType': 'elementMakeRead',
+                'notifications': this.notificationsList,
+            });
+            this.notificationsCheck();
+        }
     },
   mounted(){
     this.update();
