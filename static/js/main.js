@@ -343,9 +343,9 @@ var app = new Vue({
         setModeratableState(state){
             this.isCardModeratable = state
         },
-        filter: function() {
-            this.items = [];
-            this.update();
+        filter: async function() {
+            let a = await this.makeRequest(`${this.baseUrl}api/projects/`, "GET", {'start': 0, 'number': 5, 'year': this.selectedYear,'department': this.selectedDepartment, 'mark': this.selectedMark, 'author': this.selectedAuthor,'name': this.searchText, 'status': 'approved'}, {}, {})
+            app.items = a
         },
         getFilterParams: async function(){
             let a = await this.makeRequest(`${this.baseUrl}api/filter_params/`, "GET", {}, {}, {})
