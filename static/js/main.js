@@ -30,6 +30,7 @@ var app = new Vue({
             dialogReg: false,
             dialogAdm: false,
             dialogLog: false,
+            dialogContRunNotify: false,
             addMenu: false,
             dialogGitlabAuth: false,
             userProjects: [],
@@ -379,11 +380,14 @@ var app = new Vue({
         },
         // Отправка данных о запуске проекта
         sendProjectRunConfig: async function(id){
+
+            this.dialogContRunNotify = true
             let a = await this.makeRequest(`${this.baseUrl}`,
             "POST", {}, {'X-CSRFToken': app.getCSRFToken()}, {
                 'requestType': 'elementRun',
                 'elementId': id,
             });
+            this.dialogContRunNotify = false
             if (a.status == 'ok' || a.status == 'Container with this name already exists'){
                     window.location.href = `http://cont${a.cont.id}.localhost:1337`;
                   }
