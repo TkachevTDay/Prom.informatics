@@ -28,6 +28,13 @@ class Project(models.Model):
     docker_status = models.TextField(max_length=255, default='declined')
     docker_image_name = models.TextField(max_length=255, default='')
     tech_stack = models.TextField(max_length=700, default='')
+    student_uploader = models.ForeignKey(Student, on_delete=models.CASCADE, default='')
+
+class Notifications(models.Model):
+    user_sender = models.ForeignKey(Student, on_delete=models.CASCADE, default='', related_name='user_sender')
+    user_receiver = models.ForeignKey(Student, on_delete=models.CASCADE, default='', related_name='user_receiver')
+    message = models.TextField(max_length=700, default='')
+    send_time = models.DateTimeField(auto_now_add=True)
 
 @receiver(post_save, sender = User)
 def user_is_created(sender, instance, created, **kwargs):

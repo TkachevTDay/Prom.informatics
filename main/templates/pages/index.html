@@ -26,9 +26,18 @@
                     <div class="d-flex justify-end">
                         <v-menu v-model="profileMenu" open-on-hover>
                             <template v-slot:activator="{ on, attrs }">
-                                <v-btn v-show="isAuthorized" plain color="white" v-bind="attrs" v-on="on">
-                                    Профиль
-                                </v-btn>
+                                <v-badge v-show="isAuthorized"
+                                    :content=6
+                                    :value=6
+                                    color="red"
+                                    size="5"
+                                    bottom
+                                    overlap
+                                  >
+                                    <v-btn v-show="isAuthorized" plain color="white" v-bind="attrs" v-on="on">
+                                        Профиль
+                                    </v-btn>
+                                 </v-badge>
                             </template>
                             <v-card width="300px" height="200px">
                                 <v-container fill-height fluid>

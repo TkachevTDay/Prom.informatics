@@ -2,7 +2,7 @@ import json
 from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework import viewsets
-from .models import Project, Student
+from .models import Project, Student, Notifications
 from django.core.mail import send_mail
 from .serializers import ProjectSerializer
 from .additional import container_run, pop_avialable_port, check_existing_containers, create_socket_files, \
@@ -75,7 +75,8 @@ def index_page(request):
             tech_stack = json.loads(body)['currentTechStack']
             item = Project(name = name, author = author, description = description, mark = mark, year = year,
                            department = department, images = images, icon=images[0] if images else '',
-                           path_link=path_link, tech_stack=tech_stack)
+                           path_link=path_link, tech_stack=tech_stack, student_uploader=
+                           Student.objects.get(user_id=request.user.id))
             item.save()
             send_mail(
                 'Новый проект выслан на модерацию.',
@@ -164,6 +165,10 @@ def index_page(request):
             if json.loads(body)["secondname"]:
                 reg_user.firstname = json.loads(body)["secondname"]
             reg_user.save()
+            element = Student.objects.get(user_id=reg_user.id)
+            system_user = Student.objects.get(user=User.objects.filter(username='system')[0])
+            notification = Notifications(user_receiver=element, user_sender=system_user, message="Добро пожаловать на сайт курса 'Промышленное программирование'")
+            notification.save()
             return JsonResponse({'responseStatus': 'Successfully saved'})
         """
             Проверка статуса пользователя

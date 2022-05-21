@@ -113,7 +113,7 @@ var app = new Vue({
             )
           },
         gitlabAuthFormIsValid() {
-            return(this.personalAccessToken)
+            return(this.personalAccessTokenInput)
         },
 
         loginFormIsValid () {
