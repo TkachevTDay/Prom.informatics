@@ -78,7 +78,9 @@ services:
 
   nginx:
     container_name: prominformatics_nginx
-    build: ./nginx
+    build:
+      context: ./
+      dockerfile: ./nginx/Dockerfile
     ports:
       - 1337:80
     depends_on:
