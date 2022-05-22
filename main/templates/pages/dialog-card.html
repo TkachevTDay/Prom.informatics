@@ -30,7 +30,7 @@
                         {% csrf_token %}
                         <v-btn @click='changedStatus = "approved"; changeProjectStatus(); moderateProjects=[]; updateAdminList();' @click.stop="showDialog">Подтвердить</v-btn>
                         <v-btn @click='changedDockerStatus= "approved"; changedStatus="approved"; changeProjectStatus(); moderateProjects=[]; updateAdminList();' @click.stop="showDialog">Подтвердить с докером</v-btn>
-                        <v-btn @click='changedStatus = "declined"; changeProjectStatus(); moderateProjects=[]; updateAdminList();' @click.stop="showDialog">Отклонить</v-btn>
+                        <v-btn @click='dialogDeclineAnswer = true'>Отклонить</v-btn>
                     </form>
                 </v-row>
                 <v-col class="d-flex justify-end" v-if="isCardModeratable==false">

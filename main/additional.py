@@ -3,6 +3,8 @@ import redis
 import os
 import subprocess
 import json
+from .models import Notifications, Student
+from django.core.mail import send_mail
 """
     Additional calc function's
 """
@@ -100,3 +102,15 @@ def element_build(element):
     client = docker.from_env()
     client.images.build(path= f'/prominf/mediafiles/{element.path_link.split("/")[-1][0:-4]}', tag=image_name)
     return image_name
+
+def make_notification(user_sender_id, user_receiver_id, message, email=None):
+    item = Notifications(user_sender = Student.objects.get(user_id=user_sender_id), user_receiver=Student.objects.get(user_id=user_receiver_id), message=message)
+    if email:
+        send_mail(
+            'Сайт проектов курса "Промышленное программирование"',
+            message,
+            'prominfnotification@yandex.ru',
+            [email],
+            fail_silently=False,
+        )
+    item.save()

@@ -25,6 +25,8 @@ var app = new Vue({
             personalAccessToken: '',
             personalAccessTokenInput: '',
             userId: 0,
+            declineAnswer: '',
+            isGitlabConnected: 0,
             authorizeLogin: '',
             authorizePass: '',
             dialog: false,
@@ -32,7 +34,9 @@ var app = new Vue({
             dialogReg: false,
             dialogAdm: false,
             dialogLog: false,
+            dialogDeclineAnswer: false,
             dialogContRunNotify: false,
+            dialogNotifications: false,
             addMenu: false,
             dialogGitlabAuth: false,
             userProjects: [],
@@ -75,6 +79,7 @@ var app = new Vue({
             currentAddImgs: [],
             currentProjectAvatar: '',
             moderateProjects: [],
+            profileNotifications: '',
             changedStatus: '',
             changedDockerStatus: 'declined',
             userInf: '',
@@ -262,6 +267,7 @@ var app = new Vue({
              {'requestType': 'userUnAuth'}));
              console.log(unauthResponse.responseStatus)
              this.isAuthorized = false
+             this.personalAccessToken = ''
         },
 
         showDialog: function(){
@@ -408,11 +414,13 @@ var app = new Vue({
                 'elementId': this.currentId,
                 'elementNewStatus': this.changedStatus,
                 'elementNewDockerStatus': this.changedDockerStatus,
+                'elementAnswer': this.declineAnswer,
             });
             this.changedDockerStatus = 'declined'
             await this.updateAdminList();
             await this.update();
             await this.getRecentProjects();
+            await this.notificationsCheck();
         },
         notificationsCheck: async function(){
             let a = await this.makeRequest(`${this.baseUrl}`,

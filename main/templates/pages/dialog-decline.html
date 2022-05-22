@@ -1,0 +1,17 @@
+<v-dialog v-model="dialogDeclineAnswer" :retain-focus="false" width="500px">
+    <div class="d-flex justify-center">
+            <v-card width="500px" class="rounded-0">
+                <v-container>
+                    <v-row justify="center">
+                        <v-col cols="8" style="padding-bottom: 0px; padding-top: 25px">
+                            <v-textarea
+                                v-model="declineAnswer"
+                                 label="Комментарий к отказу"
+                            ></v-textarea>
+                            <v-btn @click='changedStatus = "declined"; changeProjectStatus(); moderateProjects=[]; updateAdminList(); dialogDeclineAnswer=false; dialog=falase' >Отклонить</v-btn>
+                 </v-container>
+            </v-card>
+
+    </div>
+
+</v-dialog>

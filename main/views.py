@@ -6,7 +6,7 @@ from .models import Project, Student, Notifications
 from django.core.mail import send_mail
 from .serializers import ProjectSerializer
 from .additional import container_run, pop_avialable_port, check_existing_containers, create_socket_files, \
-    uvicorn_start, project_clone, lead_to_useful_view, add_container_connection, element_build, get_port_by_name
+    uvicorn_start, project_clone, lead_to_useful_view, add_container_connection, element_build, get_port_by_name, make_notification
 import redis
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -124,16 +124,30 @@ def index_page(request):
             element.status = json.loads(body)["elementNewStatus"]
             element.docker_status = json.loads(body)["elementNewDockerStatus"]
             element.save(update_fields=['status', 'docker_status'])
-            if element.tech_stack == 'Django-project':
-                project_clone(element, json.loads(body)["personalAccessToken"])
-                if element.docker_status == 'approved':
-                    element.docker_image_name = element_build(element)
-                    element.save(update_fields=['docker_image_name'])
-                    return JsonResponse({'responseStatus': 'Successful build'})
+            if element.status == 'approved':
+                if element.tech_stack == 'Django-project':
+                    project_clone(element, json.loads(body)["personalAccessToken"])
+                    if element.docker_status == 'approved':
+                        element.docker_image_name = element_build(element)
+                        element.save(update_fields=['docker_image_name'])
+                        make_notification(user_sender_id=Student.objects.get(user=User.objects.get(username='system')).id,
+                                          user_receiver_id=element.student_uploader_id,
+                                          message=f'Ваш проект с именем {element.name} успешно прошёл модерацию и '
+                                                  f'доступен для запуска через докер.'),
+                        email = Student.objects.get(id=element.student_uploader_id).user.email
+                        return JsonResponse({'responseStatus': 'Successful build'})
+                    else:
+                        make_notification(
+                            user_sender_id=Student.objects.get(user=User.objects.get(username='system')).id,
+                            user_receiver_id=element.student_uploader_id,
+                            message=f'Ваш проект с именем {element.name} успешно прошёл модерацию.', email=Student.objects.get(id=element.student_uploader_id).user.email)
+                        return JsonResponse({'responseStatus': 'Not avialiable (not Django project)'})
             else:
-                return JsonResponse({'responseStatus': 'Not avialiable (not Django project)'})
+                make_notification(
+                    user_sender_id=Student.objects.get(user=User.objects.get(username='system')).id,
+                    user_receiver_id=element.student_uploader_id,
+                    message=f'Ваш проект с именем {element.name} не прошёл модерацию. Комментарий администратора: {json.loads(body)["elementAnswer"]}', email=Student.objects.get(id=element.student_uploader_id).user.email)
 
-            return JsonResponse({'responseStatus':'success'})
         """
             Аутентификация пользователя
         """
@@ -165,10 +179,9 @@ def index_page(request):
             if json.loads(body)["secondname"]:
                 reg_user.firstname = json.loads(body)["secondname"]
             reg_user.save()
-            element = Student.objects.get(user_id=reg_user.id)
-            system_user = Student.objects.get(user=User.objects.filter(username='system')[0])
-            notification = Notifications(user_receiver=element, user_sender=system_user, message="Добро пожаловать на сайт курса 'Промышленное программирование'")
-            notification.save()
+            make_notification(user_receiver_id=reg_user.id,
+                              user_sender_id=Student.objects.get(user=User.objects.get(username='system')).id,
+                              message ="Добро пожаловать на сайт курса 'Промышленное программирование'!")
             return JsonResponse({'responseStatus': 'Successfully saved'})
         """
             Проверка статуса пользователя

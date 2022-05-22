@@ -3,19 +3,21 @@
         <v-card
                 @click.stop="showDialog"
                 @click="updateCurrentData(); isCardModeratable = false"
-                class="mx-auto"
+                class="mx-auto rounded-xl"
+                color="white"
                 max-width="1200"
                 max-height="700"
+                outlined
         >
             <v-img
                     :src=item.icon
                     height="550px"
             ></v-img>
-
-            <v-card-title>
+        <v-row justify="center">
+            <v-card-title color="deep-purple accent-4">
                 [[ item.name ]]
             </v-card-title>
-
+        </v-row>
         </v-card>
 
     </template>

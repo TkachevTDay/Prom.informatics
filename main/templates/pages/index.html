@@ -22,7 +22,8 @@
                 {% include 'dialog-gitlab-auth.html' %}
                 {% include 'dialog-gitlab-auth-instruction.html' %}
                 {% include 'dialog-cont-run-notification.html' %}
-                <v-parallax dark src="https://informatics.ru/img/intro/intro-inter-progressive.jpg" height="900">
+                {% include 'dialog-decline.html' %}
+                <v-parallax dark src="/static/img/fon.png" height="900">
                     <div class="d-flex justify-end">
                         <v-menu v-model="profileMenu">
                             <template v-slot:activator="{ on, attrs }">
@@ -133,18 +134,20 @@
                         </v-btn>
 
                     </div>
-                    <v-row align="start" justify="start">
-                        <v-card class="d-flex pa-1" outlined color="transparent">
+                    <v-row align="center" justify="start" style="margin-bottom: 100px; margin-left: 0px">
+                        <v-card class="d-flex pa-1 rounded-xl" outlined color="transparent" >
                             <v-card-title primary-title class="justify-center">
                                 <div align=center style="
                                     background: linear-gradient(to right, #fdb008, #fb4e93);
                                     -webkit-background-clip: text;
                                     -webkit-text-fill-color: transparent;
+                                    -webkit-text-stroke-width: 1px;
+                                    -webkit-text-stroke-color: white;
                                     ">
-                                    <h2 class="text-h2 font-800-normal mb-5" style="font-size:10px; text-align: left;">
+                                    <h2 class="text-h2 font-weight-bold mb-5" style="font-size:20px; text-align: left;">
                                         Сайт проектов курса
                                     </h2>
-                                    <h2 class="text-h2 font-800-normal mb-1" style="font-size:10px; text-align: left;">
+                                    <h2 class="text-h2 font-weight-bold mb-1" style="font-size:20px; text-align: left;">
                                         "Промышленное программирование"
                                     </h2>
                                 </div>
