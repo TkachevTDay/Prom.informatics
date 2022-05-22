@@ -25,51 +25,55 @@
                 {% include 'dialog-decline.html' %}
                 <v-parallax dark src="/static/img/fon.png" height="900">
                     <div class="d-flex justify-end">
-                            <v-btn plain color="white" @click="emergency()">
-                                    Экстренная кнопка (убить все контейнеры)
-                            </v-btn>
+                        <v-btn plain color="white" @click="emergency()">
+                            Экстренная кнопка (убить все контейнеры)
+                        </v-btn>
                         <v-menu v-model="profileMenu">
 
                             <template v-slot:activator="{ on, attrs }">
                                 <v-badge v-show="isAuthorized"
-                                    :content=notificationsAmount
-                                    :value=notificationsAmount
-                                    color="red"
-                                    size="5"
-                                    bottom
-                                    overlap
+                                         :content=notificationsAmount
+                                         :value=notificationsAmount
+                                         color="red"
+                                         size="5"
+                                         bottom
+                                         overlap
 
-                                  >
+                                >
                                     <v-btn v-show="isAuthorized" plain color="white" v-bind="attrs" v-on="on">
                                         Профиль
                                     </v-btn>
-                                 </v-badge>
+                                </v-badge>
                             </template>
                             <v-card width="300px" height="150px">
                                 <v-container>
                                     <v-row cols="2" justify="center" width="300px">
-                                        <h2 v-if="isAuthorized" class="font-weight-light text-center">[[currentUser.fields.username]]</h2>
+                                        <h2 v-if="isAuthorized" class="font-weight-light text-center">
+                                            [[currentUser.fields.username]]</h2>
                                     </v-row>
                                     <v-row cols="2" justify="center" width="300px">
-                                        <h3 v-if="isAuthorized" class="font-weight-thin text-center">[[currentUser.fields.email]]</h3>
+                                        <h3 v-if="isAuthorized" class="font-weight-thin text-center">
+                                            [[currentUser.fields.email]]</h3>
                                     </v-row>
                                     <v-row cols="2" justify="center">
                                         <v-menu v-model="profileNotifications">
                                             <template v-slot:activator="{ on, attrs }">
                                                 <v-badge v-show="isAuthorized"
-                                                    :content=notificationsAmount
-                                                    :value=notificationsAmount
-                                                    color="red"
-                                                    size="5"
-                                                    bottom
-                                                     left
-                                                    overlap
-                                                    dot
-                                                     style="margin-bottom: 10px; margin-left: 10px;"
-                                                  >
-                                                <v-btn class="black--text" style=""  plain @click="dialogNotifications=true; makeRead();" v-bind="attrs" v-on="on">
-                                                    Уведомления
-                                                </v-btn>
+                                                         :content=notificationsAmount
+                                                         :value=notificationsAmount
+                                                         color="red"
+                                                         size="5"
+                                                         bottom
+                                                         left
+                                                         overlap
+                                                         dot
+                                                         style="margin-bottom: 10px; margin-left: 10px;"
+                                                >
+                                                    <v-btn class="black--text" style="" plain
+                                                           @click="dialogNotifications=true; makeRead();" v-bind="attrs"
+                                                           v-on="on">
+                                                        Уведомления
+                                                    </v-btn>
                                                 </v-badge>
                                             </template>
                                             <v-list>
@@ -78,7 +82,8 @@
                                                 >
                                                     <v-row align="center" justify="center">
                                                         <div style='display: inline-block'>
-                                                            <h4 class="font-weight-thin mr-2">[[ item.fields.send_time ]]</h4>
+                                                            <h4 class="font-weight-thin mr-2">[[ item.fields.send_time
+                                                                ]]</h4>
                                                         </div>
                                                         <div style='display: inline-block'>
                                                             <h4 class="font-weight-thin">[[ item.fields.message ]]</h4>
@@ -89,17 +94,20 @@
                                         </v-menu>
                                     </v-row>
                                     <v-row cols="2" justify="center">
-                                            <v-btn class="black--text" style="" plain  @click="dialogGitlabAuth=true" width="300px" v-show="!isGitlabConnected">
-                                                Привязать аккаунт к gitlab
-                                            </v-btn>
-                                            <h5 v-show="isGitlabConnected" class="font-weight-thin" width="300px">Ваша учётная запись связана с гитлабом</h5>
+                                        <v-btn class="black--text" style="" plain @click="dialogGitlabAuth=true"
+                                               width="300px" v-show="!isGitlabConnected">
+                                            Привязать аккаунт к gitlab
+                                        </v-btn>
+                                        <h5 v-show="isGitlabConnected" class="font-weight-thin" width="300px">Ваша
+                                            учётная запись связана с гитлабом</h5>
                                     </v-row>
                                 </v-container>
                             </v-card>
                         </v-menu>
                         <v-menu v-model="addMenu" transition="scale-transition">
                             <template v-slot:activator="{ on, attrs }">
-                                <v-btn plain color="white" v-show="isAuthorized" v-bind="attrs" v-on="on" @click="projectsLoad()">
+                                <v-btn plain color="white" v-show="isAuthorized" v-bind="attrs" v-on="on"
+                                       @click="projectsLoad()">
                                     Загрузить проект
                                 </v-btn>
                             </template>
@@ -133,13 +141,14 @@
                                 Выйти
                             </v-btn>
                         </form>
-                        <v-btn v-if="isAdministrator==true"plain color="white" @click="dialogAdm=true; updateAdminList()">
+                        <v-btn v-if="isAdministrator==true" plain color="white"
+                               @click="dialogAdm=true; updateAdminList()">
                             Открыть панель администратора
                         </v-btn>
 
                     </div>
                     <v-row align="center" justify="start" style="margin-bottom: 100px; margin-left: 0px">
-                        <v-card class="d-flex pa-1 rounded-xl" outlined color="transparent" >
+                        <v-card class="d-flex pa-1 rounded-xl" outlined color="transparent">
                             <v-card-title primary-title class="justify-center">
                                 <div align=center style="
                                     background: linear-gradient(to right, #fdb008, #fb4e93);
@@ -164,7 +173,7 @@
                     <v-row align="start" justify="start">
                         <v-col class="text-center" cols="12">
                             <h1 class="text-h2 font-600-normal mb-4 white--text" style="margin-top: 25px">
-                                Последние проекты:
+                                Последние проекты
                             </h1>
                         </v-col>
                     </v-row>
@@ -270,58 +279,111 @@
             </div>
             <br>
             <br>
-                <v-card class="mx-auto" max-width="70%">
-                    <v-card class="mx-auto rounded-0" v-for="(item, i) in items" :key="i" @click.stop="showDialog" @click="updateCurrentData(item); isCardModeratable=false">
-                        <v-container fill-height fluid>
-                            <v-row>
-                                <v-col cols="5">
-                                    <v-container fill-height fluid>
-                                        <v-row>
-                                            <v-col cols="4">
-                                                <v-img  :src="item.icon"></v-img>
-                                            </v-col>
-                                            <v-col cols="8">
-                                                <h1 class="text-h3 font-weight-thin">[[item.name]]</h1>
-                                                <h3 class="text-h5 font-weight-thin">todo: tags should be here</h3>
-                                            </v-col>
-                                        </v-row>
-                                    </v-container>
-                                </v-col>
-                                    <v-col cols="2">
-                                        <v-container fill-height fluid>
-                                            <v-card style="width:fit-content; height: fit-content;" :color=markColors[item.mark]>
-                                                    <v-card-title justify="center" align="center" class="text-h4 font-weight white--text">[[item.mark]]</v-card-title>
-                                            </v-card>
-                                        </v-container>
-                                    </v-col>
-                                <v-col>
-                                </v-col>
-                            </v-row>
-                        </v-container>
-                    </v-card>
-                     <v-btn elevation="2" @click="update">Показать ещё</v-btn>
+            <br>
+            <v-card class="mx-auto" max-width="70%">
+                <v-card class="mx-auto" v-for="(item, i) in items" :key="i" @click.stop="showDialog"
+                        @click="updateCurrentData(item); isCardModeratable=false" >
+                    <v-container fill-height fluid>
+                        <v-row align="center"
+                               justify="center">
+                            <v-col cols="2">
+                                <v-container fluid>
+                                    <v-img :src="item.icon"></v-img>
+                                </v-container>
+                            </v-col>
+                            <v-col cols="2">
+                                <v-container fluid>
+                                    <h1 class="text-h3 font-weight-thin">[[item.name]]</h1>
+                                </v-container>
+                            </v-col>
+                            <v-col cols="1">
+                                <v-container justify="center" align="center">
+                                    <!--                                    <v-card style="width: 40%; padding-left: 0px; padding-right: 0px;"-->
+                                    <!--                                            :color=markColors[item.mark]>-->
+                                    <h3 class="text-h3 font-weight-bold text-center" style="
+                                    background: linear-gradient(to right, #fdb008, #fb4e93);
+                                    -webkit-background-clip: text;
+                                    -webkit-text-fill-color: transparent;
+                                    -webkit-text-stroke-width: 1px;
+                                    -webkit-text-stroke-color: white;
+                                    ">
+                                        [[item.mark]]
+                                    </h3>
+                                    <!--                                    </v-card>-->
+                                </v-container>
+                            </v-col>
+                            <v-col cols="2">
+                                <v-container justify="center" align="center">
+                                    <!--                style="margin-left: -45%;"                   -->
+                                    <h5 class="text-h5 font-weight-bold text-center" style="
+                                    background: linear-gradient(to right, #fdb008, #fb4e93);
+                                    -webkit-background-clip: text;
+                                    -webkit-text-fill-color: transparent;
+                                    -webkit-text-stroke-width: 1px;
+                                    -webkit-text-stroke-color: white;
+                                    ">
+                                        [[item.department]]
+                                    </h5>
+                                </v-container>
+                            </v-col>
+                            <v-col cols="2">
+                                <v-container justify="center" align="center">
+                                    <!--                  style="margin-left: -85%;"                   -->
+                                    <h4 class="text-h4 font-weight-bold text-center" style="
+                                    background: linear-gradient(to right, #fdb008, #fb4e93);
+                                    -webkit-background-clip: text;
+                                    -webkit-text-fill-color: transparent;
+                                    -webkit-text-stroke-width: 1px;
+                                    -webkit-text-stroke-color: white;
+                                    ">
+                                        [[item.author]]
+                                    </h4>
+                                </v-container>
+                            </v-col>
+                            <v-col cols="3">
+                                <v-container justify="center" align="center">
+                                    <h4 class="text-h4 font-weight-bold text-center" style="
+                                    background: linear-gradient(to right, #fdb008, #fb4e93);
+                                    -webkit-background-clip: text;
+                                    -webkit-text-fill-color: transparent;
+                                    -webkit-text-stroke-width: 1px;
+                                    -webkit-text-stroke-color: white;
+                                    ">
+                                        [[item.year]]
+                                    </h4>
+                                </v-container>
+                            </v-col>
+                        </v-row>
+                    </v-container>
                 </v-card>
+                <v-btn elevation="2" @click="update" style="width: 100%">Показать ещё</v-btn>
+            </v-card>
 
             <br>
             <br>
             <br>
             <template>
-  <v-footer
-    dark
-    padless
-  >
-    <v-card
-      flat
-      tile
-      class="grey lighten-5 white--text text-center"
-    >
-      <v-card-text class="light-gray--text pt-0 deep-purple darken-4">
-        Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo interdum. Praesent ut risus eget metus luctus accumsan id ultrices nunc. Sed at orci sed massa consectetur dignissim a sit amet dui. Duis commodo vitae velit et faucibus. Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel diam elementum tempor vel ut orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-      </v-card-text>
+                <v-footer
+                        dark
+                        padless
+                >
+                    <v-card
+                            flat
+                            tile
+                            class="grey lighten-5 white--text text-center"
+                    >
+                        <v-card-text class="light-gray--text pt-0 deep-purple darken-4">
+                            Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo
+                            interdum. Praesent ut risus eget metus luctus accumsan id ultrices nunc. Sed at orci sed
+                            massa consectetur dignissim a sit amet dui. Duis commodo vitae velit et faucibus. Morbi
+                            vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui
+                            sollicitudin. Vestibulum eu ipsum vel diam elementum tempor vel ut orci. Orci varius natoque
+                            penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                        </v-card-text>
 
-    </v-card>
-  </v-footer>
-</template>
+                    </v-card>
+                </v-footer>
+            </template>
         </v-main>
 
     </v-app>
@@ -329,8 +391,12 @@
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js" integrity="sha512-szJ5FSo9hEmXXe7b5AUVtn/WnL8a5VofnFeYC2i2z03uS2LhAch7ewNLbl5flsEmTTimMN0enBZg/3sQ+YOSzQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"
+        integrity="sha512-szJ5FSo9hEmXXe7b5AUVtn/WnL8a5VofnFeYC2i2z03uS2LhAch7ewNLbl5flsEmTTimMN0enBZg/3sQ+YOSzQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="/static/js/main.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js" integrity="sha512-wT7uPE7tOP6w4o28u1DN775jYjHQApdBnib5Pho4RB0Pgd9y7eSkAV1BTqQydupYDB9GBhTcQQzyNMPMV3cAew==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"
+        integrity="sha512-wT7uPE7tOP6w4o28u1DN775jYjHQApdBnib5Pho4RB0Pgd9y7eSkAV1BTqQydupYDB9GBhTcQQzyNMPMV3cAew=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>
 </html>

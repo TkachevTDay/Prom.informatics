@@ -22,7 +22,9 @@
                 <v-row class="my-0 mr-0 ml-10" v-if="isCardModeratable==true">
                     <form method="post">
                         {% csrf_token %}
-                        <v-btn @click='sendProjectOnModerate()' :disabled="!formIsValid" @click.stop="showDialog">Отправить</v-btn>
+                        <v-btn @click='sendProjectOnModerate()' :disabled="!formIsValid" @click.stop="showDialog">
+                            Отправить
+                        </v-btn>
                     </form>
                 </v-row>
                 <v-row class="my-0 mr-0 ml-10" v-if="dialogAdm==true">
@@ -75,7 +77,9 @@
                                   v-model="currentAddImg"
                                   color="grey"
                     ></v-text-field>
-                    <v-btn  :disabled="!checkURL" v-if="isCardModeratable==true" @click="uploadImg" color="grey"> Загрузить картинку </v-btn>
+                    <v-btn :disabled="!checkURL" v-if="isCardModeratable==true" @click="uploadImg" color="grey">
+                        Загрузить картинку
+                    </v-btn>
                 </v-col>
                 <v-col class="d-flex justify-end align-right">
                     <v-carousel v-model="carousel" hide-delimiters height="400px" style="margin-bottom: -10px">
@@ -87,17 +91,17 @@
                                 width="650px"
                         >
 
-                                <v-row
-                                        class="fill-height"
-                                        align="center"
-                                        justify="center"
-                                >
-                                    <v-img
-                                            :src="n"
-                                            height="350px"
-                                            width="400px"
-                                            contain></v-img>
-                                </v-row>
+                            <v-row
+                                    class="fill-height"
+                                    align="center"
+                                    justify="center"
+                            >
+                                <v-img
+                                        :src="n"
+                                        height="350px"
+                                        width="400px"
+                                        contain></v-img>
+                            </v-row>
                         </v-carousel-item>
                     </v-carousel>
 
@@ -119,26 +123,28 @@
                 <v-col>
                     <h4 class="font-weight-light">Отделение:</h4>
                     <h5 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentDepartment]]</h5>
-                    <v-text-field v-if="isCardModeratable==true"
-                                  name="currentAddDepartment"
-                                  label="Отделение:"
-                                  v-model="currentAddDepartment"
-                                  color="grey"
-                                  :rules="rules.value"
-                                  required
-                    ></v-text-field>
+                    <v-select v-if="isCardModeratable==true"
+                              color="grey"
+                              name="currentAddDepartment"
+                              :items="departments"
+                              item-text="text"
+                              item-value="value"
+                              label="Отделение:"
+                              v-model="currentAddDepartment"
+                    ></v-select>
                 </v-col>
                 <v-col>
                     <h4 class="font-weight-light">Группа:</h4>
                     <h5 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentAuthor]]</h5>
-                    <v-text-field v-if="isCardModeratable==true"
-                                  name="currentAddAuthor"
-                                  label="Группа:"
-                                  v-model="currentAddAuthor"
-                                  color="grey"
-                                  :rules="rules.value"
-                                  required
-                    ></v-text-field>
+                    <v-select v-if="isCardModeratable==true"
+                              color="grey"
+                              name="currentAddAuthor"
+                              :items="groups"
+                              item-text="text"
+                              item-value="value"
+                              label="Группа:"
+                              v-model="currentAddAuthor"
+                    ></v-select>
                 </v-col>
                 <v-col>
                     <h4 class="font-weight-light">Оценка:</h4>

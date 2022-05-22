@@ -4,20 +4,6 @@ var app = new Vue({
     vuetify: new Vuetify(),
     data(){
         return {
-            markColors: {
-                '2-': '#E53935',
-                '2': '#E53935',
-                '2+': '#E53935',
-                '3-': '#FDD835',
-                '3': '#FFA726',
-                '3+': '#FDD835',
-                '4-': '#B9F6CA',
-                '4': '#69F0AE',
-                '4+': '#00E676',
-                '5-': '#00C853',
-                '5': '#9575CD',
-                '5+': '#7E57C2',
-            },
             notificationsAmount: 0,
             notificationsList: [],
             isAdministrator: true,
@@ -63,6 +49,8 @@ var app = new Vue({
             currentAddMark: '',
             currentAddYear: '',
             currentAddPathLink: '',
+            groups: ['s101', 's102', 's103', 's104', 's105', 's106'],
+            departments: ['Физтехпарк', 'Профсоюзная', 'Проспект Мира', 'ВШЭ', 'Яндекс', 'Мытищи', 'Королёв', 'Пушкино', 'Щёлково', 'Онлайн', 'Виртуальный класс'],
             items: [],
             markItems: [],
             departmentItems: [],
@@ -116,7 +104,7 @@ var app = new Vue({
               this.currentAddAuthor &&
               this.currentAddDepartment &&
               this.currentAddDescription &&
-              this.currentAddMark && this.currentAddName && this.currentAddName && this.currentAddTechStack && this.currentAddYear
+              this.currentAddMark && this.currentAddName && this.currentAddTechStack && this.currentAddYear
             )
           },
         gitlabAuthFormIsValid() {
@@ -379,7 +367,6 @@ var app = new Vue({
                 'currentAddName': this.currentAddName.trim(),
                 'currentAddDescription': this.currentAddDescription.trim(),
                 'currentAddAuthor': this.currentAddAuthor.trim(),
-                'currentAddTech': this.currentAddTech.trim(),
                 'currentAddDepartment': this.currentAddDepartment.trim(),
                 'currentAddMark': this.currentAddMark.trim(),
                 'currentAddYear': this.currentAddYear.trim(),
