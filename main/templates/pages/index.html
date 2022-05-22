@@ -43,10 +43,10 @@
                             <v-card width="300px" height="150px">
                                 <v-container>
                                     <v-row cols="2" justify="center" width="300px">
-                                        <h2 class="font-weight-light text-center">[[currentUser.fields.username]]</h2>
+                                        <h2 v-if="isAuthorized" class="font-weight-light text-center">[[currentUser.fields.username]]</h2>
                                     </v-row>
                                     <v-row cols="2" justify="center" width="300px">
-                                        <h3 class="font-weight-thin text-center">[[currentUser.fields.email]]</h3>
+                                        <h3 v-if="isAuthorized" class="font-weight-thin text-center">[[currentUser.fields.email]]</h3>
                                     </v-row>
                                     <v-row cols="2" justify="center">
                                         <v-menu v-model="profileNotifications">
