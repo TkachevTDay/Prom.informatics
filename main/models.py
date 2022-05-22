@@ -27,6 +27,9 @@ class Project(models.Model):
     status = models.TextField(max_length=255, default='on moderate')
     docker_status = models.TextField(max_length=255, default='declined')
     docker_image_name = models.TextField(max_length=255, default='')
+#DROP DATABASE prominformatics_db WITH (FORCE);
+#psql -U s104_prominformatics_user postgres
+#sudo docker exec -it db bash
     tech_stack = models.TextField(max_length=700, default='')
     student_uploader = models.ForeignKey(Student, on_delete=models.CASCADE, default='')
 

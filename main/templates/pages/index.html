@@ -13,7 +13,7 @@
 <body>
 <div id="app">
     <v-app>
-        <v-main>
+        <v-main class="deep-purple darken-2">
             <template>
                 {% include 'dialog-card.html' %}
                 {% include 'dialog-adm.html' %}
@@ -92,7 +92,7 @@
                                 </v-container>
                             </v-card>
                         </v-menu>
-                        <v-menu v-model="addMenu">
+                        <v-menu v-model="addMenu" transition="scale-transition">
                             <template v-slot:activator="{ on, attrs }">
                                 <v-btn plain color="white" v-show="isAuthorized" v-bind="attrs" v-on="on" @click="projectsLoad()">
                                     Загрузить проект
@@ -133,22 +133,30 @@
                         </v-btn>
 
                     </div>
-                    <v-row align="center" justify="center">
-                        <v-card class="d-flex pa-1" color="rgba(255, 255, 255, 0.8)">
+                    <v-row align="start" justify="start">
+                        <v-card class="d-flex pa-1" outlined color="transparent">
                             <v-card-title primary-title class="justify-center">
-
-                                <h3 align=center class="text-h3 font-weight-thin mb-1" style="font-size:10px">
-                                    Сайт проектов курса "Промышленное программирование"
-                                </h3>
+                                <div align=center style="
+                                    background: linear-gradient(to right, #fdb008, #fb4e93);
+                                    -webkit-background-clip: text;
+                                    -webkit-text-fill-color: transparent;
+                                    ">
+                                    <h2 class="text-h2 font-800-normal mb-5" style="font-size:10px; text-align: left;">
+                                        Сайт проектов курса
+                                    </h2>
+                                    <h2 class="text-h2 font-800-normal mb-1" style="font-size:10px; text-align: left;">
+                                        "Промышленное программирование"
+                                    </h2>
+                                </div>
 
                             </v-card-title>
                         </v-card>
                     </v-row>
                 </v-parallax>
                 <v-container>
-                    <v-row align="center" justify="center">
+                    <v-row align="start" justify="start">
                         <v-col class="text-center" cols="12">
-                            <h1 class="text-h3 font-weight-thin mb-4" style="margin-top: 25px">
+                            <h1 class="text-h2 font-600-normal mb-4 white--text" style="margin-top: 25px">
                                 Последние проекты:
                             </h1>
                         </v-col>
@@ -183,7 +191,7 @@
                 <v-carousel-item
                         v-for="(item, i) in recentProjects"
                         :key=i
-
+                        :elevation="22"
                 >
                     {% include 'card.html' %}
                 </v-carousel-item>
@@ -255,7 +263,6 @@
             </div>
             <br>
             <br>
-            <br>
                 <v-card class="mx-auto" max-width="70%">
                     <v-card class="mx-auto rounded-0" v-for="(item, i) in items" :key="i" @click.stop="showDialog" @click="updateCurrentData(item); isCardModeratable=false">
                         <v-container fill-height fluid>
@@ -301,7 +308,7 @@
       tile
       class="grey lighten-5 white--text text-center"
     >
-      <v-card-text class="black--text pt-0">
+      <v-card-text class="light-gray--text pt-0 deep-purple darken-4">
         Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo interdum. Praesent ut risus eget metus luctus accumsan id ultrices nunc. Sed at orci sed massa consectetur dignissim a sit amet dui. Duis commodo vitae velit et faucibus. Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel diam elementum tempor vel ut orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
       </v-card-text>
 
