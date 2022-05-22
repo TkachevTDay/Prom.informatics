@@ -5,6 +5,7 @@ import subprocess
 import json
 from .models import Notifications, Student
 from django.core.mail import send_mail
+
 """
     Additional calc function's
 """
@@ -114,3 +115,4 @@ def make_notification(user_sender_id, user_receiver_id, message, email=None):
             fail_silently=False,
         )
     item.save()
+
