@@ -25,7 +25,11 @@
                 {% include 'dialog-decline.html' %}
                 <v-parallax dark src="/static/img/fon.png" height="900">
                     <div class="d-flex justify-end">
+                            <v-btn plain color="white" @click="emergency()">
+                                    Экстренная кнопка (убить все контейнеры)
+                            </v-btn>
                         <v-menu v-model="profileMenu">
+
                             <template v-slot:activator="{ on, attrs }">
                                 <v-badge v-show="isAuthorized"
                                     :content=notificationsAmount

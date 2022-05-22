@@ -437,7 +437,13 @@ var app = new Vue({
                 'notifications': this.notificationsList,
             });
             this.notificationsCheck();
-        }
+        },
+        emergency: async function(){
+            let a = await this.makeRequest(`${this.baseUrl}`,
+            "POST", {}, {'X-CSRFToken': Cookies.get('csrftoken')}, {
+                'requestType': 'emergency',
+            });
+        },
     },
   mounted(){
     this.update();

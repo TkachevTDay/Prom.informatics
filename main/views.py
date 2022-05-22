@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import json
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -8,6 +9,8 @@ from .serializers import ProjectSerializer
 from .additional import container_run, pop_avialable_port, check_existing_containers, create_socket_files, \
     uvicorn_start, project_clone, lead_to_useful_view, add_container_connection, element_build, get_port_by_name, make_notification
 import redis
+from prominformatics.celery import kill_switch
+
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.core import serializers
@@ -239,6 +242,12 @@ def index_page(request):
                 element.read = "read"
                 element.save(update_fields=['read'])
             return JsonResponse({'responseStatus': 'success'})
+        """
+            Экстренное убийство запущенных контейнеров
+        """
+        if json.loads(body)["requestType"] == "emergency":
+            kill_switch(emergency=True)
+            # Использовать в экстренных случаях
     return render(request, 'index.html', {})
 
 
