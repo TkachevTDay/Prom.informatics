@@ -69,7 +69,7 @@
                                                          dot
                                                          style="margin-bottom: 10px; margin-left: 10px;"
                                                 >
-                                                    <v-btn class="black--text" style="" plain
+                                                    <v-btn class="black--text" plain
                                                            @click="dialogNotifications=true; makeRead();" v-bind="attrs"
                                                            v-on="on">
                                                         Уведомления
@@ -94,7 +94,7 @@
                                         </v-menu>
                                     </v-row>
                                     <v-row cols="2" justify="center">
-                                        <v-btn class="black--text" style="" plain @click="dialogGitlabAuth=true"
+                                        <v-btn class="black--text" plain @click="dialogGitlabAuth=true"
                                                width="300px" v-show="!isGitlabConnected">
                                             Привязать аккаунт к gitlab
                                         </v-btn>
@@ -281,8 +281,8 @@
             <br>
             <br>
             <v-card class="mx-auto" max-width="70%">
-                <v-card class="mx-auto" v-for="(item, i) in items" :key="i" @click.stop="showDialog"
-                        @click="updateCurrentData(item); isCardModeratable=false" >
+                <v-card class="mx-auto rounded-0" v-for="(item, i) in items" :key="i" @click.stop="showDialog"
+                        @click="updateCurrentData(item); isCardModeratable=false" color="blue-grey lighten-5">
                     <v-container fill-height fluid>
                         <v-row align="center"
                                justify="center">
@@ -293,34 +293,30 @@
                             </v-col>
                             <v-col cols="2">
                                 <v-container fluid>
-                                    <h1 class="text-h3 font-weight-thin">[[item.name]]</h1>
+                                    <h1 class="text-h3 font-weight-light" style="
+                                    background: linear-gradient(to bottom,  #512DA8, #6883bc);
+                                    -webkit-background-clip: text;
+                                    -webkit-text-fill-color: transparent;
+                                    ">[[item.name]]</h1>
                                 </v-container>
                             </v-col>
                             <v-col cols="1">
                                 <v-container justify="center" align="center">
-                                    <!--                                    <v-card style="width: 40%; padding-left: 0px; padding-right: 0px;"-->
-                                    <!--                                            :color=markColors[item.mark]>-->
                                     <h3 class="text-h3 font-weight-bold text-center" style="
-                                    background: linear-gradient(to right, #fdb008, #fb4e93);
+                                    background: linear-gradient(to bottom,  #512DA8, #6883bc);
                                     -webkit-background-clip: text;
                                     -webkit-text-fill-color: transparent;
-                                    -webkit-text-stroke-width: 1px;
-                                    -webkit-text-stroke-color: white;
                                     ">
                                         [[item.mark]]
                                     </h3>
-                                    <!--                                    </v-card>-->
                                 </v-container>
                             </v-col>
                             <v-col cols="2">
                                 <v-container justify="center" align="center">
-                                    <!--                style="margin-left: -45%;"                   -->
                                     <h5 class="text-h5 font-weight-bold text-center" style="
-                                    background: linear-gradient(to right, #fdb008, #fb4e93);
+                                    background: linear-gradient(to bottom,  #512DA8, #6883bc);
                                     -webkit-background-clip: text;
                                     -webkit-text-fill-color: transparent;
-                                    -webkit-text-stroke-width: 1px;
-                                    -webkit-text-stroke-color: white;
                                     ">
                                         [[item.department]]
                                     </h5>
@@ -328,13 +324,10 @@
                             </v-col>
                             <v-col cols="2">
                                 <v-container justify="center" align="center">
-                                    <!--                  style="margin-left: -85%;"                   -->
                                     <h4 class="text-h4 font-weight-bold text-center" style="
-                                    background: linear-gradient(to right, #fdb008, #fb4e93);
+                                    background: linear-gradient(to bottom,  #512DA8, #6883bc);
                                     -webkit-background-clip: text;
                                     -webkit-text-fill-color: transparent;
-                                    -webkit-text-stroke-width: 1px;
-                                    -webkit-text-stroke-color: white;
                                     ">
                                         [[item.author]]
                                     </h4>
@@ -343,11 +336,9 @@
                             <v-col cols="3">
                                 <v-container justify="center" align="center">
                                     <h4 class="text-h4 font-weight-bold text-center" style="
-                                    background: linear-gradient(to right, #fdb008, #fb4e93);
+                                    background: linear-gradient(to bottom,  #512DA8, #6883bc);
                                     -webkit-background-clip: text;
                                     -webkit-text-fill-color: transparent;
-                                    -webkit-text-stroke-width: 1px;
-                                    -webkit-text-stroke-color: white;
                                     ">
                                         [[item.year]]
                                     </h4>
@@ -356,7 +347,7 @@
                         </v-row>
                     </v-container>
                 </v-card>
-                <v-btn elevation="2" @click="update" style="width: 100%">Показать ещё</v-btn>
+                <v-btn elevation="2" @click="update" style="width: 100%" color="deep-purple lighten-4">Показать ещё</v-btn>
             </v-card>
 
             <br>
@@ -372,7 +363,7 @@
                             tile
                             class="grey lighten-5 white--text text-center"
                     >
-                        <v-card-text class="light-gray--text pt-0 deep-purple darken-4">
+                        <v-card-text class="light-gray--text pt-0 deep-purple darken-2">
                             Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo
                             interdum. Praesent ut risus eget metus luctus accumsan id ultrices nunc. Sed at orci sed
                             massa consectetur dignissim a sit amet dui. Duis commodo vitae velit et faucibus. Morbi

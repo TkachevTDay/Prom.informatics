@@ -109,8 +109,8 @@
             </v-row>
             <v-row class="mx-2 my-1 text-center">
                 <v-col>
-                    <h4 class="font-weight-light">Год:</h4>
-                    <h5 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentYear]]</h5>
+                    <h4 class="font-weight-light">Год</h4>
+                    <h4 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentYear]]</h4>
                     <v-text-field v-if="isCardModeratable==true"
                                   name="currentAddYear"
                                   label="Год:"
@@ -121,8 +121,8 @@
                     ></v-text-field>
                 </v-col>
                 <v-col>
-                    <h4 class="font-weight-light">Отделение:</h4>
-                    <h5 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentDepartment]]</h5>
+                    <h4 class="font-weight-light">Отделение</h4>
+                    <h4 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentDepartment]]</h4>
                     <v-select v-if="isCardModeratable==true"
                               color="grey"
                               name="currentAddDepartment"
@@ -134,8 +134,8 @@
                     ></v-select>
                 </v-col>
                 <v-col>
-                    <h4 class="font-weight-light">Группа:</h4>
-                    <h5 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentAuthor]]</h5>
+                    <h4 class="font-weight-light">Группа</h4>
+                    <h4 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentAuthor]]</h4>
                     <v-select v-if="isCardModeratable==true"
                               color="grey"
                               name="currentAddAuthor"
@@ -147,8 +147,8 @@
                     ></v-select>
                 </v-col>
                 <v-col>
-                    <h4 class="font-weight-light">Оценка:</h4>
-                    <h5 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentMark]]</h5>
+                    <h4 class="font-weight-light">Оценка</h4>
+                    <h4 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentMark]]</h4>
                     <v-text-field v-if="isCardModeratable==true"
                                   name="currentAddMark"
                                   label="Оценка:"
