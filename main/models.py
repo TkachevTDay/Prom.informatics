@@ -25,6 +25,9 @@ class Project(models.Model):
     status = models.TextField(max_length=255, default='on moderate')
     docker_status = models.TextField(max_length=255, default='declined')
     docker_image_name = models.TextField(max_length=255, default='')
+#DROP DATABASE prominformatics_db WITH (FORCE);
+#psql -U s104_prominformatics_user postgres
+#sudo docker exec -it db bash
 
 @receiver(post_save, sender = User)
 def user_is_created(sender, instance, created, **kwargs):
