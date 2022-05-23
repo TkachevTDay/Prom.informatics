@@ -64,7 +64,9 @@ var app = new Vue({
             currentProjectImages: [],
             currentTechStack: '',
             currentAddTechStack: '',
+            currentMediaStatus: '',
             currentAddImgs: [],
+            files: [],
             currentProjectAvatar: '',
             moderateProjects: [],
             profileNotifications: '',
@@ -85,6 +87,7 @@ var app = new Vue({
             dialogAuthInstruction: false,
             currentUser: '',
             currentUserGroup: '',
+            result: [],
             techStack: ['Django-project', 'Pygame-project', 'Other'],
             rules: {
               value: [val => (val || '').length > 0 || 'Это поле необходимо заполнить!'],
@@ -97,7 +100,16 @@ var app = new Vue({
     },
     computed: {
         checkURL () {
-            return /^https?:\/\/.+\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(this.currentAddImg);
+                const youtubeEmbedTemplate = 'https://www.youtube.com/embed/'
+              const url = this.currentAddImg.split(/(vi\/|v%3D|v=|\/v\/|youtu\.be\/|\/embed\/)/)
+              console.log("url", url)
+              const YId = undefined !== url[2] ? url[2].split(/[^0-9a-z_/\\-]/i)[0] : url[0]
+              console.log("YId", YId)
+              if (YId === url[0]) {
+                return false
+              } else {
+                return true
+              }
         },
         formIsValid () {
             return (
@@ -165,7 +177,9 @@ var app = new Vue({
                             }
                     }
                     if (method == 'POST'){
-                        xhr.send(JSON.stringify(data));
+                        let a = JSON.stringify(data)
+                        console.log(a)
+                        xhr.send(a);
                     }
                     else {
                         xhr.send();
@@ -259,7 +273,6 @@ var app = new Vue({
         },
 
         showDialog: function(){
-        this.currentProjectImages=[];
             this.dialog = !this.dialog;
         },
         showAddDialog: function(){
@@ -270,8 +283,16 @@ var app = new Vue({
             this.filterShow = !this.filterShow
         },
         uploadImg: function(){
-            this.currentProjectImages.push(this.currentAddImg);
-            this.currentAddImg = '';
+                const youtubeEmbedTemplate = 'https://www.youtube.com/embed/'
+          const url = this.currentAddImg.split(/(vi\/|v%3D|v=|\/v\/|youtu\.be\/|\/embed\/)/)
+          console.log("url", url)
+          const YId = undefined !== url[2] ? url[2].split(/[^0-9a-z_/\\-]/i)[0] : url[0]
+          console.log("YId", YId)
+          const topOfQueue = youtubeEmbedTemplate.concat(YId)
+          console.log("topOfQueue", topOfQueue)
+
+          this.currentProjectImages.push({'type': 'video', 'src':topOfQueue});
+          this.currentAddImg = '';
         },
         updateCurrentData: function(item = null){
             if (item == null) {
@@ -359,8 +380,28 @@ var app = new Vue({
             await this.authCheck();
             await this.notificationsCheck();
         },
+        readFile: async function(file){
+            return new Promise(function(resolve, reject){
+                    var fileReader = new FileReader();
+                    console.log(file)
+                    fileReader.onload = function (evt) {
+                        if(evt.target.error){
+                            reject(Error(evt.target.error))
+                        }
+                        let a = evt.target.result
+                        app.result.push(a)
+                        resolve(a);
+                    };
+                    fileReader.readAsDataURL(file)
+                }
+            )
+        },
         // Отправка проекта
         sendProjectOnModerate: async function(item){
+
+            for (i of this.files){
+                console.log('resolved by', await this.readFile(i))
+            }
             await this.makeRequest(`${this.baseUrl}`,
             "POST", {}, {'X-CSRFToken': app.getCSRFToken()}, {
                 'requestType': 'elementAdd',
@@ -373,6 +414,7 @@ var app = new Vue({
                 'currentAddImages': this.currentProjectImages,
                 'currentAddPathLink': this.currentAddPathLink,
                 'currentTechStack':this.currentAddTechStack,
+                'currentFiles': this.result,
             })
         },
         // Отправка данных о запуске проекта

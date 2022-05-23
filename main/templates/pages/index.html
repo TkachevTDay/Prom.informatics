@@ -118,7 +118,7 @@
                                             v-for="(item, i) in userProjects"
                                             :key="i"
                                             @click="updateCurrentAddData(i); isCardModeratable = true"
-                                            @click.stop="showDialog"
+                                            @click.stop="currentProjectImages=[]; dialog=true"
                                     >
                                         <v-row align="center" justify="center">
                                             <div style='display: inline-block'>

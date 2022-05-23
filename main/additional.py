@@ -9,6 +9,13 @@ from django.core.mail import send_mail
 """
     Additional calc function's
 """
+def request_valid_check(body):
+    try:
+        json.loads(body)
+        return True
+    except ValueError:
+        return False
+
 def add_container_connection(container_name, port):
     r = redis.StrictRedis(host='redis', port=6379, db=0)
     active_containers = json.loads(r.get('active_containers').decode('UTF-8'))

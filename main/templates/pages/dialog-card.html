@@ -70,16 +70,51 @@
                                   v-model="currentAddTechStack"
                                   color="grey"
                     ></v-select>
-                    <h3 v-if="isCardModeratable==true" class="font-weight-light"> Ссылка на картинку </h3>
-                    <v-text-field v-if="isCardModeratable==true"
-                                  name="currentAddImg"
-                                  label="Ссылка на картинку"
-                                  v-model="currentAddImg"
-                                  color="grey"
-                    ></v-text-field>
-                    <v-btn :disabled="!checkURL" v-if="isCardModeratable==true" @click="uploadImg" color="grey">
-                        Загрузить картинку
-                    </v-btn>
+                    <v-container flex>
+                        <h3 v-if="isCardModeratable==true" class="font-weight-light"> Вставить видео </h3>
+                        <v-text-field v-if="isCardModeratable==true"
+                                      name="currentAddImg"
+                                      label="Используйте ссылку YouTube"
+                                      v-model="currentAddImg"
+                                      color="grey">
+
+                        </v-text-field>
+                        <v-btn :disabled="!checkURL" v-if="isCardModeratable==true" @click="uploadImg" color="grey">
+                            Загрузить видео
+                        </v-btn>
+                    </v-container>
+                      <v-file-input
+                        v-if="isCardModeratable"
+                        v-model="files"
+                        color="deep-purple accent-4"
+                        counter
+                        label="File input"
+                        multiple
+                        placeholder="Select your files"
+                        prepend-icon="mdi-paperclip"
+                        outlined
+                        :show-size="1000"
+                      >
+                        <template v-slot:selection="{ index, text }">
+                          <v-chip
+                            v-if="index < 2"
+                            color="deep-purple accent-4"
+                            dark
+                            label
+                            small
+                          >
+                            [[ text ]]
+                          </v-chip>
+
+                          <span
+                            v-else-if="index === 2"
+                            class="text-overline grey--text text--darken-3 mx-2"
+                          >
+                            +[[ files.length - 2 ]] File(s)
+                          </span>
+                        </template>
+                      </v-file-input>
+
                 </v-col>
                 <v-col class="d-flex justify-end align-right">
                     <v-carousel v-model="carousel" hide-delimiters height="400px" style="margin-bottom: -10px">
@@ -97,10 +132,15 @@
                                     justify="center"
                             >
                                 <v-img
-                                        :src="n"
+                                v-if="n.type=='image'"
+                                :src="n.src">
+
+                                </v-img>
+                                <iframe v-if="n.type=='video'"
+                                        :src="n.src"
                                         height="350px"
                                         width="400px"
-                                        contain></v-img>
+                                        contain></iframe>
                             </v-row>
                         </v-carousel-item>
                     </v-carousel>
