@@ -90,6 +90,8 @@ def index_page(request):
                 if not os.path.exists(f'/prominf/mediafiles/images/{lead_to_useful_view(item.path_link)}/'):
                     os.makedirs(f'/prominf/mediafiles/images/{lead_to_useful_view(item.path_link)}/')
                 for it, i in enumerate(files):
+                    if it == 0:
+                        item.icon = f"/media/images/{lead_to_useful_view(item.path_link)}/{it}.png"
                     tmp = base64.urlsafe_b64decode(i.split('base64,')[1])
                     save_path = f"/prominf/mediafiles/images/{lead_to_useful_view(item.path_link)}/{it}.png"
                     with open(save_path, "wb") as fh:
