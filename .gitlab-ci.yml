@@ -15,9 +15,7 @@
 image:
   name: docker/compose:latest
 services:
-    - name: docker:dind
-      entrypoint: ["env", "-u", "DOCKER_HOST"]
-      command: ["dockerd-entrypoint.sh"]
+  - docker:18.09.7-dind
 
 variables:
     DOCKER_HOST: tcp://docker:2375/
