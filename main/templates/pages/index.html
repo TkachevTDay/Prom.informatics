@@ -129,6 +129,14 @@
                                             </div>
                                         </v-row>
                                     </v-list-item>
+                                    <v-list-item v-if="isAdministrator" height="25px" width="200px" @click="updateCurrentAddData(); isCardModeratable = true"
+                                            @click.stop="currentProjectImages=[]; dialog=true">
+                                        <v-row align="center" justify="center">
+                                            <v-col cols="9">
+                                                    <h5 class="text-center">Добавить свой проект (Только для администраторов)</h5>
+                                            </v-col>
+                                        </v-row>
+                                    </v-list-item>
                                 </v-list>
                                 <v-card v-if="tokenError" width="200px" height="150px">
                                     <v-container>

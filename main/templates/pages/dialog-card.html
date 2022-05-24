@@ -27,6 +27,15 @@
                         </v-btn>
                     </form>
                 </v-row>
+                <v-row class="mr-10">
+                    <v-text-field v-if="isCardModeratable==true"
+                                  name="currentUrl"
+                                  label="Ссылка на репозиторий"
+                                  v-model="currentUrl"
+                                  color="grey"
+                                  :disabled="!isAdministrator"
+                    ></v-text-field>
+                </v-row>
                 <v-row class="my-0 mr-0 ml-10" v-if="dialogAdm==true">
                     <form method="post">
                         {% csrf_token %}
