@@ -4,25 +4,16 @@ var app = new Vue({
     vuetify: new Vuetify(),
     data(){
         return {
-            markColors: {
-                '2-': '#E53935',
-                '2': '#E53935',
-                '2+': '#E53935',
-                '3-': '#FDD835',
-                '3': '#FFA726',
-                '3+': '#FDD835',
-                '4-': '#B9F6CA',
-                '4': '#69F0AE',
-                '4+': '#00E676',
-                '5-': '#00C853',
-                '5': '#9575CD',
-                '5+': '#7E57C2',
-            },
-            isAdministrator: true,
+            notificationsAmount: 0,
+            notificationsList: [],
+            isAdministrator: false,
             isAuthorized: 0,
             personalAccessToken: '',
             personalAccessTokenInput: '',
             userId: 0,
+            tokenError: false,
+            declineAnswer: '',
+            isGitlabConnected: 0,
             authorizeLogin: '',
             authorizePass: '',
             dialog: false,
@@ -30,6 +21,9 @@ var app = new Vue({
             dialogReg: false,
             dialogAdm: false,
             dialogLog: false,
+            dialogDeclineAnswer: false,
+            dialogContRunNotify: false,
+            dialogNotifications: false,
             addMenu: false,
             dialogGitlabAuth: false,
             userProjects: [],
@@ -56,6 +50,8 @@ var app = new Vue({
             currentAddMark: '',
             currentAddYear: '',
             currentAddPathLink: '',
+            groups: ['s101', 's102', 's103', 's104', 's105', 's106'],
+            departments: ['Физтехпарк', 'Профсоюзная', 'Проспект Мира', 'ВШЭ', 'Яндекс', 'Мытищи', 'Королёв', 'Пушкино', 'Щёлково', 'Онлайн', 'Виртуальный класс'],
             items: [],
             markItems: [],
             departmentItems: [],
@@ -69,9 +65,12 @@ var app = new Vue({
             currentProjectImages: [],
             currentTechStack: '',
             currentAddTechStack: '',
+            currentMediaStatus: '',
             currentAddImgs: [],
+            files: [],
             currentProjectAvatar: '',
             moderateProjects: [],
+            profileNotifications: '',
             changedStatus: '',
             changedDockerStatus: 'declined',
             userInf: '',
@@ -89,30 +88,45 @@ var app = new Vue({
             dialogAuthInstruction: false,
             currentUser: '',
             currentUserGroup: '',
+            currentUrl: '',
+            result: [],
             techStack: ['Django-project', 'Pygame-project', 'Other'],
             rules: {
               value: [val => (val || '').length > 0 || 'Это поле необходимо заполнить!'],
                emailRules: [
                             v => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Введите корректный e-mail'
                             ],
-               authorizeHint: [v => (this.authResponse.responseStatus != 'Authentication failed (Incorrect input values)') || 'Проверьте правильность заполненных данных']
+               authorizeHint: [v => (this.authResponse.responseStatus != 'Authentication failed (Incorrect input values)') || 'Проверьте правильность заполненных данных'],
+               fileInputSize:[
+                    files => (files.length <= 5 && this.files.length != 0 && files.map(file => file.size).reduce((previous, next) => previous + next) <= 5242880) || 'Размер файлов не должен превышать 5 МБ. Допустимое количество файлов от 1 до 5 шт.'
+               ],
+
             },
         };
     },
     computed: {
         checkURL () {
-            return /^https?:\/\/.+\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(this.currentAddImg);
+                const youtubeEmbedTemplate = 'https://www.youtube.com/embed/'
+              const url = this.currentAddImg.split(/(vi\/|v%3D|v=|\/v\/|youtu\.be\/|\/embed\/)/)
+              console.log("url", url)
+              const YId = undefined !== url[2] ? url[2].split(/[^0-9a-z_/\\-]/i)[0] : url[0]
+              console.log("YId", YId)
+              if (YId === url[0]) {
+                return false
+              } else {
+                return true
+              }
         },
         formIsValid () {
             return (
               this.currentAddAuthor &&
               this.currentAddDepartment &&
               this.currentAddDescription &&
-              this.currentAddMark && this.currentAddName && this.currentAddName && this.currentAddTechStack && this.currentAddYear
+              this.currentAddMark && this.currentAddName && this.currentAddTechStack && this.currentAddYear && (this.files.length <= 5 && this.files.length != 0 && this.files.map(file => file.size).reduce((previous, next) => previous + next) <= 5242880)
             )
           },
         gitlabAuthFormIsValid() {
-            return(this.personalAccessToken)
+            return(this.personalAccessTokenInput)
         },
 
         loginFormIsValid () {
@@ -143,6 +157,11 @@ var app = new Vue({
         }
     },
     methods: {
+
+        redirectToProjectRepo: async function(){
+            window.location.href=this.currentUrl;
+        },
+
         makeRequest: async function(url, method, params = {}, headers = {}, data = {}){
             return new Promise(function (resolve, reject)
                 {
@@ -169,7 +188,9 @@ var app = new Vue({
                             }
                     }
                     if (method == 'POST'){
-                        xhr.send(JSON.stringify(data));
+                        let a = JSON.stringify(data)
+                        console.log(a)
+                        xhr.send(a);
                     }
                     else {
                         xhr.send();
@@ -201,12 +222,19 @@ var app = new Vue({
         },
         getId: async function(){
             console.log(this.personalAccessToken)
-            app.userId = (await this.makeRequest(`https://gitlab.informatics.ru/api/v4/personal_access_tokens`, "GET", {}, {'PRIVATE-TOKEN': this.personalAccessToken}, {}))[0].user_id;
+            try{
+                let response = (await this.makeRequest(`https://gitlab.informatics.ru/api/v4/personal_access_tokens`, "GET", {}, {'PRIVATE-TOKEN': this.personalAccessToken}, {}));
+                app.userId = response[0].user_id;
+            } catch(err) {
+                this.tokenError = true;
+            }
         },
         projectsLoad: async function(){
             await this.getId();
-            await this.getUserGroup();
-            await this.getUserProjects();
+            if(!this.tokenError){
+                await this.getUserGroup();
+                await this.getUserProjects();
+            }
         },
         authCheck: async function(){
             let authCheckResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
@@ -218,19 +246,25 @@ var app = new Vue({
                 if(this.isGitlabConnected == 1){
                     this.personalAccessToken = authCheckResponse.privateAccessToken
                 }
+            } else {
+            this.isAdministrator = false
+
             }
         },
         auth: async function(){
+             this.tokenError = false
              this.authResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
              {'requestType': 'userAuth', 'username': this.authorizeLogin, 'password': sha256(this.authorizePass)}));
              console.log(this.authResponse.responseStatus)
              await this.authCheck();
+
              this.authorizePass = '';
              if (this.authResponse.responseStatus == 'Successfully authenticated'){
                 this.authorizeLogin = '';
                 this.dialogLog = false;
              }
-
+             this.notificationsCheck();
+             await this.verifyAdministrator();
         },
         registry: async function(){
             this.registryResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
@@ -248,6 +282,7 @@ var app = new Vue({
             this.gitlabAuthResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
              {'requestType': 'gitlabAuth', 'personalAccessToken': this.personalAccessTokenInput}));
             console.log(this.gitlabAuthResponse.responseStatus)
+
             this.authCheck();
             this.personalAccessTokenInput = ''
             this.dialogGitlabAuth = false
@@ -258,10 +293,14 @@ var app = new Vue({
              {'requestType': 'userUnAuth'}));
              console.log(unauthResponse.responseStatus)
              this.isAuthorized = false
+             this.isAdministrator = false
+             this.personalAccessToken = ''
+             await this.authCheck();
+
+
         },
 
         showDialog: function(){
-        this.currentProjectImages=[];
             this.dialog = !this.dialog;
         },
         showAddDialog: function(){
@@ -272,8 +311,16 @@ var app = new Vue({
             this.filterShow = !this.filterShow
         },
         uploadImg: function(){
-            this.currentProjectImages.push(this.currentAddImg);
-            this.currentAddImg = '';
+                const youtubeEmbedTemplate = 'https://www.youtube.com/embed/'
+          const url = this.currentAddImg.split(/(vi\/|v%3D|v=|\/v\/|youtu\.be\/|\/embed\/)/)
+          console.log("url", url)
+          const YId = undefined !== url[2] ? url[2].split(/[^0-9a-z_/\\-]/i)[0] : url[0]
+          console.log("YId", YId)
+          const topOfQueue = youtubeEmbedTemplate.concat(YId)
+          console.log("topOfQueue", topOfQueue)
+
+          this.currentProjectImages.push({'type': 'video', 'src':topOfQueue});
+          this.currentAddImg = '';
         },
         updateCurrentData: function(item = null){
             if (item == null) {
@@ -287,6 +334,7 @@ var app = new Vue({
                 this.currentProjectImages=this.recentProjects[this.carouselIterator].images
                 this.currentProjectAvatar=this.recentProjects[this.carouselIterator].icon
                 this.currentTechStack=this.recentProjects[this.carouselIterator].tech_stack
+                this.currentUrl=this.recentProjects[this.carouselIterator].path_link
             } else {
                 this.currentId=item.id
                 this.currentName=item.name
@@ -298,6 +346,7 @@ var app = new Vue({
                 this.currentProjectImages=item.images
                 this.currentProjectAvatar=item.icon
                 this.currentTechStack=item.tech_stack
+                this.currentUrl=item.path_link
             }
 
         },
@@ -359,31 +408,56 @@ var app = new Vue({
             app.recentProjects = a;
             await app.updateCurrentData();
             await this.authCheck();
+            await this.notificationsCheck();
+            await this.verifyAdministrator();
+        },
+        readFile: async function(file){
+            return new Promise(function(resolve, reject){
+                    var fileReader = new FileReader();
+                    console.log(file)
+                    fileReader.onload = function (evt) {
+                        if(evt.target.error){
+                            reject(Error(evt.target.error))
+                        }
+                        let a = evt.target.result
+                        app.result.push(a)
+                        resolve(a);
+                    };
+                    fileReader.readAsDataURL(file)
+                }
+            )
         },
         // Отправка проекта
         sendProjectOnModerate: async function(item){
+
+            for (i of this.files){
+                console.log('resolved by', await this.readFile(i))
+            }
             await this.makeRequest(`${this.baseUrl}`,
             "POST", {}, {'X-CSRFToken': app.getCSRFToken()}, {
                 'requestType': 'elementAdd',
                 'currentAddName': this.currentAddName.trim(),
                 'currentAddDescription': this.currentAddDescription.trim(),
                 'currentAddAuthor': this.currentAddAuthor.trim(),
-                'currentAddTech': this.currentAddTech.trim(),
                 'currentAddDepartment': this.currentAddDepartment.trim(),
                 'currentAddMark': this.currentAddMark.trim(),
                 'currentAddYear': this.currentAddYear.trim(),
                 'currentAddImages': this.currentProjectImages,
                 'currentAddPathLink': this.currentAddPathLink,
                 'currentTechStack':this.currentAddTechStack,
+                'currentFiles': this.result,
             })
         },
         // Отправка данных о запуске проекта
         sendProjectRunConfig: async function(id){
+
+            this.dialogContRunNotify = true
             let a = await this.makeRequest(`${this.baseUrl}`,
             "POST", {}, {'X-CSRFToken': app.getCSRFToken()}, {
                 'requestType': 'elementRun',
                 'elementId': id,
             });
+            this.dialogContRunNotify = false
             if (a.status == 'ok' || a.status == 'Container with this name already exists'){
                     window.location.href = `http://cont${a.cont.id}.localhost:1337`;
                   }
@@ -400,11 +474,43 @@ var app = new Vue({
                 'elementId': this.currentId,
                 'elementNewStatus': this.changedStatus,
                 'elementNewDockerStatus': this.changedDockerStatus,
+                'elementAnswer': this.declineAnswer,
             });
             this.changedDockerStatus = 'declined'
             await this.updateAdminList();
             await this.update();
             await this.getRecentProjects();
+            await this.notificationsCheck();
+
+        },
+        notificationsCheck: async function(){
+            let a = await this.makeRequest(`${this.baseUrl}`,
+            "POST", {}, {'X-CSRFToken': Cookies.get('csrftoken')}, {
+                'requestType': 'elementCheckNotifications',
+            });
+            this.notificationsList = (JSON.parse(a.responseStatus))
+            this.notificationsAmount = a.len
+        },
+        makeRead: async function(){
+            let a = await this.makeRequest(`${this.baseUrl}`,
+            "POST", {}, {'X-CSRFToken': Cookies.get('csrftoken')}, {
+                'requestType': 'elementMakeRead',
+                'notifications': this.notificationsList,
+            });
+            this.notificationsCheck();
+        },
+        emergency: async function(){
+            let a = await this.makeRequest(`${this.baseUrl}`,
+            "POST", {}, {'X-CSRFToken': Cookies.get('csrftoken')}, {
+                'requestType': 'emergency',
+            });
+        },
+        verifyAdministrator: async function(){
+            let a = await this.makeRequest(`${this.baseUrl}`,
+            "POST", {}, {'X-CSRFToken': Cookies.get('csrftoken')}, {
+                'requestType': 'adminVerify',
+            });
+            this.isAdministrator = a.status;
         },
     },
   mounted(){

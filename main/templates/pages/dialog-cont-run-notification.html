@@ -1,0 +1,32 @@
+
+<v-dialog v-model="dialogContRunNotify" width="400px" :retain-focus="false">
+    <div class="d-flex justify-center">
+        <v-card width="400px" class="">
+            <v-container>
+                    <v-row cols="8" justify="center">
+                        <v-col cols="8" style="" class="text-center">
+                            <h5 class="text-h5 font-weight-thin" style="padding-top: 20px; padding-bottom: 0px;">Ожидайте перенаправления.</h5>
+                        </v-col>
+                    </v-row>
+                    <v-row cols="2" justify="center">
+                        <v-col cols="8" class="text-center" style="padding-top: 0px; padding-bottom: 0px;">
+                            <div>Слот для тестирования выделен на срок 5 минут.</div>
+                        </v-col>
+
+
+                    </v-row>
+                    <v-row cols="2" justify="center">
+                        <v-col cols="8" class="text-center">
+                            <v-progress-circular
+                              indeterminate
+                              color="primary"
+                            ></v-progress-circular>
+                        </v-col>
+
+                    </v-row>
+            </v-container>
+        </v-card>
+
+    </div>
+
+</v-dialog>

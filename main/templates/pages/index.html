@@ -13,7 +13,7 @@
 <body>
 <div id="app">
     <v-app>
-        <v-main>
+        <v-main class="deep-purple darken-2">
             <template>
                 {% include 'dialog-card.html' %}
                 {% include 'dialog-adm.html' %}
@@ -21,38 +21,104 @@
                 {% include 'dialog-reg.html' %}
                 {% include 'dialog-gitlab-auth.html' %}
                 {% include 'dialog-gitlab-auth-instruction.html' %}
-                <v-parallax dark src="https://informatics.ru/img/intro/intro-inter-progressive.jpg" height="900">
+                {% include 'dialog-cont-run-notification.html' %}
+                {% include 'dialog-decline.html' %}
+                <v-parallax dark src="/static/img/fon.png" height="900">
                     <div class="d-flex justify-end">
-                        <v-menu v-model="profileMenu" open-on-hover>
+                        <v-btn v-if="isAdministrator" plain color="white" @click="emergency()">
+                            Экстренная кнопка (убить все контейнеры)
+                        </v-btn>
+                        <v-menu v-if="isAuthorized"  v-model="profileMenu">
+
                             <template v-slot:activator="{ on, attrs }">
-                                <v-btn v-show="isAuthorized" plain color="white" v-bind="attrs" v-on="on">
-                                    Профиль
-                                </v-btn>
+                                <v-badge
+                                         :content=notificationsAmount
+                                         :value=notificationsAmount
+                                         color="red"
+                                         size="5"
+                                         bottom
+                                         overlap
+
+                                >
+                                    <v-btn plain color="white" v-bind="attrs" v-on="on">
+                                        Профиль
+                                    </v-btn>
+                                </v-badge>
                             </template>
-                            <v-card width="300px" height="200px">
-                                <v-container fill-height fluid>
-                                    <v-row align="center" justify="center">
-                                        <v-btn color="primary" style="display: table-cell;" @click="dialogGitlabAuth=true">
+                            <v-card width="300px" height="150px">
+                                <v-container>
+                                    <v-row cols="2" justify="center" width="300px">
+                                        <h2 v-if="isAuthorized" class="font-weight-light text-center">
+                                            [[currentUser.fields.username]]</h2>
+                                    </v-row>
+                                    <v-row cols="2" justify="center" width="300px">
+                                        <h3 v-if="isAuthorized" class="font-weight-thin text-center">
+                                            [[currentUser.fields.email]]</h3>
+                                    </v-row>
+                                    <v-row cols="2" justify="center">
+                                        <v-menu v-if="isAuthorized"  v-model="profileNotifications">
+                                            <template v-slot:activator="{ on, attrs }">
+                                                <v-badge
+                                                         :content=notificationsAmount
+                                                         :value=notificationsAmount
+                                                         color="red"
+                                                         size="5"
+                                                         bottom
+                                                         left
+                                                         overlap
+                                                         dot
+                                                         style="margin-bottom: 10px; margin-left: 10px;"
+                                                >
+                                                    <v-btn class="black--text" plain
+                                                           @click="dialogNotifications=true; makeRead();" v-bind="attrs"
+                                                           v-on="on">
+                                                        Уведомления
+                                                    </v-btn>
+                                                </v-badge>
+                                            </template>
+                                            <v-list>
+                                                <v-list-item
+                                                        v-for="(item, i) in notificationsList"
+                                                >
+                                                    <v-row align="center" justify="center">
+                                                        <div style='display: inline-block'>
+                                                            <h4 class="font-weight-thin mr-2">[[ item.fields.send_time
+                                                                ]]</h4>
+                                                        </div>
+                                                        <div style='display: inline-block'>
+                                                            <h4 class="font-weight-thin">[[ item.fields.message ]]</h4>
+                                                        </div>
+                                                    </v-row>
+                                                </v-list-item>
+                                            </v-list>
+                                        </v-menu>
+                                    </v-row>
+                                    <v-row cols="2" justify="center">
+                                        <v-btn class="black--text" plain @click="dialogGitlabAuth=true"
+                                               width="300px" v-if="!isGitlabConnected">
                                             Привязать аккаунт к gitlab
                                         </v-btn>
+                                        <h5 v-if="isGitlabConnected" class="font-weight-thin" width="300px">Ваша
+                                            учётная запись связана с гитлабом</h5>
                                     </v-row>
                                 </v-container>
                             </v-card>
                         </v-menu>
-                        <v-menu v-model="addMenu">
+                        <v-menu v-if="isAuthorized" v-model="addMenu" transition="scale-transition">
                             <template v-slot:activator="{ on, attrs }">
-                                <v-btn plain color="white" v-show="isAuthorized" v-bind="attrs" v-on="on" @click="projectsLoad()">
+                                <v-btn  plain color="white"  v-bind="attrs" v-on="on"
+                                       @click="projectsLoad()">
                                     Загрузить проект
                                 </v-btn>
                             </template>
                             <form method="post">
                                 {% csrf_token %}
-                                <v-list>
+                                <v-list v-if="!tokenError">
                                     <v-list-item
                                             v-for="(item, i) in userProjects"
                                             :key="i"
                                             @click="updateCurrentAddData(i); isCardModeratable = true"
-                                            @click.stop="showDialog"
+                                            @click.stop="currentProjectImages=[]; dialog=true"
                                     >
                                         <v-row align="center" justify="center">
                                             <div style='display: inline-block'>
@@ -63,40 +129,68 @@
                                             </div>
                                         </v-row>
                                     </v-list-item>
+                                    <v-list-item v-if="isAdministrator" height="25px" width="200px" @click="updateCurrentAddData(); isCardModeratable = true"
+                                            @click.stop="currentProjectImages=[]; dialog=true">
+                                        <v-row align="center" justify="center">
+                                            <v-col cols="9">
+                                                    <h5 class="text-center">Добавить свой проект (Только для администраторов)</h5>
+                                            </v-col>
+                                        </v-row>
+                                    </v-list-item>
                                 </v-list>
+                                <v-card v-if="tokenError" width="200px" height="150px">
+                                    <v-container>
+                                        <v-row align="center" justify="center">
+                                            <v-col cols="9">
+                                                <h3 color="warning">Введён неверный токен доступа.</h3>
+                                            </v-col>
+                                        </v-row>
+                                    </v-container>
+                                </v-card>
                             </form>
                         </v-menu>
                         <form method="post">
                             {% csrf_token %}
-                            <v-btn plain color="white" @click="dialogLog=true" v-show="!isAuthorized">
+                            <v-btn plain color="white" @click="dialogLog=true" v-if="!isAuthorized">
                                 Зарегистрироваться/Войти
                             </v-btn>
-                            <v-btn plain color="white" @click="unauth()" v-show="isAuthorized">
+                            <v-btn plain color="white" @click="unauth()" v-if="isAuthorized">
                                 Выйти
                             </v-btn>
                         </form>
-                        <v-btn v-if="isAdministrator==true"plain color="white" @click="dialogAdm=true; updateAdminList()">
+                        <v-btn v-if="isAdministrator==true" plain color="white"
+                               @click="dialogAdm=true; updateAdminList()">
                             Открыть панель администратора
                         </v-btn>
 
                     </div>
-                    <v-row align="center" justify="center">
-                        <v-card class="d-flex pa-1" color="rgba(255, 255, 255, 0.8)">
+                    <v-row align="center" justify="start" style="margin-bottom: 100px; margin-left: 0px">
+                        <v-card class="d-flex pa-1 rounded-xl" outlined color="transparent">
                             <v-card-title primary-title class="justify-center">
-
-                                <h3 align=center class="text-h3 font-weight-thin mb-1" style="font-size:10px">
-                                    Сайт проектов курса "Промышленное программирование"
-                                </h3>
+                                <div align=center style="
+                                    background: linear-gradient(to right, #fdb008, #fb4e93);
+                                    -webkit-background-clip: text;
+                                    -webkit-text-fill-color: transparent;
+                                    -webkit-text-stroke-width: 1px;
+                                    -webkit-text-stroke-color: white;
+                                    ">
+                                    <h2 class="text-h2 font-weight-bold mb-5" style="font-size:20px; text-align: left;">
+                                        Сайт проектов курса
+                                    </h2>
+                                    <h2 class="text-h2 font-weight-bold mb-1" style="font-size:20px; text-align: left;">
+                                        "Промышленное программирование"
+                                    </h2>
+                                </div>
 
                             </v-card-title>
                         </v-card>
                     </v-row>
                 </v-parallax>
                 <v-container>
-                    <v-row align="center" justify="center">
+                    <v-row align="start" justify="start">
                         <v-col class="text-center" cols="12">
-                            <h1 class="text-h3 font-weight-thin mb-4" style="margin-top: 25px">
-                                Последние проекты:
+                            <h1 class="text-h2 font-600-normal mb-4 white--text" style="margin-top: 25px">
+                                Последние проекты
                             </h1>
                         </v-col>
                     </v-row>
@@ -130,7 +224,7 @@
                 <v-carousel-item
                         v-for="(item, i) in recentProjects"
                         :key=i
-
+                        :elevation="22"
                 >
                     {% include 'card.html' %}
                 </v-carousel-item>
@@ -203,58 +297,101 @@
             <br>
             <br>
             <br>
-                <v-card class="mx-auto" max-width="70%">
-                    <v-card class="mx-auto rounded-0" v-for="(item, i) in items" :key="i" @click.stop="showDialog" @click="updateCurrentData(item); isCardModeratable=false">
-                        <v-container fill-height fluid>
-                            <v-row>
-                                <v-col cols="5">
-                                    <v-container fill-height fluid>
-                                        <v-row>
-                                            <v-col cols="4">
-                                                <v-img  :src="item.icon"></v-img>
-                                            </v-col>
-                                            <v-col cols="8">
-                                                <h1 class="text-h3 font-weight-thin">[[item.name]]</h1>
-                                                <h3 class="text-h5 font-weight-thin">todo: tags should be here</h3>
-                                            </v-col>
-                                        </v-row>
-                                    </v-container>
-                                </v-col>
-                                    <v-col cols="2">
-                                        <v-container fill-height fluid>
-                                            <v-card style="width:fit-content; height: fit-content;" :color=markColors[item.mark]>
-                                                    <v-card-title justify="center" align="center" class="text-h4 font-weight white--text">[[item.mark]]</v-card-title>
-                                            </v-card>
-                                        </v-container>
-                                    </v-col>
-                                <v-col>
-                                </v-col>
-                            </v-row>
-                        </v-container>
-                    </v-card>
-                     <v-btn elevation="2" @click="update">Показать ещё</v-btn>
+            <v-card class="mx-auto" max-width="70%">
+                <v-card class="mx-auto rounded-0" v-for="(item, i) in items" :key="i" @click.stop="showDialog"
+                        @click="updateCurrentData(item); isCardModeratable=false" color="blue-grey lighten-5">
+                    <v-container fill-height fluid>
+                        <v-row align="center"
+                               justify="center">
+                            <v-col cols="2">
+                                <v-container fluid>
+                                    <v-img :src="item.icon"></v-img>
+                                </v-container>
+                            </v-col>
+                            <v-col cols="2">
+                                <v-container fluid>
+                                    <h1 class="text-h3 font-weight-light" style="
+                                    background: linear-gradient(to bottom,  #512DA8, #6883bc);
+                                    -webkit-background-clip: text;
+                                    -webkit-text-fill-color: transparent;
+                                    ">[[item.name]]</h1>
+                                </v-container>
+                            </v-col>
+                            <v-col cols="1">
+                                <v-container justify="center" align="center">
+                                    <h3 class="text-h3 font-weight-bold text-center" style="
+                                    background: linear-gradient(to bottom,  #512DA8, #6883bc);
+                                    -webkit-background-clip: text;
+                                    -webkit-text-fill-color: transparent;
+                                    ">
+                                        [[item.mark]]
+                                    </h3>
+                                </v-container>
+                            </v-col>
+                            <v-col cols="2">
+                                <v-container justify="center" align="center">
+                                    <h5 class="text-h5 font-weight-bold text-center" style="
+                                    background: linear-gradient(to bottom,  #512DA8, #6883bc);
+                                    -webkit-background-clip: text;
+                                    -webkit-text-fill-color: transparent;
+                                    ">
+                                        [[item.department]]
+                                    </h5>
+                                </v-container>
+                            </v-col>
+                            <v-col cols="2">
+                                <v-container justify="center" align="center">
+                                    <h4 class="text-h4 font-weight-bold text-center" style="
+                                    background: linear-gradient(to bottom,  #512DA8, #6883bc);
+                                    -webkit-background-clip: text;
+                                    -webkit-text-fill-color: transparent;
+                                    ">
+                                        [[item.author]]
+                                    </h4>
+                                </v-container>
+                            </v-col>
+                            <v-col cols="3">
+                                <v-container justify="center" align="center">
+                                    <h4 class="text-h4 font-weight-bold text-center" style="
+                                    background: linear-gradient(to bottom,  #512DA8, #6883bc);
+                                    -webkit-background-clip: text;
+                                    -webkit-text-fill-color: transparent;
+                                    ">
+                                        [[item.year]]
+                                    </h4>
+                                </v-container>
+                            </v-col>
+                        </v-row>
+                    </v-container>
                 </v-card>
+                <v-btn elevation="2" @click="update" style="width: 100%" color="deep-purple lighten-4">Показать ещё</v-btn>
+            </v-card>
 
             <br>
             <br>
             <br>
             <template>
-  <v-footer
-    dark
-    padless
-  >
-    <v-card
-      flat
-      tile
-      class="grey lighten-5 white--text text-center"
-    >
-      <v-card-text class="black--text pt-0">
-        Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo interdum. Praesent ut risus eget metus luctus accumsan id ultrices nunc. Sed at orci sed massa consectetur dignissim a sit amet dui. Duis commodo vitae velit et faucibus. Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel diam elementum tempor vel ut orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-      </v-card-text>
+                <v-footer
+                        dark
+                        padless
+                >
+                    <v-card
+                            flat
+                            tile
+                            class="grey lighten-5 white--text text-center"
+                    >
+                        <v-card-text class="light-gray--text pt-0 deep-purple darken-2">
+                            Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo
+                            interdum. Praesent ut risus eget metus luctus accumsan id ultrices nunc. Sed at orci sed
+                            massa consectetur dignissim a sit amet dui. Duis commodo vitae velit et faucibus. Morbi
+                            vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui
+                            sollicitudin. Vestibulum eu ipsum vel diam elementum tempor vel ut orci. Orci varius natoque
+                            penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                        </v-card-text>
 
-    </v-card>
-  </v-footer>
-</template>
+                    </v-card>
+                </v-footer>
+            </template>
         </v-main>
 
     </v-app>
@@ -262,8 +399,12 @@
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js" integrity="sha512-szJ5FSo9hEmXXe7b5AUVtn/WnL8a5VofnFeYC2i2z03uS2LhAch7ewNLbl5flsEmTTimMN0enBZg/3sQ+YOSzQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"
+        integrity="sha512-szJ5FSo9hEmXXe7b5AUVtn/WnL8a5VofnFeYC2i2z03uS2LhAch7ewNLbl5flsEmTTimMN0enBZg/3sQ+YOSzQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="/static/js/main.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js" integrity="sha512-wT7uPE7tOP6w4o28u1DN775jYjHQApdBnib5Pho4RB0Pgd9y7eSkAV1BTqQydupYDB9GBhTcQQzyNMPMV3cAew==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"
+        integrity="sha512-wT7uPE7tOP6w4o28u1DN775jYjHQApdBnib5Pho4RB0Pgd9y7eSkAV1BTqQydupYDB9GBhTcQQzyNMPMV3cAew=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>
 </html>

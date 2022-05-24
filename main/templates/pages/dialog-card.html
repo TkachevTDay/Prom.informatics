@@ -22,15 +22,26 @@
                 <v-row class="my-0 mr-0 ml-10" v-if="isCardModeratable==true">
                     <form method="post">
                         {% csrf_token %}
-                        <v-btn @click='sendProjectOnModerate()' :disabled="!formIsValid" @click.stop="showDialog">Отправить</v-btn>
+                        <v-btn @click='sendProjectOnModerate()' :disabled="!formIsValid" @click.stop="showDialog">
+                            Отправить
+                        </v-btn>
                     </form>
+                </v-row>
+                <v-row class="mr-10">
+                    <v-text-field v-if="isCardModeratable==true"
+                                  name="currentUrl"
+                                  label="Ссылка на репозиторий"
+                                  v-model="currentUrl"
+                                  color="grey"
+                                  :disabled="!isAdministrator"
+                    ></v-text-field>
                 </v-row>
                 <v-row class="my-0 mr-0 ml-10" v-if="dialogAdm==true">
                     <form method="post">
                         {% csrf_token %}
                         <v-btn @click='changedStatus = "approved"; changeProjectStatus(); moderateProjects=[]; updateAdminList();' @click.stop="showDialog">Подтвердить</v-btn>
                         <v-btn @click='changedDockerStatus= "approved"; changedStatus="approved"; changeProjectStatus(); moderateProjects=[]; updateAdminList();' @click.stop="showDialog">Подтвердить с докером</v-btn>
-                        <v-btn @click='changedStatus = "declined"; changeProjectStatus(); moderateProjects=[]; updateAdminList();' @click.stop="showDialog">Отклонить</v-btn>
+                        <v-btn @click='dialogDeclineAnswer = true'>Отклонить</v-btn>
                     </form>
                 </v-row>
                 <v-col class="d-flex justify-end" v-if="isCardModeratable==false">
@@ -42,7 +53,7 @@
                             </v-icon>
                         </v-btn>
                     </v-form>
-                    <v-btn big>
+                    <v-btn big @click="redirectToProjectRepo">
                         <img src="https://fonts.gstatic.com/s/i/materialicons/code/v11/24px.svg"/>
                     </v-btn>
                 </v-col>
@@ -68,14 +79,53 @@
                                   v-model="currentAddTechStack"
                                   color="grey"
                     ></v-select>
-                    <h3 v-if="isCardModeratable==true" class="font-weight-light"> Ссылка на картинку </h3>
-                    <v-text-field v-if="isCardModeratable==true"
-                                  name="currentAddImg"
-                                  label="Ссылка на картинку"
-                                  v-model="currentAddImg"
-                                  color="grey"
-                    ></v-text-field>
-                    <v-btn  :disabled="!checkURL" v-if="isCardModeratable==true" @click="uploadImg" color="grey"> Загрузить картинку </v-btn>
+                    <v-container flex>
+                        <h3 v-if="isCardModeratable==true" class="font-weight-light"> Вставить видео </h3>
+                        <v-text-field v-if="isCardModeratable==true"
+                                      name="currentAddImg"
+                                      label="Используйте ссылку YouTube"
+                                      v-model="currentAddImg"
+                                      color="grey">
+
+                        </v-text-field>
+                        <v-btn :disabled="!checkURL" v-if="isCardModeratable==true" @click="uploadImg" color="grey">
+                            Загрузить видео
+                        </v-btn>
+                    </v-container>
+                      <v-file-input
+                        v-if="isCardModeratable"
+                        v-model="files"
+                        color="deep-purple accent-4"
+                        counter
+                        label="File input"
+                        multiple
+                        placeholder="Select your files"
+                        prepend-icon="mdi-paperclip"
+                        outlined
+                        :show-size="1000"
+                        :rules="rules.fileInputSize"
+                        accept="image/*"
+                      >
+                        <template v-slot:selection="{ index, text }">
+                          <v-chip
+                            v-if="index < 2"
+                            color="deep-purple accent-4"
+                            dark
+                            label
+                            small
+                          >
+                            [[ text ]]
+                          </v-chip>
+
+                          <span
+                            v-else-if="index === 2"
+                            class="text-overline grey--text text--darken-3 mx-2"
+                          >
+                            +[[ files.length - 2 ]] File(s)
+                          </span>
+                        </template>
+                      </v-file-input>
+
                 </v-col>
                 <v-col class="d-flex justify-end align-right">
                     <v-carousel v-model="carousel" hide-delimiters height="400px" style="margin-bottom: -10px">
@@ -87,17 +137,22 @@
                                 width="650px"
                         >
 
-                                <v-row
-                                        class="fill-height"
-                                        align="center"
-                                        justify="center"
-                                >
-                                    <v-img
-                                            :src="n"
-                                            height="350px"
-                                            width="400px"
-                                            contain></v-img>
-                                </v-row>
+                            <v-row
+                                    class="fill-height"
+                                    align="center"
+                                    justify="center"
+                            >
+                                <v-img
+                                v-if="n.type=='image'"
+                                :src="n.src">
+
+                                </v-img>
+                                <iframe v-if="n.type=='video'"
+                                        :src="n.src"
+                                        height="350px"
+                                        width="400px"
+                                        contain></iframe>
+                            </v-row>
                         </v-carousel-item>
                     </v-carousel>
 
@@ -105,8 +160,8 @@
             </v-row>
             <v-row class="mx-2 my-1 text-center">
                 <v-col>
-                    <h4 class="font-weight-light">Год:</h4>
-                    <h5 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentYear]]</h5>
+                    <h4 class="font-weight-light">Год</h4>
+                    <h4 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentYear]]</h4>
                     <v-text-field v-if="isCardModeratable==true"
                                   name="currentAddYear"
                                   label="Год:"
@@ -117,32 +172,34 @@
                     ></v-text-field>
                 </v-col>
                 <v-col>
-                    <h4 class="font-weight-light">Отделение:</h4>
-                    <h5 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentDepartment]]</h5>
-                    <v-text-field v-if="isCardModeratable==true"
-                                  name="currentAddDepartment"
-                                  label="Отделение:"
-                                  v-model="currentAddDepartment"
-                                  color="grey"
-                                  :rules="rules.value"
-                                  required
-                    ></v-text-field>
+                    <h4 class="font-weight-light">Отделение</h4>
+                    <h4 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentDepartment]]</h4>
+                    <v-select v-if="isCardModeratable==true"
+                              color="grey"
+                              name="currentAddDepartment"
+                              :items="departments"
+                              item-text="text"
+                              item-value="value"
+                              label="Отделение:"
+                              v-model="currentAddDepartment"
+                    ></v-select>
                 </v-col>
                 <v-col>
-                    <h4 class="font-weight-light">Группа:</h4>
-                    <h5 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentAuthor]]</h5>
-                    <v-text-field v-if="isCardModeratable==true"
-                                  name="currentAddAuthor"
-                                  label="Группа:"
-                                  v-model="currentAddAuthor"
-                                  color="grey"
-                                  :rules="rules.value"
-                                  required
-                    ></v-text-field>
+                    <h4 class="font-weight-light">Группа</h4>
+                    <h4 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentAuthor]]</h4>
+                    <v-select v-if="isCardModeratable==true"
+                              color="grey"
+                              name="currentAddAuthor"
+                              :items="groups"
+                              item-text="text"
+                              item-value="value"
+                              label="Группа:"
+                              v-model="currentAddAuthor"
+                    ></v-select>
                 </v-col>
                 <v-col>
-                    <h4 class="font-weight-light">Оценка:</h4>
-                    <h5 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentMark]]</h5>
+                    <h4 class="font-weight-light">Оценка</h4>
+                    <h4 v-if="isCardModeratable==false" class="ma-0 font-weight-thin"> [[currentMark]]</h4>
                     <v-text-field v-if="isCardModeratable==true"
                                   name="currentAddMark"
                                   label="Оценка:"
