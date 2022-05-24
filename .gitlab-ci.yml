@@ -6,7 +6,7 @@ docker-build:
     - docker:dind
   before_script:
     - apt-get upgrade
-    - apt install docker
+    - apt-get install docker
     - docker login -u skytthepointofdark -p "13b8766d-d457-4779-8297-d240da6bfc28" 
     - apt install docker-compose
     - python3 -m pip install --upgrade pip
