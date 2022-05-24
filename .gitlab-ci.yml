@@ -10,7 +10,8 @@ docker-build:
     DOCKER_TLS_CERTDIR: ""
   before_script:
     - apk add docker-compose
-    - dockerd-rootless.sh --experimental
+    - addgroup -S appgroup && adduser -S appuser -G appgroup
+    - USER appuser
   # Default branch leaves tag empty (= latest tag)
   # All other branches are tagged with the escaped branch name (commit ref slug)
   script:
