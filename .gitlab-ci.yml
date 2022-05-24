@@ -1,9 +1,13 @@
 docker-build:
   # Use the official docker image.
-  image: docker:latest
+  image: docker:stable
   stage: build
   services:
     - docker:dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
   before_script:
     - apk add docker-compose
   # Default branch leaves tag empty (= latest tag)
