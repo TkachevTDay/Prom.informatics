@@ -87,6 +87,7 @@ var app = new Vue({
             dialogAuthInstruction: false,
             currentUser: '',
             currentUserGroup: '',
+            currentUrl: '',
             result: [],
             techStack: ['Django-project', 'Pygame-project', 'Other'],
             rules: {
@@ -155,6 +156,11 @@ var app = new Vue({
         }
     },
     methods: {
+
+        redirectToProjectRepo: async function(){
+            window.location.href=this.currentUrl;
+        },
+
         makeRequest: async function(url, method, params = {}, headers = {}, data = {}){
             return new Promise(function (resolve, reject)
                 {
@@ -310,6 +316,7 @@ var app = new Vue({
                 this.currentProjectImages=this.recentProjects[this.carouselIterator].images
                 this.currentProjectAvatar=this.recentProjects[this.carouselIterator].icon
                 this.currentTechStack=this.recentProjects[this.carouselIterator].tech_stack
+                this.currentUrl=this.recentProjects[this.carouselIterator].path_link
             } else {
                 this.currentId=item.id
                 this.currentName=item.name
@@ -321,6 +328,7 @@ var app = new Vue({
                 this.currentProjectImages=item.images
                 this.currentProjectAvatar=item.icon
                 this.currentTechStack=item.tech_stack
+                this.currentUrl=item.path_link
             }
 
         },
