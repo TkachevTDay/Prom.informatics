@@ -10,10 +10,11 @@ docker-build:
     DOCKER_TLS_CERTDIR: ""
   before_script:
     - apk add docker-compose
+    - dockerd-rootless.sh --experimental
   # Default branch leaves tag empty (= latest tag)
   # All other branches are tagged with the escaped branch name (commit ref slug)
   script:
-    - sudo docker build -t prominformatics .
+    - docker build -t prominformatics .
     - echo "all right!"
   # Run this job in a branch where a Dockerfile exists
 
