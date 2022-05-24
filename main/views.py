@@ -142,34 +142,47 @@ def index_page(request):
             """
             if json.loads(body)["requestType"] == 'elementChangeStatus':
                 element = Project.objects.get(id=json.loads(body)["elementId"])
-                element.status = json.loads(body)["elementNewStatus"]
-                element.docker_status = json.loads(body)["elementNewDockerStatus"]
-                element.save(update_fields=['status', 'docker_status'])
-                if element.status == 'approved':
+                status = json.loads(body)["elementNewStatus"]
+                docker_status = json.loads(body)["elementNewDockerStatus"]
+                if status == 'approved':
                     if element.tech_stack == 'Django-project':
-                        project_clone(element, json.loads(body)["personalAccessToken"])
-                        if element.docker_status == 'approved':
-                            element.docker_image_name = element_build(element)
-                            element.save(update_fields=['docker_image_name'])
+                        if docker_status == 'approved':
                             make_notification(user_sender_id=Student.objects.get(user=User.objects.get(username='system')).id,
                                               user_receiver_id=element.student_uploader_id,
                                               message=f'Ваш проект с именем {element.name} успешно прошёл модерацию и '
-                                                      f'доступен для запуска через докер.'),
+                                                      f'доступен для запуска через докер.')
                             email = Student.objects.get(id=element.student_uploader_id).user.email
+                            project_clone(element, json.loads(body)["personalAccessToken"])
+                            element.docker_image_name = element_build(element)
+                            element.save(update_fields=['docker_image_name'])
+                            element.status = status
+                            element.docker_status = docker_status
+                            element.save(update_fields=['status', 'docker_status'])
                             return JsonResponse({'responseStatus': 'Successful build'})
                         else:
                             make_notification(
                                 user_sender_id=Student.objects.get(user=User.objects.get(username='system')).id,
                                 user_receiver_id=element.student_uploader_id,
                                 message=f'Ваш проект с именем {element.name} успешно прошёл модерацию.', email=Student.objects.get(id=element.student_uploader_id).user.email)
+                            element.status = status
+                            element.docker_status = docker_status
+                            element.save(update_fields=['status', 'docker_status'])
                             return JsonResponse({'responseStatus': 'Not avialiable (not Django project)'})
+                    else:
+                        element.status = status
+                        element.docker_status = docker_status
+                        element.save(update_fields=['status', 'docker_status'])
+                        return JsonResponse({'responseStatus': 'Successful moderation for non-django project'})
                 else:
+                    element.status = status
+                    element.docker_status = docker_status
+                    element.save(update_fields=['status', 'docker_status'])
                     shutil.rmtree(f"/prominf/mediafiles/images/{lead_to_useful_view(element.path_link)}")
                     make_notification(
                         user_sender_id=Student.objects.get(user=User.objects.get(username='system')).id,
                         user_receiver_id=element.student_uploader_id,
                         message=f'Ваш проект с именем {element.name} не прошёл модерацию. Комментарий администратора: {json.loads(body)["elementAnswer"]}', email=Student.objects.get(id=element.student_uploader_id).user.email)
-
+                    return JsonResponse({'responseStatus': 'Successful declined moderation'})
             """
                 Аутентификация пользователя
             """
