@@ -58,7 +58,7 @@ var app = new Vue({
             authorItems: [],
             yearItems: [],
             recentProjects: [],
-            baseUrl: 'http://localhost:1337/',
+            baseUrl: 'http://www.prftest.xyz/',
             carouselIterator: 0,
             images: [],
             filterShow: false,
