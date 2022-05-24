@@ -10,7 +10,7 @@ docker-build:
     DOCKER_TLS_CERTDIR: ""
   before_script:
     - apk add docker-compose
-    - adduser -D $USER && echo "$USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USER && chmod 0440 /etc/sudoers.d/$USER 
+    - adduser -D $USER && echo "$USER ALL=(ALL)" > /etc/sudoers.d/$USER && chmod 0440 /etc/sudoers.d/$USER 
     - USER $USER
   # Default branch leaves tag empty (= latest tag)
   # All other branches are tagged with the escaped branch name (commit ref slug)
