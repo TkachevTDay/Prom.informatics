@@ -11,6 +11,7 @@ from .additional import container_run, pop_avialable_port, check_existing_contai
     make_notification, request_valid_check
 import base64
 import redis
+import shutil
 from prominformatics.celery import kill_switch
 import os
 from django.contrib.auth.models import User
@@ -137,15 +138,6 @@ def index_page(request):
             """
                 Изменение статуса проекта (модерация)
             """
-
-
-
-
-            #todo: Удаление медиа фолдера при деклайне
-
-
-
-
             if json.loads(body)["requestType"] == 'elementChangeStatus':
                 element = Project.objects.get(id=json.loads(body)["elementId"])
                 element.status = json.loads(body)["elementNewStatus"]
@@ -170,6 +162,7 @@ def index_page(request):
                                 message=f'Ваш проект с именем {element.name} успешно прошёл модерацию.', email=Student.objects.get(id=element.student_uploader_id).user.email)
                             return JsonResponse({'responseStatus': 'Not avialiable (not Django project)'})
                 else:
+                    shutil.rmtree(f"/prominf/mediafiles/images/{lead_to_useful_view(element.path_link)}")
                     make_notification(
                         user_sender_id=Student.objects.get(user=User.objects.get(username='system')).id,
                         user_receiver_id=element.student_uploader_id,

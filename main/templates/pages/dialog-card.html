@@ -94,6 +94,8 @@
                         prepend-icon="mdi-paperclip"
                         outlined
                         :show-size="1000"
+                        :rules="rules.fileInputSize"
+                        accept="image/*"
                       >
                         <template v-slot:selection="{ index, text }">
                           <v-chip

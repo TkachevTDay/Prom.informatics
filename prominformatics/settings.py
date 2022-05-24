@@ -120,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/

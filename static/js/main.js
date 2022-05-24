@@ -94,7 +94,11 @@ var app = new Vue({
                emailRules: [
                             v => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Введите корректный e-mail'
                             ],
-               authorizeHint: [v => (this.authResponse.responseStatus != 'Authentication failed (Incorrect input values)') || 'Проверьте правильность заполненных данных']
+               authorizeHint: [v => (this.authResponse.responseStatus != 'Authentication failed (Incorrect input values)') || 'Проверьте правильность заполненных данных'],
+               fileInputSize:[
+                    files => (files.length <= 5 && this.files.length != 0 && files.map(file => file.size).reduce((previous, next) => previous + next) <= 5242880) || 'Размер файлов не должен превышать 5 МБ. Допустимое количество файлов от 1 до 5 шт.'
+               ],
+
             },
         };
     },
@@ -116,7 +120,7 @@ var app = new Vue({
               this.currentAddAuthor &&
               this.currentAddDepartment &&
               this.currentAddDescription &&
-              this.currentAddMark && this.currentAddName && this.currentAddTechStack && this.currentAddYear
+              this.currentAddMark && this.currentAddName && this.currentAddTechStack && this.currentAddYear && (this.files.length <= 5 && this.files.length != 0 && this.files.map(file => file.size).reduce((previous, next) => previous + next) <= 5242880)
             )
           },
         gitlabAuthFormIsValid() {
