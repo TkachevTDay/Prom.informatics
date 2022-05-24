@@ -24,8 +24,12 @@ stages:          # List of stages for jobs, and their order of execution
   - deploy
 
 before_script:
-  - apk add --no-cache py-pip
-  - pip install docker-compose
+  - apk update
+  - apk add docker docker-compose
+  - /etc/init.d/docker start
+  - apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
+  - python3 -m ensurepip
+  - pip3 install --no-cache --upgrade pip setuptools
 
 
 build-job:       # This job runs in the build stage, which runs first.
