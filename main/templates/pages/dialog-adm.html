@@ -4,8 +4,9 @@
         height="75%"
         :retain-focus="false"
 >
-    <v-list>
+    <v-list v-if="moderateProjects.length != 0">
         <v-list-item
+
                 v-for="(item, i) in moderateProjects"
                 :key="i"
                 @click="updateCurrentData(item); isCardModeratable = false"
@@ -21,6 +22,9 @@
             </v-row>
         </v-list-item>
     </v-list>
+    <v-card v-if="moderateProjects.length == 0">
+        <v-card-title class="justify-center">Нет проектов, ожидающих модерации.</v-card-title>
+    </v-card>
      <v-btn v-if="moderateProjects.length >= 3" elevation="2" @click="updateAdminList">Показать ещё</v-btn>
 
 </v-dialog>
