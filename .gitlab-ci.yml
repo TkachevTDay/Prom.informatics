@@ -12,12 +12,13 @@
 # Stages run in sequential order, but jobs within stages run in parallel.
 #
 # For more information, see: https://docs.gitlab.com/ee/ci/yaml/index.html#stages
-image: docker:latest
+image:
+  name: docker/compose:latest
 services:
-    - docker:dind
+  - docker:dind
 
 variables:
-  DOCKER_HOST: tcp://docker:2375
+  DOCKER_HOST: tcp://docker:2375/
   DOCKER_DRIVER: overlay2
 
 stages:          # List of stages for jobs, and their order of execution
@@ -26,18 +27,16 @@ stages:          # List of stages for jobs, and their order of execution
   - deploy
 
 before_script:
-  - apk update
-  - export DOCKER_HOST=tcp://docker:2375
-  - apk add docker docker-compose
-  - apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
-  - python3 -m ensurepip
-  - pip3 install --no-cache --upgrade pip setuptools
+  - docker version
+  - docker-compose version
+
 
 
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
   script:
-    - docker-compose build --no-cache
+    - docker-compose down
+    - docker-compose build
     - echo "Built successfully."
 
 unit-test-job:   # This job runs in the test stage.
