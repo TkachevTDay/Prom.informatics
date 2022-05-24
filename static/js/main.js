@@ -6,7 +6,7 @@ var app = new Vue({
         return {
             notificationsAmount: 0,
             notificationsList: [],
-            isAdministrator: true,
+            isAdministrator: false,
             isAuthorized: 0,
             personalAccessToken: '',
             personalAccessTokenInput: '',
@@ -246,6 +246,9 @@ var app = new Vue({
                 if(this.isGitlabConnected == 1){
                     this.personalAccessToken = authCheckResponse.privateAccessToken
                 }
+            } else {
+            this.isAdministrator = false
+
             }
         },
         auth: async function(){
@@ -261,7 +264,7 @@ var app = new Vue({
                 this.dialogLog = false;
              }
              this.notificationsCheck();
-
+             await this.verifyAdministrator();
         },
         registry: async function(){
             this.registryResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
@@ -279,6 +282,7 @@ var app = new Vue({
             this.gitlabAuthResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
              {'requestType': 'gitlabAuth', 'personalAccessToken': this.personalAccessTokenInput}));
             console.log(this.gitlabAuthResponse.responseStatus)
+
             this.authCheck();
             this.personalAccessTokenInput = ''
             this.dialogGitlabAuth = false
@@ -289,7 +293,11 @@ var app = new Vue({
              {'requestType': 'userUnAuth'}));
              console.log(unauthResponse.responseStatus)
              this.isAuthorized = false
+             this.isAdministrator = false
              this.personalAccessToken = ''
+             await this.authCheck();
+
+
         },
 
         showDialog: function(){
@@ -401,6 +409,7 @@ var app = new Vue({
             await app.updateCurrentData();
             await this.authCheck();
             await this.notificationsCheck();
+            await this.verifyAdministrator();
         },
         readFile: async function(file){
             return new Promise(function(resolve, reject){
@@ -472,6 +481,7 @@ var app = new Vue({
             await this.update();
             await this.getRecentProjects();
             await this.notificationsCheck();
+
         },
         notificationsCheck: async function(){
             let a = await this.makeRequest(`${this.baseUrl}`,
@@ -494,6 +504,13 @@ var app = new Vue({
             "POST", {}, {'X-CSRFToken': Cookies.get('csrftoken')}, {
                 'requestType': 'emergency',
             });
+        },
+        verifyAdministrator: async function(){
+            let a = await this.makeRequest(`${this.baseUrl}`,
+            "POST", {}, {'X-CSRFToken': Cookies.get('csrftoken')}, {
+                'requestType': 'adminVerify',
+            });
+            this.isAdministrator = a.status;
         },
     },
   mounted(){

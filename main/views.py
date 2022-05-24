@@ -266,6 +266,11 @@ def index_page(request):
             """
             if json.loads(body)["requestType"] == "emergency":
                 kill_switch(emergency=True)
+            """
+                Проверка супер-пользователя
+            """
+            if json.loads(body)["requestType"] == "adminVerify":
+                return JsonResponse({'status': request.user.is_superuser})
                 # Использовать в экстренных случаях
     return render(request, 'index.html', {})
 

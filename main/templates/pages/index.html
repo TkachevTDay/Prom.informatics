@@ -25,13 +25,13 @@
                 {% include 'dialog-decline.html' %}
                 <v-parallax dark src="/static/img/fon.png" height="900">
                     <div class="d-flex justify-end">
-                        <v-btn plain color="white" @click="emergency()">
+                        <v-btn v-if="isAdministrator" plain color="white" @click="emergency()">
                             Экстренная кнопка (убить все контейнеры)
                         </v-btn>
-                        <v-menu v-model="profileMenu">
+                        <v-menu v-if="isAuthorized"  v-model="profileMenu">
 
                             <template v-slot:activator="{ on, attrs }">
-                                <v-badge v-show="isAuthorized"
+                                <v-badge
                                          :content=notificationsAmount
                                          :value=notificationsAmount
                                          color="red"
@@ -40,7 +40,7 @@
                                          overlap
 
                                 >
-                                    <v-btn v-show="isAuthorized" plain color="white" v-bind="attrs" v-on="on">
+                                    <v-btn plain color="white" v-bind="attrs" v-on="on">
                                         Профиль
                                     </v-btn>
                                 </v-badge>
@@ -56,9 +56,9 @@
                                             [[currentUser.fields.email]]</h3>
                                     </v-row>
                                     <v-row cols="2" justify="center">
-                                        <v-menu v-model="profileNotifications">
+                                        <v-menu v-if="isAuthorized"  v-model="profileNotifications">
                                             <template v-slot:activator="{ on, attrs }">
-                                                <v-badge v-show="isAuthorized"
+                                                <v-badge
                                                          :content=notificationsAmount
                                                          :value=notificationsAmount
                                                          color="red"
@@ -95,18 +95,18 @@
                                     </v-row>
                                     <v-row cols="2" justify="center">
                                         <v-btn class="black--text" plain @click="dialogGitlabAuth=true"
-                                               width="300px" v-show="!isGitlabConnected">
+                                               width="300px" v-if="!isGitlabConnected">
                                             Привязать аккаунт к gitlab
                                         </v-btn>
-                                        <h5 v-show="isGitlabConnected" class="font-weight-thin" width="300px">Ваша
+                                        <h5 v-if="isGitlabConnected" class="font-weight-thin" width="300px">Ваша
                                             учётная запись связана с гитлабом</h5>
                                     </v-row>
                                 </v-container>
                             </v-card>
                         </v-menu>
-                        <v-menu v-model="addMenu" transition="scale-transition">
+                        <v-menu v-if="isAuthorized" v-model="addMenu" transition="scale-transition">
                             <template v-slot:activator="{ on, attrs }">
-                                <v-btn plain color="white" v-show="isAuthorized" v-bind="attrs" v-on="on"
+                                <v-btn  plain color="white"  v-bind="attrs" v-on="on"
                                        @click="projectsLoad()">
                                     Загрузить проект
                                 </v-btn>
@@ -151,10 +151,10 @@
                         </v-menu>
                         <form method="post">
                             {% csrf_token %}
-                            <v-btn plain color="white" @click="dialogLog=true" v-show="!isAuthorized">
+                            <v-btn plain color="white" @click="dialogLog=true" v-if="!isAuthorized">
                                 Зарегистрироваться/Войти
                             </v-btn>
-                            <v-btn plain color="white" @click="unauth()" v-show="isAuthorized">
+                            <v-btn plain color="white" @click="unauth()" v-if="isAuthorized">
                                 Выйти
                             </v-btn>
                         </form>
