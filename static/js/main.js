@@ -11,6 +11,7 @@ var app = new Vue({
             personalAccessToken: '',
             personalAccessTokenInput: '',
             userId: 0,
+            tokenError: false,
             declineAnswer: '',
             isGitlabConnected: 0,
             authorizeLogin: '',
@@ -221,12 +222,19 @@ var app = new Vue({
         },
         getId: async function(){
             console.log(this.personalAccessToken)
-            app.userId = (await this.makeRequest(`https://gitlab.informatics.ru/api/v4/personal_access_tokens`, "GET", {}, {'PRIVATE-TOKEN': this.personalAccessToken}, {}))[0].user_id;
+            try{
+                let response = (await this.makeRequest(`https://gitlab.informatics.ru/api/v4/personal_access_tokens`, "GET", {}, {'PRIVATE-TOKEN': this.personalAccessToken}, {}));
+                app.userId = response[0].user_id;
+            } catch(err) {
+                this.tokenError = true;
+            }
         },
         projectsLoad: async function(){
             await this.getId();
-            await this.getUserGroup();
-            await this.getUserProjects();
+            if(!this.tokenError){
+                await this.getUserGroup();
+                await this.getUserProjects();
+            }
         },
         authCheck: async function(){
             let authCheckResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
@@ -241,10 +249,12 @@ var app = new Vue({
             }
         },
         auth: async function(){
+             this.tokenError = false
              this.authResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
              {'requestType': 'userAuth', 'username': this.authorizeLogin, 'password': sha256(this.authorizePass)}));
              console.log(this.authResponse.responseStatus)
              await this.authCheck();
+
              this.authorizePass = '';
              if (this.authResponse.responseStatus == 'Successfully authenticated'){
                 this.authorizeLogin = '';
