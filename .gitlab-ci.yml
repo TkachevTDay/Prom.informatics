@@ -1,15 +1,11 @@
 docker-build:
   # Use the official docker image.
-  image: python:3-slim
+  image: docker:latest
   stage: build
   services:
     - docker:dind
   before_script:
-    - apt-get upgrade
-    - apt-get install docker
-    - docker login -u skytthepointofdark -p "13b8766d-d457-4779-8297-d240da6bfc28" 
-    - apt install docker-compose
-    - python3 -m pip install --upgrade pip
+    - apk add docker-compose
   # Default branch leaves tag empty (= latest tag)
   # All other branches are tagged with the escaped branch name (commit ref slug)
   script:
