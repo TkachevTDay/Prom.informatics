@@ -16,7 +16,9 @@ image: docker:latest
 services:
     - docker:dind
 
-
+variables:
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_DRIVER: overlay2
 
 stages:          # List of stages for jobs, and their order of execution
   - build
@@ -25,6 +27,7 @@ stages:          # List of stages for jobs, and their order of execution
 
 before_script:
   - apk update
+  - export DOCKER_HOST=tcp://docker:2375
   - apk add docker docker-compose
   - apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
   - python3 -m ensurepip
