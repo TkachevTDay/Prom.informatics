@@ -33,7 +33,7 @@ def kill_switch(emergency=False):
         if not emergency:
             if (int(str(datetime.now() - datetime.strptime(
                     '-'.join(tmp_date.split('T')[0].split(':')[0].split('-')) + ' ' + ':'.join(
-                            tmp_date.split('T')[1].split(':'))[:8], '%Y-%m-%d %H:%M:%S')).split(':')[1])) >= 1:
+                            tmp_date.split('T')[1].split(':'))[:8], '%Y-%m-%d %H:%M:%S')).split(':')[1])) >= 10:
                 port = list(clientAPI.inspect_container(i)['NetworkSettings']['Ports'].keys())[0].split('/')[0]
                 print(list(clientAPI.inspect_container(i)['NetworkSettings']['Ports'].keys())[0].split('/')[0])
                 client.containers.get(i).remove(force=True)
