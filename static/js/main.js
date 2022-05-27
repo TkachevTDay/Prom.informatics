@@ -8,6 +8,8 @@ var app = new Vue({
             notificationsList: [],
             isAdministrator: false,
             isAuthorized: 0,
+            authError: false,
+            regError: false,
             personalAccessToken: '',
             personalAccessTokenInput: '',
             userId: 0,
@@ -225,6 +227,7 @@ var app = new Vue({
             try{
                 let response = (await this.makeRequest(`https://gitlab.informatics.ru/api/v4/personal_access_tokens`, "GET", {}, {'PRIVATE-TOKEN': this.personalAccessToken}, {}));
                 app.userId = response[0].user_id;
+                this.tokenError = false;
             } catch(err) {
                 this.tokenError = true;
             }
@@ -256,14 +259,19 @@ var app = new Vue({
              this.authResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
              {'requestType': 'userAuth', 'username': this.authorizeLogin, 'password': sha256(this.authorizePass)}));
              console.log(this.authResponse.responseStatus)
-             await this.authCheck();
+
 
              this.authorizePass = '';
              if (this.authResponse.responseStatus == 'Successfully authenticated'){
                 this.authorizeLogin = '';
                 this.dialogLog = false;
+                this.authError = false;
              }
-             this.notificationsCheck();
+             else {
+                this.authError = true;
+             }
+             await this.authCheck();
+             await this.notificationsCheck();
              await this.verifyAdministrator();
         },
         registry: async function(){
@@ -271,12 +279,18 @@ var app = new Vue({
              {'requestType': 'userRegistry', 'username': this.userNameReg, 'email': this.emailReg, 'firstname':this.firstNameReg,
               'secondname':this.secondNameReg, 'password': sha256(this.passwordReg)}));
             console.log(this.registryResponse.responseStatus);
-            this.dialogReg = false;
-            this.userNameReg = '';
-            this.emailReg = '';
-            this.firstNameReg = '';
-            this.secondNameReg= '';
-            this.passwordReg = '';
+            if (this.registryResponse.responseStatus == "Successfully saved"){
+                this.dialogReg = false;
+                this.userNameReg = '';
+                this.emailReg = '';
+                this.firstNameReg = '';
+                this.secondNameReg= '';
+                this.passwordReg = '';
+                this.registryError = false
+            } else {
+                this.passwordReg = '';
+                this.registryError = true
+            }
         },
         gitlabAuth: async function(){
 
