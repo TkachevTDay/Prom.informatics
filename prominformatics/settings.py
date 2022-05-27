@@ -32,7 +32,7 @@ ALLOWED_HOSTS = ['*']
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "mediafiles"
 
-CSRF_TRUSTED_ORIGINS = ["http://prftest.xyz/"]
+CSRF_TRUSTED_ORIGINS = ["http://prftest.xyz"]
 # Application definition
 
 INSTALLED_APPS = [
