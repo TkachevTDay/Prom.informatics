@@ -25,17 +25,21 @@
                         <v-btn @click='sendProjectOnModerate()' :disabled="!formIsValid" @click.stop="showDialog">
                             Отправить
                         </v-btn>
+
                     </form>
+
                 </v-row>
+
                 <v-row class="mr-10">
-                    <v-text-field v-if="isCardModeratable==true"
-                                  name="currentAddPathLink"
-                                  label="Ссылка на репозиторий"
-                                  v-model="currentAddPathLink"
-                                  color="grey"
-                                  :disabled="!isAdministrator"
-                    ></v-text-field>
-                </v-row>
+                    <v-row cols="8">
+                        <v-text-field v-if="isCardModeratable==true"
+                                      name="currentAddPathLink"
+                                      label="Ссылка на репозиторий"
+                                      v-model="currentAddPathLink"
+                                      color="grey"
+                                      :disabled="!isAdministrator"
+                        ></v-text-field>
+                    </v-row>
                 <v-row class="my-0 mr-0 ml-10" v-if="dialogAdm==true">
                     <form method="post">
                         {% csrf_token %}
@@ -125,7 +129,9 @@
                           </span>
                         </template>
                       </v-file-input>
-
+                        <h4 v-if="isCardModeratable"   class="font-weight-light">
+                            <a href="https://docs.google.com/document/d/18-7v66TJGBR8mqQBQYWebdDvv-wLbdz-IPwGrqRd8Ls/edit#heading=h.aguwbvk41d48">Запуск проекта (Пункт 3.4.5)</a>
+                        </h4>
                 </v-col>
                 <v-col class="d-flex justify-end align-right">
                     <v-carousel v-model="carousel" hide-delimiters height="400px" style="margin-bottom: -10px">
@@ -210,6 +216,7 @@
                     ></v-text-field>
                 </v-col>
             </v-row>
+
         </v-card>
     </div>
 </v-dialog>
