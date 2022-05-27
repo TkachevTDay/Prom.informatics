@@ -1,0 +1,30 @@
+<v-dialog v-model="dialogDel" :retain-focus="false" width="500px">
+    <div class="d-flex justify-center">
+            <v-card width="500px" class="rounded-xl">
+                  <v-container>
+                    <v-row cols="2" justify="center">
+                        <v-col cols="8" style="padding-bottom: 0px; padding-top: 25px">
+                            <v-text-field
+
+                                label="Введите имя проекта, который Вы хотите удалить"
+                                v-model="projectDeleteName"
+                                color="grey"
+                                filled
+                                rounded
+                                dense
+                        ></v-text-field>
+                            </v-col>
+                    </v-row>
+                    <v-row cols="2" justify="center">
+                        <v-col cols="8" style="padding-bottom: 0px; padding-top: 25px">
+                            <v-container>
+                            <v-btn @click="projectDelete(); dialogDel = false; update(); getRecentProjects();" color="primary" :disabled="!projectDeleteFormIsValid">
+                                Удалить проект
+                            </v-btn>
+                                </v-container>
+                            </v-col>
+                    </v-row>
+                  </v-container>
+            </v-card>
+    </div>
+</v-dialog>

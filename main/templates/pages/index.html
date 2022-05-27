@@ -23,8 +23,12 @@
                 {% include 'dialog-gitlab-auth-instruction.html' %}
                 {% include 'dialog-cont-run-notification.html' %}
                 {% include 'dialog-decline.html' %}
+                {% include 'dialog-del.html' %}
                 <v-parallax dark src="/static/img/fon.png" height="900">
                     <div class="d-flex justify-end">
+                        <v-btn v-if="isAdministrator" plain color="white" @click="dialogDel = true">
+                            Удалить проект по имени
+                        </v-btn>
                         <v-btn v-if="isAdministrator" plain color="white" @click="emergency()">
                             Экстренная кнопка (убить все контейнеры)
                         </v-btn>
