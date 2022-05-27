@@ -2,11 +2,12 @@
 <html xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
 <head>
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
-     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
-    <link href="/static/css/main.css" rel="stylesheet" type="text/css">
+    <link href="static/css/main.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
 
 </head>
 <body>
@@ -22,8 +23,12 @@
                 {% include 'dialog-gitlab-auth-instruction.html' %}
                 {% include 'dialog-cont-run-notification.html' %}
                 {% include 'dialog-decline.html' %}
+                {% include 'dialog-del.html' %}
                 <v-parallax dark src="/static/img/fon.png" height="900">
                     <div class="d-flex justify-end">
+                        <v-btn v-if="isAdministrator" plain color="white" @click="dialogDel = true">
+                            Удалить проект по имени
+                        </v-btn>
                         <v-btn v-if="isAdministrator" plain color="white" @click="emergency()">
                             Экстренная кнопка (убить все контейнеры)
                         </v-btn>

@@ -177,14 +177,13 @@ def index_page(request):
                             element.save(update_fields=['status', 'docker_status'])
                             return JsonResponse({'responseStatus': 'Successful moderation for non-django project'})
                     else:
-                        element.status = status
-                        element.docker_status = docker_status
-                        element.save(update_fields=['status', 'docker_status'])
                         shutil.rmtree(f"/prominf/mediafiles/images/{lead_to_useful_view(element.path_link)}")
+                        element.delete()
                         make_notification(
                             user_sender_id=Student.objects.get(user=User.objects.get(username='system')).id,
                             user_receiver_id=element.student_uploader_id,
                             message=f'Ваш проект с именем {element.name} не прошёл модерацию. Комментарий администратора: {json.loads(body)["elementAnswer"]}', email=Student.objects.get(id=element.student_uploader_id).user.email)
+
                         return JsonResponse({'responseStatus': 'Successful declined moderation'})
             """
                 Аутентификация пользователя
@@ -289,6 +288,15 @@ def index_page(request):
             if json.loads(body)["requestType"] == "adminVerify":
                 return JsonResponse({'status': request.user.is_superuser})
                 # Использовать в экстренных случаях
+            if json.loads(body)["requestType"] == 'elementDelete':
+                if request.user.is_superuser:
+                    project = Project.objects.get(name=json.loads(body)["elementDeleteName"])
+                    if os.path.exists(f"/prominf/mediafiles/images/{lead_to_useful_view(project.path_link)}"):
+                        shutil.rmtree(f"/prominf/mediafiles/images/{lead_to_useful_view(project.path_link)}")
+                    if os.path.exists(f"/prominf/mediafiles/{lead_to_useful_view(project.path_link)}"):
+                        shutil.rmtree(f"/prominf/mediafiles/{lead_to_useful_view(project.path_link)}")
+                    project.delete()
+
     return render(request, 'index.html', {})
 
 

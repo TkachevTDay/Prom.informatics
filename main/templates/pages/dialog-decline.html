@@ -8,7 +8,7 @@
                                 v-model="declineAnswer"
                                  label="Комментарий к отказу"
                             ></v-textarea>
-                            <v-btn @click='changedStatus = "declined"; changeProjectStatus(); moderateProjects=[]; updateAdminList(); dialogDeclineAnswer=false; dialog=falase' >Отклонить</v-btn>
+                            <v-btn @click='changedStatus = "declined"; changeProjectStatus(); dialogDeclineAnswer=false; dialog=false; moderateProjects=[]; updateAdminList();' >Отклонить</v-btn>
                  </v-container>
             </v-card>
 

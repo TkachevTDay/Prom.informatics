@@ -6,6 +6,7 @@ var app = new Vue({
         return {
             notificationsAmount: 0,
             notificationsList: [],
+            projectDeleteName: '',
             isAdministrator: false,
             isAuthorized: 0,
             authError: false,
@@ -13,6 +14,7 @@ var app = new Vue({
             personalAccessToken: '',
             personalAccessTokenInput: '',
             userId: 0,
+            dialogDel: false,
             tokenError: false,
             declineAnswer: '',
             isGitlabConnected: 0,
@@ -142,6 +144,14 @@ var app = new Vue({
                 this.emailReg &&
                 this.passwordReg
             )
+
+        },
+        projectDeleteFormIsValid() {
+            if (this.projectDeleteName){
+                return true
+            } else{
+                return false
+            }
 
         },
 
@@ -527,6 +537,15 @@ var app = new Vue({
                 'requestType': 'adminVerify',
             });
             this.isAdministrator = a.status;
+        },
+        projectDelete: async function(){
+            let a = await this.makeRequest(`${this.baseUrl}`,
+            "POST", {}, {'X-CSRFToken': Cookies.get('csrftoken')}, {
+                'requestType': 'elementDelete',
+                'elementDeleteName': this.projectDeleteName,
+            });
+            this.isAdministrator = a.status;
+
         },
     },
   mounted(){
