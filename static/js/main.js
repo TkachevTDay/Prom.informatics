@@ -94,6 +94,7 @@ var app = new Vue({
             currentUserGroup: '',
             currentUrl: '',
             result: [],
+            dialogDockerInstruction: false,
             currentDockerStatus: '',
             techStack: ['Django-project', 'Pygame-project', 'Other'],
             rules: {
