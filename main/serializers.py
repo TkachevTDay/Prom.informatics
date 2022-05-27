@@ -8,7 +8,7 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
         model = Project
         fields = ['url', 'id', 'name', 'description', 'path_link', 'upload_date', 'last_open_date', 'author',
                   'department',
-                  'mark', 'year', 'icon', 'images', 'tech_stack']
+                  'mark', 'year', 'icon', 'images', 'tech_stack', 'docker_status']
 
 class NotificationsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

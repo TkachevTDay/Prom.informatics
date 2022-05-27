@@ -47,7 +47,7 @@
                 <v-col class="d-flex justify-end" v-if="isCardModeratable==false">
                     <v-form method="post">
                         {% csrf_token %}
-                        <v-btn class="mr-2" big @click="sendProjectRunConfig(currentId)">
+                        <v-btn class="mr-2" big @click="sendProjectRunConfig(currentId)" :disabled="currentDockerStatus == 'declined'">
                             <v-icon dark>
                                 mdi-play
                             </v-icon>

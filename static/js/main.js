@@ -94,6 +94,7 @@ var app = new Vue({
             currentUserGroup: '',
             currentUrl: '',
             result: [],
+            currentDockerStatus: '',
             techStack: ['Django-project', 'Pygame-project', 'Other'],
             rules: {
               value: [val => (val || '').length > 0 || 'Это поле необходимо заполнить!'],
@@ -361,6 +362,7 @@ var app = new Vue({
                 this.currentProjectAvatar=this.recentProjects[this.carouselIterator].icon
                 this.currentTechStack=this.recentProjects[this.carouselIterator].tech_stack
                 this.currentUrl=this.recentProjects[this.carouselIterator].path_link
+                this.currentDockerStatus=this.recentProjects[this.carouselIterator].docker_status
             } else {
                 this.currentId=item.id
                 this.currentName=item.name
@@ -373,6 +375,7 @@ var app = new Vue({
                 this.currentProjectAvatar=item.icon
                 this.currentTechStack=item.tech_stack
                 this.currentUrl=item.path_link
+                this.currentDockerStatus=item.docker_status
             }
 
         },
