@@ -62,7 +62,7 @@ var app = new Vue({
             authorItems: [],
             yearItems: [],
             recentProjects: [],
-            baseUrl: 'http://localhost:1337/',
+            baseUrl: 'http://prftest.xyz/',
             carouselIterator: 0,
             images: [],
             filterShow: false,
@@ -488,7 +488,7 @@ var app = new Vue({
             });
             this.dialogContRunNotify = false
             if (a.status == 'ok' || a.status == 'Container with this name already exists'){
-                    window.location.href = `http://cont${a.cont.id}.localhost:1337`;
+                    window.location.href = `http://cont${a.cont.id}.prftest.xyz`;
                   }
             else{
                 console.log(a.status)
