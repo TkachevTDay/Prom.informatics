@@ -9,7 +9,7 @@ var app = new Vue({
             isAdministrator: false,
             isAuthorized: 0,
             authError: false,
-            regError: false,
+            registryError: false,
             personalAccessToken: '',
             personalAccessTokenInput: '',
             userId: 0,
