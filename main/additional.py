@@ -93,24 +93,6 @@ def uvicorn_start(element_name):
 def lead_to_useful_view(element):
     return element.split('/')[-1][0:-4]
 
-def project_clone(element, personal_access_token):
-    print()
-    print(element)
-    if not os.path.exists(f'/prominf/mediafiles/{element.path_link.split("/")[-1][0:-4]}/'):
-        os.makedirs(f'/prominf/mediafiles/{element.path_link.split("/")[-1][0:-4]}/')
-        os.chmod(f'/prominf/clone.sh', 777)
-        clone_file = f'#!/bin/bash\ngit clone https://oauth2:{personal_access_token}@{"/".join(element.path_link.split("/")[2:])} /prominf/mediafiles/{element.path_link.split("/")[-1][0:-4]}'
-        with open(f'/prominf/clone.sh', 'w') as file:
-            file.write(clone_file)
-        exit_code = subprocess.call(f'/prominf/clone.sh')
-
-
-def element_build(element):
-    print('building')
-    image_name=element.path_link.split("/")[-1][0:-4]
-    client = docker.from_env()
-    client.images.build(path= f'/prominf/mediafiles/{element.path_link.split("/")[-1][0:-4]}', tag=image_name)
-    return image_name
 
 def make_notification(user_sender_id, user_receiver_id, message, email=None):
     item = Notifications(user_sender = Student.objects.get(user_id=user_sender_id), user_receiver=Student.objects.get(user_id=user_receiver_id), message=message)
@@ -123,4 +105,3 @@ def make_notification(user_sender_id, user_receiver_id, message, email=None):
             fail_silently=False,
         )
     item.save()
-

@@ -7,12 +7,12 @@ from .models import Project, Student, Notifications
 from django.core.mail import send_mail
 from .serializers import ProjectSerializer
 from .additional import container_run, pop_avialable_port, check_existing_containers, create_socket_files, \
-    uvicorn_start, project_clone, lead_to_useful_view, add_container_connection, element_build, get_port_by_name, \
+    uvicorn_start, lead_to_useful_view, add_container_connection, get_port_by_name, \
     make_notification, request_valid_check
 import base64
 import redis
 import shutil
-from prominformatics.celery import kill_switch
+from prominformatics.celery import kill_switch, project_clone, element_build
 import os
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -141,7 +141,7 @@ def index_page(request):
                 Изменение статуса проекта (модерация)
             """
             if json.loads(body)["requestType"] == 'elementChangeStatus':
-                if request.user.is_superuser == 't':
+                if request.user.is_superuser:
                     element = Project.objects.get(id=json.loads(body)["elementId"])
                     print('element:', element)
                     print(element)
@@ -157,8 +157,9 @@ def index_page(request):
                                 email = Student.objects.get(id=element.student_uploader_id).user.email
                                 print('student:', Student.objects.get(id=element.student_uploader_id))
                                 print('personal_access_token:',  Student.objects.get(id=element.student_uploader_id).personal_access_token)
-                                project_clone(element, Student.objects.get(id=element.student_uploader_id).personal_access_token)
-                                element.docker_image_name = element_build(element)
+                                project_clone.delay(element.path_link, Student.objects.get(id=element.student_uploader_id).personal_access_token)
+                                element.docker_image_name = element.path_link.split("/")[-1][0:-4]
+                                element_build.delay(element.path_link)
                                 element.save(update_fields=['docker_image_name'])
                                 element.status = status
                                 element.docker_status = docker_status
@@ -283,7 +284,7 @@ def index_page(request):
                 Экстренное убийство запущенных контейнеров
             """
             if json.loads(body)["requestType"] == "emergency":
-                if request.user.is_superuser == 't':
+                if request.user.is_superuser:
                     kill_switch(emergency=True)
             """
                 Проверка супер-пользователя

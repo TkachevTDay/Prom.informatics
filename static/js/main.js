@@ -279,6 +279,8 @@ var app = new Vue({
             this.passwordReg = '';
         },
         gitlabAuth: async function(){
+
+
             this.gitlabAuthResponse = (await this.makeRequest(`${this.baseUrl}`, "POST", {}, {'X-CSRFToken': app.getCSRFToken()},
              {'requestType': 'gitlabAuth', 'personalAccessToken': this.personalAccessTokenInput}));
             console.log(this.gitlabAuthResponse.responseStatus)

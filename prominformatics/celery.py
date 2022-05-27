@@ -7,7 +7,7 @@ from datetime import datetime
 import json
 from django_celery_beat.models import PeriodicTask, IntervalSchedule
 from django.utils import timezone
-
+import subprocess
 from main import additional
 django.setup()
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "prominformatics.settings")
@@ -50,5 +50,22 @@ def kill_switch(emergency=False):
     r.set('active_containers', json.dumps(active_containers))
 
     print('task completed')
-if __name__ == '__main__':
-    kill_switch()
+
+@app.task(name='project_clone')
+def project_clone(element, personal_access_token):
+    print()
+    print(element)
+    if not os.path.exists(f'/prominf/mediafiles/{element.split("/")[-1][0:-4]}/'):
+        os.makedirs(f'/prominf/mediafiles/{element.split("/")[-1][0:-4]}/')
+        os.chmod(f'/prominf/clone.sh', 777)
+        clone_file = f'#!/bin/bash\ngit clone https://oauth2:{personal_access_token}@{"/".join(element.split("/")[2:])} /prominf/mediafiles/{element.split("/")[-1][0:-4]}'
+        with open(f'/prominf/clone.sh', 'w') as file:
+            file.write(clone_file)
+        exit_code = subprocess.call(f'/prominf/clone.sh')
+
+@app.task(name='element_build')
+def element_build(element):
+    print('building')
+    image_name=element.split("/")[-1][0:-4]
+    client = docker.from_env()
+    client.images.build(path= f'/prominf/mediafiles/{element.split("/")[-1][0:-4]}', tag=image_name)
