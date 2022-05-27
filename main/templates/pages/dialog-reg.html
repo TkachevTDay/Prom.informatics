@@ -21,7 +21,7 @@
                             filled
                             rounded
                             dense
-                            label="Почтовый адрес"
+                            label="Электронная почта"
                             v-model="emailReg"
                             color="grey"
                             :rules="rules.emailRules"
@@ -67,6 +67,11 @@
                             type="password"
                     ></v-text-field>
                 </v-col>
+            </v-row>
+            <v-row v-if="registryError" justify="center" cols="2">
+                <div  class="red--text">
+                    Пользователь с таким именем / электронной почтой существует
+                </div>
             </v-row>
             <v-row cols="2" justify="center" >
                 <v-btn color="primary" :disabled="!registrationFormIsValid" @click="registry()">Зарегистрироваться</v-btn>

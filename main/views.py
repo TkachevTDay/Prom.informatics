@@ -158,12 +158,9 @@ def index_page(request):
                                 print('student:', Student.objects.get(id=element.student_uploader_id))
                                 print('personal_access_token:',  Student.objects.get(id=element.student_uploader_id).personal_access_token)
                                 project_clone.delay(element.path_link, Student.objects.get(id=element.student_uploader_id).personal_access_token)
+                                element_build.delay(element.path_link, element.id)
                                 element.docker_image_name = element.path_link.split("/")[-1][0:-4]
-                                element_build.delay(element.path_link)
                                 element.save(update_fields=['docker_image_name'])
-                                element.status = status
-                                element.docker_status = docker_status
-                                element.save(update_fields=['status', 'docker_status'])
                                 return JsonResponse({'responseStatus': 'Successful build'})
                             else:
                                 make_notification(

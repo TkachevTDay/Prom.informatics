@@ -25,15 +25,19 @@
                                 v-model="authorizePass"
                                 color="grey"
                                 type="password"
-                                :rules="rules.authorizeHint"
-                                required
                         ></v-text-field>
                         </v-col>
+                    </v-row>
+                    <v-row v-if="authError" justify="center" cols="2">
+                        <div  class="red--text">
+                            Ошибка. Проверьте правильность введённых данных
+                        </div>
                     </v-row>
                     <v-row cols="2" justify="center">
                         <v-btn color="primary" :disabled="!loginFormIsValid" @click="auth()">
                             Войти
                         </v-btn>
+
                     </v-row>
                 <v-row cols="2" justify="center">
                     <v-col cols="9">
@@ -44,6 +48,7 @@
                                 @click.prevent="dialogLog = false; dialogReg = true;"
                                 >Зарегистрироваться</a>
                         </div>
+
                     </v-col>
 
                 </v-row>

@@ -3,6 +3,7 @@ import os
 from celery import Celery
 import redis
 import docker, django
+from main.models import Project
 from datetime import datetime
 import json
 from django_celery_beat.models import PeriodicTask, IntervalSchedule
@@ -64,8 +65,14 @@ def project_clone(element, personal_access_token):
         exit_code = subprocess.call(f'/prominf/clone.sh')
 
 @app.task(name='element_build')
-def element_build(element):
+def element_build(element, id):
     print('building')
+    project = Project.objects.get(id = id)
+    project.status = 'on build'
+    project.save(update_fields=["status"])
     image_name=element.split("/")[-1][0:-4]
     client = docker.from_env()
     client.images.build(path= f'/prominf/mediafiles/{element.split("/")[-1][0:-4]}', tag=image_name)
+    project.status = 'approved'
+    project.docker_status = 'approved'
+    project.save(update_fields=["status", "docker_status"])
