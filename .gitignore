@@ -9,6 +9,7 @@ __pycache__/
 local_settings.py
 db.sqlite3
 postgres-data/
+
 db.sqlite3-journal
 mediafiles/
 clone.sh
@@ -23,7 +24,6 @@ clone.sh
 
 # C extensions
 *.so
-
 # Distribution / packaging
 .Python
 build/

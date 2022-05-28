@@ -105,3 +105,5 @@ def make_notification(user_sender_id, user_receiver_id, message, email=None):
             fail_silently=False,
         )
     item.save()
+
+

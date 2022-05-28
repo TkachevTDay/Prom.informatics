@@ -9,7 +9,8 @@ import json
 from django_celery_beat.models import PeriodicTask, IntervalSchedule
 from django.utils import timezone
 import subprocess
-from main import additional
+from main import additional, nginx_build
+from prominformatics.settings import SERVER_NAME
 django.setup()
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "prominformatics.settings")
 
@@ -41,6 +42,7 @@ def kill_switch(emergency=False):
                 del active_containers[i]
                 additional.push_port(
                     port=port)
+                nginx_update.delay()
         else:
             port = list(clientAPI.inspect_container(i)['NetworkSettings']['Ports'].keys())[0].split('/')[0]
             print(list(clientAPI.inspect_container(i)['NetworkSettings']['Ports'].keys())[0].split('/')[0])
@@ -76,3 +78,15 @@ def element_build(element, id):
     project.status = 'approved'
     project.docker_status = 'approved'
     project.save(update_fields=["status", "docker_status"])
+
+@app.task(name='update_nginx')
+def nginx_update():
+    nu = nginx_build.NginxConfFile(server_name=SERVER_NAME)
+    file = nu.create_nginx_config_file()
+    print(file)
+    with open(f'/prominf/nginx_dynamically_build_files/nginx_build.sh', 'w') as file:
+        file.write('#!/bin/sh\ndocker exec -i prominformatics_nginx cp /dyn_files/nginx.conf /etc/nginx\ndocker exec -i prominformatics_nginx nginx -s reload')
+    with open(f'/prominf/nginx_dynamically_build_files/nginx.conf', 'w') as file:
+        file.write(str(file))
+
+    exit_code = subprocess.call(f'/prominf/nginx_dynamically_build_files/nginx_build.sh')
