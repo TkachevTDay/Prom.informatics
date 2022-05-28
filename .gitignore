@@ -455,3 +455,4 @@ lib*.pc
 /Debug/
 /Release/
 /tmp_install/
+/mediafiles/

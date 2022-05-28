@@ -40,14 +40,15 @@ def kill_switch(emergency=False):
                 print(list(clientAPI.inspect_container(i)['NetworkSettings']['Ports'].keys())[0].split('/')[0])
                 client.containers.get(i).remove(force=True)
                 del active_containers[i]
+                nginx_update.delay()
                 additional.push_port(
                     port=port)
-                nginx_update.delay()
         else:
             port = list(clientAPI.inspect_container(i)['NetworkSettings']['Ports'].keys())[0].split('/')[0]
             print(list(clientAPI.inspect_container(i)['NetworkSettings']['Ports'].keys())[0].split('/')[0])
             client.containers.get(i).remove(force=True)
             del active_containers[i]
+            nginx_update.delay()
             additional.push_port(
                 port=port)
     r.set('active_containers', json.dumps(active_containers))
@@ -60,10 +61,10 @@ def project_clone(element, personal_access_token):
     print(element)
     if not os.path.exists(f'/prominf/mediafiles/{element.split("/")[-1][0:-4]}/'):
         os.makedirs(f'/prominf/mediafiles/{element.split("/")[-1][0:-4]}/')
-        os.chmod(f'/prominf/clone.sh', 777)
         clone_file = f'#!/bin/bash\ngit clone https://oauth2:{personal_access_token}@{"/".join(element.split("/")[2:])} /prominf/mediafiles/{element.split("/")[-1][0:-4]}'
         with open(f'/prominf/clone.sh', 'w') as file:
             file.write(clone_file)
+        os.chmod(f'/prominf/clone.sh', 777)
         exit_code = subprocess.call(f'/prominf/clone.sh')
 
 @app.task(name='element_build')
