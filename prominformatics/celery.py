@@ -82,11 +82,9 @@ def element_build(element, id):
 @app.task(name='update_nginx')
 def nginx_update():
     nu = nginx_build.NginxConfFile(server_name=SERVER_NAME)
-    file = nu.create_nginx_config_file()
-    print(file)
+    _file = nu.create_nginx_config_file()
+    print(_file)
     with open(f'/prominf/nginx_dynamically_build_files/nginx_build.sh', 'w') as file:
-        file.write('#!/bin/sh\ndocker exec -i prominformatics_nginx cp /dyn_files/nginx.conf /etc/nginx\ndocker exec -i prominformatics_nginx nginx -s reload')
-    with open(f'/prominf/nginx_dynamically_build_files/nginx.conf', 'w') as file:
-        file.write(str(file))
-
+        file.write(f'''#!/bin/sh\ndocker exec -i prominformatics_nginx touch /nginx.conf\ndocker exec -i prominformatics_nginx chmod 666 /nginx.conf\ndocker exec -i prominformatics_nginx bash -c "echo '{_file}' > /nginx.conf"\ndocker exec -i prominformatics_nginx cp /nginx.conf /etc/nginx\ndocker exec -i prominformatics_nginx nginx -s reload''')
+        os.chmod(f'/prominf/nginx_dynamically_build_files/nginx_build.sh', 666)
     exit_code = subprocess.call(f'/prominf/nginx_dynamically_build_files/nginx_build.sh')
