@@ -12,7 +12,7 @@ from .additional import container_run, pop_avialable_port, check_existing_contai
 import base64
 import redis
 import shutil
-from prominformatics.celery import kill_switch, project_clone, element_build
+from prominformatics.celery import kill_switch, project_clone, element_build, nginx_update
 import os
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -129,6 +129,7 @@ def index_page(request):
                                 create_socket_files(lead_to_useful_view(current_element.path_link))
                                 uvicorn_start(lead_to_useful_view(current_element.path_link))
                                 add_container_connection(lead_to_useful_view(current_element.path_link), ports_get_request)
+                                nginx_update.delay()
                                 return JsonResponse({'cont': cont_inf, 'status': 'ok'})
                             else:
                                 return JsonResponse({'status': 'All ports are busy'})

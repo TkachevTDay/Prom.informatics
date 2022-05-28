@@ -17,7 +17,7 @@ import django
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
+SERVER_NAME = "prftest.xyz"
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -32,7 +32,7 @@ ALLOWED_HOSTS = ['*']
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "mediafiles"
 
-CSRF_TRUSTED_ORIGINS = ["http://prftest.xyz"]
+CSRF_TRUSTED_ORIGINS = [f"http://{SERVER_NAME}"]
 # Application definition
 
 INSTALLED_APPS = [

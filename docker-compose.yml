@@ -67,9 +67,8 @@ services:
       - .:/prominf
       - /var/run/docker.sock:/var/run/docker.sock
       - staticfiles:/prominf/staticfiles/
-      - media_volume:/prominf/mediafiles/
       - socket_files:/prominf/socketfiles/
-    command: ./script.sh
+    command: bash script.sh
     restart: always
     depends_on:
       - db
@@ -82,12 +81,12 @@ services:
       context: ./
       dockerfile: ./nginx/Dockerfile
     ports:
-      - 80:80
+      - 1337:80
     depends_on:
       - web
     volumes:
       - staticfiles:/prominf/staticfiles/
-      - media_volume:/prominf/mediafiles/
+      - ./mediafiles/:/prominf/mediafiles/
       - run_config_0:/etc/cont_0/run_config
       - run_config_1:/etc/cont_1/run_config
       - run_config_2:/etc/cont_2/run_config
@@ -97,7 +96,6 @@ services:
 
 volumes:
   staticfiles:
-  media_volume:
   socket_files:
   redis:
   run_config_0:
